@@ -29,7 +29,7 @@ export function ThemeToggle({ className }: { className?: string }) {
           : "Toggle theme"
       }
       className={cn(
-        "flex h-10 w-10 items-center justify-center rounded-xl text-ink-soft transition-colors hover:bg-brand-50 dark:text-ink-faint dark:hover:bg-white/5",
+        "flex h-10 w-10 items-center justify-center rounded-xl text-fg-soft transition-colors hover:bg-brand-50 dark:text-fg-faint dark:hover:bg-white/5",
         className,
       )}
     >

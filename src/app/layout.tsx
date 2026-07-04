@@ -71,7 +71,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${sora.variable}`}
     >
-      <body className="min-h-screen bg-white font-sans text-ink antialiased transition-colors duration-300 dark:bg-ink dark:text-slate-200">
+      <body className="min-h-screen bg-white font-sans text-fg antialiased transition-colors duration-300 dark:bg-ink">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

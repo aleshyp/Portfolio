@@ -31,11 +31,15 @@ export function About() {
               seed={1}
               className="aspect-[4/5] w-full rounded-4xl shadow-soft"
             />
-            <div className="absolute -bottom-5 right-0 rounded-2xl border border-brand-100 bg-white px-5 py-4 shadow-lift dark:border-white/10 dark:bg-slate-800 sm:-right-5">
+            {/* Floating overlay card: needs an OPAQUE dark background (it sits
+                over the portrait), so it keeps an opaque bg-* rather than the
+                translucent bg-surface token. bg-surface-solid is the opaque
+                counterpart defined in globals.css. */}
+            <div className="absolute -bottom-5 right-0 rounded-2xl border border-border-subtle bg-surface-solid px-5 py-4 shadow-lift sm:-right-5">
               <p className="font-display text-2xl font-bold text-brand-600 dark:text-brand-400">
                 {site.location.split(",")[0]}
               </p>
-              <p className="text-xs text-ink-muted dark:text-slate-400">based &amp; available remote</p>
+              <p className="text-xs text-fg-muted">based &amp; available remote</p>
             </div>
           </div>
         </AnimatedReveal>
@@ -44,13 +48,13 @@ export function About() {
         <div>
           <AnimatedReveal>
             <Eyebrow>About me</Eyebrow>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink dark:text-slate-100 sm:text-4xl">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
               Design that respects people&apos;s time and attention.
             </h2>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
-            <div className="mt-6 space-y-4 text-ink-muted dark:text-slate-400">
+            <div className="mt-6 space-y-4 text-fg-muted">
               <p>
                 I&apos;m a {site.role.toLowerCase()} based in Kansas City. I
                 picked up graphic design at 10, started freelancing at 13 —
@@ -74,7 +78,7 @@ export function About() {
               {focusAreas.map((area) => (
                 <span
                   key={area}
-                  className="rounded-full border border-brand-200 bg-white px-3.5 py-1.5 text-sm font-medium text-ink-soft dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
+                  className="rounded-full border border-border-subtle bg-surface-raised px-3.5 py-1.5 text-sm font-medium text-fg-soft"
                 >
                   {area}
                 </span>
@@ -83,13 +87,13 @@ export function About() {
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.2}>
-            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-brand-100 pt-8 dark:border-white/10 sm:gap-6">
+            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border-subtle pt-8 sm:gap-6">
               {stats.map((s) => (
                 <div key={s.label}>
-                  <dt className="font-display text-2xl font-bold leading-tight text-ink dark:text-slate-100 sm:text-3xl [text-wrap:balance]">
+                  <dt className="font-display text-2xl font-bold leading-tight text-fg sm:text-3xl [text-wrap:balance]">
                     {s.value}
                   </dt>
-                  <dd className="mt-1 text-sm text-ink-muted dark:text-slate-400">{s.label}</dd>
+                  <dd className="mt-1 text-sm text-fg-muted">{s.label}</dd>
                 </div>
               ))}
             </dl>

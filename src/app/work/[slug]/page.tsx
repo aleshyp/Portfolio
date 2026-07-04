@@ -60,7 +60,7 @@ export default async function CaseStudy({
         <AnimatedReveal>
           <Link
             href="/#work"
-            className="inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300"
+            className="inline-flex items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
           >
             <ArrowLeft size={16} />
             Back to work
@@ -72,17 +72,17 @@ export default async function CaseStudy({
             ))}
           </div>
 
-          <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight text-ink dark:text-slate-100 sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
             {project.title}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-ink-muted dark:text-slate-400">
+          <p className="mt-5 max-w-2xl text-lg text-fg-muted">
             {project.summary}
           </p>
         </AnimatedReveal>
 
         {/* Meta */}
         <AnimatedReveal delay={0.1}>
-          <dl className="mt-10 grid grid-cols-2 gap-6 border-y border-brand-100 py-8 dark:border-white/10 sm:grid-cols-4">
+          <dl className="mt-10 grid grid-cols-2 gap-6 border-y border-border-subtle py-8 sm:grid-cols-4">
             {[
               { label: "Client", value: project.client },
               { label: "Role", value: project.role },
@@ -90,10 +90,10 @@ export default async function CaseStudy({
               { label: "Duration", value: project.duration },
             ].map((m) => (
               <div key={m.label}>
-                <dt className="text-xs font-medium uppercase tracking-wider text-ink-faint dark:text-slate-400">
+                <dt className="text-xs font-medium uppercase tracking-wider text-fg-faint">
                   {m.label}
                 </dt>
-                <dd className="mt-1.5 font-medium text-ink dark:text-slate-200">{m.value}</dd>
+                <dd className="mt-1.5 font-medium text-fg">{m.value}</dd>
               </div>
             ))}
           </dl>
@@ -116,14 +116,14 @@ export default async function CaseStudy({
         <div className="mt-16 grid gap-10 lg:grid-cols-3 lg:gap-16">
           <AnimatedReveal className="lg:col-span-2">
             <Eyebrow>Overview</Eyebrow>
-            <p className="mt-4 text-lg leading-relaxed text-ink-soft dark:text-slate-300">
+            <p className="mt-4 text-lg leading-relaxed text-fg-soft">
               {project.overview}
             </p>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
-            <div className="rounded-3xl border border-brand-100 bg-background-soft p-6 dark:border-white/10 dark:bg-white/[0.03]">
-              <p className="text-sm font-medium uppercase tracking-wider text-ink-faint dark:text-slate-400">
+            <div className="rounded-3xl border border-border-subtle bg-background-soft p-6 dark:bg-surface">
+              <p className="text-sm font-medium uppercase tracking-wider text-fg-faint">
                 Results
               </p>
               <dl className="mt-4 space-y-5">
@@ -132,7 +132,7 @@ export default async function CaseStudy({
                     <dt className="font-display text-3xl font-bold text-brand-600 dark:text-brand-400">
                       {r.value}
                     </dt>
-                    <dd className="text-sm text-ink-muted dark:text-slate-400">{r.label}</dd>
+                    <dd className="text-sm text-fg-muted">{r.label}</dd>
                   </div>
                 ))}
               </dl>
@@ -151,11 +151,11 @@ export default async function CaseStudy({
                   <span className="font-display text-sm font-semibold text-brand-700 dark:text-brand-400">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-ink dark:text-slate-100">
+                  <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-fg">
                     {block.heading}
                   </h2>
                 </div>
-                <p className="text-lg leading-relaxed text-ink-muted dark:text-slate-400 lg:col-span-8">
+                <p className="text-lg leading-relaxed text-fg-muted lg:col-span-8">
                   {block.body}
                 </p>
               </div>
@@ -175,16 +175,16 @@ export default async function CaseStudy({
 
       {/* Next project */}
       <Container>
-        <div className="mt-24 border-t border-brand-100 py-16 dark:border-white/10">
+        <div className="mt-24 border-t border-border-subtle py-16">
           <AnimatedReveal>
-            <p className="text-sm font-medium uppercase tracking-wider text-ink-faint dark:text-slate-400">
+            <p className="text-sm font-medium uppercase tracking-wider text-fg-faint">
               Next project
             </p>
             <Link
               href={`/work/${next.slug}`}
               className="group mt-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
             >
-              <h2 className="font-display text-3xl font-bold tracking-tight text-ink transition-colors duration-300 group-hover:text-brand-700 dark:text-slate-100 dark:group-hover:text-brand-300 sm:text-4xl">
+              <h2 className="font-display text-3xl font-bold tracking-tight text-fg transition-colors duration-300 group-hover:text-brand-700 dark:group-hover:text-brand-300 sm:text-4xl">
                 {next.title}
               </h2>
               <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-sm font-medium text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-brand-800 group-hover:shadow-lift dark:group-hover:bg-brand-600">

@@ -9,10 +9,10 @@ export default function NotFound() {
         <p className="font-display text-sm font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
           404
         </p>
-        <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-ink dark:text-slate-100 sm:text-5xl">
+        <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           This page wandered off.
         </h1>
-        <p className="mt-2 max-w-sm text-ink-muted dark:text-slate-400">
+        <p className="mt-2 max-w-sm text-fg-muted">
           The page you&apos;re looking for doesn&apos;t exist or has moved.
         </p>
         <Link

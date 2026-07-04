@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <Link
         href={`/work/${project.slug}`}
-        className="group flex h-full flex-col overflow-hidden rounded-4xl border border-brand-100 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-brand-500/30"
+        className="group flex h-full flex-col overflow-hidden rounded-4xl border border-border-subtle bg-surface shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:hover:border-brand-500/30"
       >
         <div className="overflow-hidden">
           <Placeholder
@@ -34,23 +34,23 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="flex flex-1 flex-col p-6 sm:p-7">
-          <div className="flex items-center gap-3 text-xs font-medium text-ink-faint dark:text-slate-400">
+          <div className="flex items-center gap-3 text-xs font-medium text-fg-faint">
             <span>{project.year}</span>
             <span className="h-1 w-1 rounded-full bg-brand-300" />
             <span>{project.role}</span>
           </div>
 
-          <h3 className="mt-3 flex items-start justify-between gap-3 font-display text-xl font-semibold text-ink dark:text-slate-100">
+          <h3 className="mt-3 flex items-start justify-between gap-3 font-display text-xl font-semibold text-fg">
             <span className="transition-colors duration-300 group-hover:text-brand-700 dark:group-hover:text-brand-300">
               {project.title}
             </span>
             <ArrowUpRight
               size={20}
-              className="mt-0.5 shrink-0 text-ink-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-600 dark:text-slate-500 dark:group-hover:text-brand-400"
+              className="mt-0.5 shrink-0 text-fg-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-600 dark:group-hover:text-brand-400"
             />
           </h3>
 
-          <p className="mt-2 text-sm leading-relaxed text-ink-muted dark:text-slate-400">
+          <p className="mt-2 text-sm leading-relaxed text-fg-muted">
             {project.blurb}
           </p>
 
