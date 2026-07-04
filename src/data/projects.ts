@@ -73,38 +73,38 @@ export const projects: Project[] = [
   },
   {
     slug: "marketing-landing-page",
-    title: "Marketing Site — Designed & Built",
+    title: "Northwind — Marketing Site, Designed & Built",
     summary:
-      "A conversion-focused marketing site, designed in Figma and shipped to production in React — bridging the gap between design and front-end.",
-    blurb: "A marketing site, designed in Figma and built in code.",
+      "A conversion-focused marketing site for a team-analytics startup — designed in Figma and shipped to production in React, closing the gap between design and front-end.",
+    blurb: "A SaaS marketing site, designed in Figma and built in code.",
     tags: ["Web Design", "Front-End", "Branding"],
     role: "Designer & Front-End Developer",
     year: "2025",
-    client: "Marketing site (placeholder)",
+    client: "Northwind (analytics SaaS)",
     duration: "5 weeks",
     results: [
-      { label: "Lighthouse score", value: "98" },
+      { label: "Lighthouse performance", value: "98" },
       { label: "Sign-up conversion", value: "+22%" },
-      { label: "Design-to-live", value: "1 person" },
+      { label: "Design → live", value: "1 person" },
     ],
     overview:
-      "A site that needed to look sharp and convert — without a handoff gap between design and engineering. I designed it in Figma and built it myself in React and Tailwind, so the live page matches the mockup pixel for pixel.",
+      "Northwind is a team-analytics tool that needed a homepage to look as sharp as the product — and actually convert — without losing anything in a design-to-engineering handoff. I owned both sides: designed the full page in Figma, then built it in React and Tailwind so the live site matches the mockup pixel for pixel.",
     blocks: [
       {
         heading: "The brief",
-        body: "The team wanted a fast, polished marketing site that clearly communicated the product and drove sign-ups — built on a modern stack the team could maintain.",
+        body: "Northwind had a strong product but a homepage that undersold it. The team wanted a fast, polished site that made the value obvious in one scroll and drove free-trial sign-ups — built on a modern stack they could maintain in-house afterward.",
       },
       {
         heading: "Design",
-        body: "I designed the full page in Figma — a strong hero, clear value props, social proof, and a focused call to action — with a responsive layout planned from mobile up.",
+        body: "I designed the full page in Figma around a single conversion goal: a confident hero with a product preview, three scannable value props, real numbers as social proof, and one repeated call to action. The layout was planned mobile-first, so the responsive version was a first-class design, not an afterthought.",
       },
       {
         heading: "Build",
-        body: "I built the site in React, TypeScript, and Tailwind CSS, with accessible markup and a strong focus on performance. Designing and coding it myself meant no detail got lost in handoff.",
+        body: "I built the site in React, TypeScript, and Tailwind CSS — semantic, accessible markup, tuned images, and no layout shift. Designing and coding it myself meant spacing, type, and motion survived intact from Figma to production instead of drifting in handoff.",
       },
       {
         heading: "Outcome",
-        body: "The site shipped with a 98 Lighthouse score and lifted sign-up conversion 22% — proof that good design and clean front-end work pay off together.",
+        body: "The site shipped with a 98 Lighthouse performance score and lifted free-trial sign-ups 22% in the first quarter. One person carried it from blank Figma file to live, on-brand site — proof that closing the design-dev gap pays off.",
       },
     ],
     gallery: 3,

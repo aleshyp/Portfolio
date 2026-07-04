@@ -7,6 +7,7 @@ import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
+import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
 import { Badge, Eyebrow } from "@/components/Badge";
 
 type Params = { slug: string };
@@ -54,10 +55,40 @@ export default async function CaseStudy({
 
   const next = getNextProject(project.slug);
 
-  // Aperture is the one fully-designed case study: it ships real (SVG) brand
-  // deliverables instead of gradient placeholders. Everything else still uses
-  // the Placeholder until real imagery exists.
-  const isAperture = project.slug === "brand-identity-system";
+  // A couple of case studies ship real (SVG) deliverables instead of gradient
+  // placeholders: Aperture (brand identity) and Northwind (marketing site).
+  // Each has its own ordered scene set + asset component; everything else still
+  // uses the Placeholder until real imagery exists.
+  const assetSet:
+    | { scenes: { scene: string; alt: string }[]; kind: "aperture" | "marketing" }
+    | null =
+    project.slug === "brand-identity-system"
+      ? { scenes: apertureScenes, kind: "aperture" }
+      : project.slug === "marketing-landing-page"
+        ? { scenes: marketingScenes, kind: "marketing" }
+        : null;
+
+  // Renders scene N from the active asset set (hero = 0), or null if none.
+  const renderScene = (index: number, className: string) => {
+    const item = assetSet?.scenes[index];
+    if (!item) return null;
+    if (assetSet!.kind === "aperture") {
+      return (
+        <ApertureAsset
+          scene={item.scene as Parameters<typeof ApertureAsset>[0]["scene"]}
+          alt={item.alt}
+          className={className}
+        />
+      );
+    }
+    return (
+      <MarketingAsset
+        scene={item.scene as Parameters<typeof MarketingAsset>[0]["scene"]}
+        alt={item.alt}
+        className={className}
+      />
+    );
+  };
 
   return (
     <article className="pt-28 sm:pt-36">
@@ -109,13 +140,7 @@ export default async function CaseStudy({
       {/* Cover */}
       <Container>
         <AnimatedReveal delay={0.05}>
-          {isAperture ? (
-            <ApertureAsset
-              scene={apertureScenes[0].scene}
-              alt={apertureScenes[0].alt}
-              className="mt-10 aspect-[16/9] w-full rounded-4xl"
-            />
-          ) : (
+          {renderScene(0, "mt-10 aspect-[16/9] w-full rounded-4xl") ?? (
             <Placeholder
               label="Hero visual"
               seed={project.accent}
@@ -175,14 +200,8 @@ export default async function CaseStudy({
               </div>
 
               {/* Insert a gallery image between blocks */}
-              {isAperture
-                ? apertureScenes[i + 1] && (
-                    <ApertureAsset
-                      scene={apertureScenes[i + 1].scene}
-                      alt={apertureScenes[i + 1].alt}
-                      className="mt-10 aspect-[16/9] w-full rounded-4xl"
-                    />
-                  )
+              {assetSet
+                ? renderScene(i + 1, "mt-10 aspect-[16/9] w-full rounded-4xl")
                 : i < project.gallery && (
                     <Placeholder
                       label={`Screen ${i + 1}`}
