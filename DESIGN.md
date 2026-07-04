@@ -94,7 +94,7 @@ navy as a **surface/background**.
 | Shadow | `shadow-soft` (resting card), `shadow-lift` (hover), `shadow-glow` (brand emphasis) |
 | Radius | `rounded-4xl` (2rem) for large cards; standard Tailwind radii otherwise (pills use `rounded-full`) |
 | Fonts | `font-sans` (Inter, body) · `font-display` (Sora, headings) — loaded via `next/font` in `layout.tsx` |
-| Motion | `animate-fade-up`, `animate-float`, `animate-shimmer` (+ `animate-delay-100/200/300`) |
+| Motion | `animate-fade-up`, `animate-float` (+ `animate-delay-100/200/300`) |
 | Backgrounds | `--background` / `--background-soft` (via `bg-background-soft`) flip per theme |
 
 ### 1.7 Spacing, layout & type
