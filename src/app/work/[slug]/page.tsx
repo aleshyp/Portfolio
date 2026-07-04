@@ -148,7 +148,7 @@ export default async function CaseStudy({
             <AnimatedReveal key={block.heading}>
               <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
                 <div className="lg:col-span-4">
-                  <span className="font-display text-sm font-semibold text-brand-400">
+                  <span className="font-display text-sm font-semibold text-brand-700 dark:text-brand-400">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-ink dark:text-slate-100">

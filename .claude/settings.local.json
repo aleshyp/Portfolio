@@ -105,7 +105,21 @@
       "PowerShell(npm --version)",
       "PowerShell(npx tsc --noEmit; Write-Output \"===TSC exit: $LASTEXITCODE===\"; npm run lint 2>&1 | Select-Object -Last 15; Write-Output \"===LINT exit: $LASTEXITCODE===\")",
       "PowerShell($env:NODE_ENV=\"\"; npm run build 2>&1 | Select-Object -Last 30; Write-Output \"===BUILD exit: $LASTEXITCODE===\")",
-      "PowerShell(git init -q; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Baseline before dependency upgrades\"; Write-Output \"===commit exit: $LASTEXITCODE===\"; git log --oneline -1)"
+      "PowerShell(git init -q; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Baseline before dependency upgrades\"; Write-Output \"===commit exit: $LASTEXITCODE===\"; git log --oneline -1)",
+      "PowerShell(foreach \\($p in @\\(\"@types/node\",\"typescript\",\"eslint\",\"eslint-config-next\",\"framer-motion\",\"lucide-react\"\\)\\) { $v = npm view $p version; Write-Output \"$p -> $v\" })",
+      "PowerShell(npm view \"@types/node@^24\" version)",
+      "PowerShell(npm install 2>&1 | Select-Object -Last 15; Write-Output \"===install exit: $LASTEXITCODE===\")",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -Last 20; Write-Output \"===TSC exit: $LASTEXITCODE===\")",
+      "PowerShell(npm run lint 2>&1 | Select-Object -Last 15; Write-Output \"===LINT exit: $LASTEXITCODE===\")",
+      "PowerShell(npm install 2>&1 | Select-Object -Last 8; Write-Output \"===install exit: $LASTEXITCODE===\")",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -Last 15; Write-Output \"===TSC exit: $LASTEXITCODE===\"; npm run lint 2>&1 | Select-Object -Last 8; Write-Output \"===LINT exit: $LASTEXITCODE===\")",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -Last 15; Write-Output \"===TSC exit: $LASTEXITCODE===\")",
+      "PowerShell(npm run build 2>&1 | Select-Object -Last 12; Write-Output \"===BUILD exit: $LASTEXITCODE===\")",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $PID } | Stop-Process -Force -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force \"c:\\\\Users\\\\iancr\\\\Portfolio\\\\.next\" -ErrorAction SilentlyContinue; Write-Output \"cleared\")",
+      "PowerShell(npm run build 2>&1 | Select-Object -Last 14; Write-Output \"===BUILD exit: $LASTEXITCODE===\")",
+      "Bash(curl -s -o /dev/null http://localhost:3210/)",
+      "Bash(sleep 1)",
+      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Upgrade tooling + low-risk majors \\(TS 6, @types/node 24, framer-motion 12, lucide-react 1\\); fix a11y spec\"; Write-Output \"exit: $LASTEXITCODE\"; git log --oneline -1)"
     ],
     "additionalDirectories": [
       "c:\\Users\\iancr\\.claude\\skills\\design-guidelines",

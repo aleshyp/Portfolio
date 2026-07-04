@@ -7,18 +7,34 @@ import AxeBuilder from "@axe-core/playwright";
  * that axe cannot cover.
  */
 
-// Scan with reduced motion so framer's AnimatedReveal skips its entrance and
-// renders content at rest (it honors useReducedMotion) — also a real-user state.
-test.use({ reducedMotion: "reduce" });
-
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
-// Freeze CSS transitions/animations before scanning. Contrast must be judged at
-// the settled state: the site's <body> and elements carry `transition-colors`,
-// and axe otherwise samples a mid-transition composited frame (e.g. the soft
-// Badge momentarily reads ~3.6:1 instead of its at-rest 5.2:1) and reports a
-// false violation. This is a standard visual/a11y-testing technique — it makes
-// the scan deterministic without changing what a settled user actually sees.
+// Emulate prefers-reduced-motion for every test in this file BEFORE any goto,
+// so framer's AnimatedReveal renders content at rest (opacity 1, no transform)
+// from first paint. This is load-bearing for contrast scanning: AnimatedReveal
+// fades opacity 0→1 via Framer Motion (JS-driven, NOT a CSS transition — so
+// freezeAnimations below can't stop it). Scanning mid-fade composites text
+// against the page and reads a transient low contrast (e.g. a Badge momentarily
+// ~3.6:1 vs its at-rest 5.2:1, or text over white reading ~1.0). AnimatedReveal
+// honors useReducedMotion(), so this makes it skip the entrance and render at
+// final opacity — a real user state, and the settled contrast is what we assert.
+// Without it the scans flake intermittently under parallel load.
+test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+});
+
+// Put the page in a settled, at-rest state before scanning, so axe judges
+// contrast at final colors — not a transient mid-animation frame.
+//
+// Two independent animation sources must both be neutralized:
+//  1. framer-motion's AnimatedReveal fades opacity 0→1 via JS (inline styles /
+//     Web Animations API, NOT CSS transitions). emulateMedia reduced-motion
+//     makes it honor useReducedMotion and render at opacity 1 immediately.
+//  2. CSS `transition-colors` on <body> and elements. A stylesheet zeroing
+//     transition/animation durations settles those.
+// Without this, axe samples a partly-faded, lighter-composited color (e.g. the
+// soft Badge reads ~3.2:1 instead of its at-rest 5.2:1) and reports a false
+// violation that varies run-to-run.
 async function freezeAnimations(page: import("@playwright/test").Page) {
   await page.addStyleTag({
     content: `*, *::before, *::after {
@@ -46,13 +62,6 @@ async function waitForHydration(page: import("@playwright/test").Page) {
 for (const route of routes) {
   test(`no a11y violations: ${route}`, async ({ page }) => {
     await page.goto(route);
-    // Wait until hydrated + theme-resolved BEFORE freezing/scanning. Under
-    // `next dev` + parallel load, axe can otherwise scan before next-themes has
-    // applied the theme class and the stylesheet has painted, reading a
-    // transient white-on-white state (contrast ~1.0) that is not a real defect.
-    // freezeAnimations alone only removes the animation window, not this
-    // hydration race — both are needed for a deterministic scan.
-    await waitForHydration(page);
     await freezeAnimations(page);
     const { violations } = await new AxeBuilder({ page })
       .withTags(WCAG)
