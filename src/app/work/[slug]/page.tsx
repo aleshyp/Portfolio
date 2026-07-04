@@ -6,6 +6,7 @@ import { projects, getProject, getNextProject } from "@/data/projects";
 import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
+import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
 import { Badge, Eyebrow } from "@/components/Badge";
 
 type Params = { slug: string };
@@ -52,6 +53,11 @@ export default async function CaseStudy({
   if (!project) notFound();
 
   const next = getNextProject(project.slug);
+
+  // Aperture is the one fully-designed case study: it ships real (SVG) brand
+  // deliverables instead of gradient placeholders. Everything else still uses
+  // the Placeholder until real imagery exists.
+  const isAperture = project.slug === "brand-identity-system";
 
   return (
     <article className="pt-28 sm:pt-36">
@@ -103,11 +109,19 @@ export default async function CaseStudy({
       {/* Cover */}
       <Container>
         <AnimatedReveal delay={0.05}>
-          <Placeholder
-            label="Hero visual"
-            seed={project.accent}
-            className="mt-10 aspect-[16/9] w-full rounded-4xl shadow-soft"
-          />
+          {isAperture ? (
+            <ApertureAsset
+              scene={apertureScenes[0].scene}
+              alt={apertureScenes[0].alt}
+              className="mt-10 aspect-[16/9] w-full rounded-4xl"
+            />
+          ) : (
+            <Placeholder
+              label="Hero visual"
+              seed={project.accent}
+              className="mt-10 aspect-[16/9] w-full rounded-4xl shadow-soft"
+            />
+          )}
         </AnimatedReveal>
       </Container>
 
@@ -161,13 +175,21 @@ export default async function CaseStudy({
               </div>
 
               {/* Insert a gallery image between blocks */}
-              {i < project.gallery && (
-                <Placeholder
-                  label={`Screen ${i + 1}`}
-                  seed={project.accent + i + 1}
-                  className="mt-10 aspect-[16/9] w-full rounded-4xl shadow-soft"
-                />
-              )}
+              {isAperture
+                ? apertureScenes[i + 1] && (
+                    <ApertureAsset
+                      scene={apertureScenes[i + 1].scene}
+                      alt={apertureScenes[i + 1].alt}
+                      className="mt-10 aspect-[16/9] w-full rounded-4xl"
+                    />
+                  )
+                : i < project.gallery && (
+                    <Placeholder
+                      label={`Screen ${i + 1}`}
+                      seed={project.accent + i + 1}
+                      className="mt-10 aspect-[16/9] w-full rounded-4xl shadow-soft"
+                    />
+                  )}
             </AnimatedReveal>
           ))}
         </div>
