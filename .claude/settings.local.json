@@ -134,7 +134,8 @@
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Write-Output \"port 3000 clear\")",
       "PowerShell(foreach \\($path in @\\(\"/work/learning-platform-ui\",\"/work/does-not-exist\"\\)\\) { try { $r = Invoke-WebRequest \"http://localhost:3000$path\" -UseBasicParsing -TimeoutSec 10; Write-Output \"$path -> HTTP $\\($r.StatusCode\\)\" } catch { $code = $_.Exception.Response.StatusCode.value__; Write-Output \"$path -> HTTP $code \\(expected 404 for bad slug\\)\" } })",
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Remove-Item \"c:\\\\Users\\\\iancr\\\\Portfolio\\\\home-tw4.jpeg\" -Force -ErrorAction SilentlyContinue; Write-Output \"server stopped, temp screenshot removed\")",
-      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; npm audit --omit=dev 2>&1 | Select-Object -Last 5; Write-Output \"===PROD audit exit: $LASTEXITCODE===\"; Write-Output \"--- full audit summary ---\"; npm audit 2>&1 | Select-String \"severity\")"
+      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; npm audit --omit=dev 2>&1 | Select-Object -Last 5; Write-Output \"===PROD audit exit: $LASTEXITCODE===\"; Write-Output \"--- full audit summary ---\"; npm audit 2>&1 | Select-String \"severity\")",
+      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; git rm -r --cached .playwright-mcp --quiet 2>&1 | Out-Null; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Ignore .playwright-mcp scratch output\"; Write-Output \"exit: $LASTEXITCODE\"; Write-Output \"=== final npm outdated ===\"; npm outdated 2>&1)"
     ],
     "additionalDirectories": [
       "c:\\Users\\iancr\\.claude\\skills\\design-guidelines",
