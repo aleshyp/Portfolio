@@ -1,0 +1,380 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - navigation [ref=e5]:
+      - link "I Ian Riley" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: I
+        - generic [ref=e8]: Ian Riley
+      - generic [ref=e9]:
+        - button "Switch to dark mode" [ref=e10]:
+          - img [ref=e12]
+        - button "Open menu" [ref=e14]:
+          - img [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e19]:
+        - generic [ref=e21]: Available for new projects
+        - heading "Hi, I'm Ian. I design clean, human-centered brands & products." [level=1] [ref=e25]
+        - paragraph [ref=e26]: A multidisciplinary designer based in Kansas City, United States, blending graphic design and UX/UI — and the front-end code to ship it — into work that feels effortless.
+        - generic [ref=e27]:
+          - link "View my work" [ref=e28] [cursor=pointer]:
+            - /url: /#work
+            - text: View my work
+            - img [ref=e29]
+          - link "Get in touch" [ref=e32] [cursor=pointer]:
+            - /url: /#contact
+        - generic [ref=e33]:
+          - img [ref=e34]
+          - generic [ref=e37]: Designing for esports orgs, influencers & brands since 2014
+      - link "Scroll to work" [ref=e39] [cursor=pointer]:
+        - /url: /#work
+        - img [ref=e40]
+    - generic [ref=e43]:
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]: Selected work
+          - heading "Case studies in clarity and craft." [level=2] [ref=e49]
+          - paragraph [ref=e50]: A few projects where thoughtful design moved the numbers — and made things genuinely nicer to use.
+        - paragraph [ref=e51]: 6 projects
+      - generic [ref=e52]:
+        - link "2025 Lead Designer Aperture — A Brand Identity From Scratch A full visual identity system, logo to guidelines. Brand Identity Logo Design Graphic Design" [ref=e54] [cursor=pointer]:
+          - /url: /work/brand-identity-system
+          - generic [ref=e59]: Brand Identity
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - generic [ref=e62]: "2025"
+              - generic [ref=e64]: Lead Designer
+            - heading "Aperture — A Brand Identity From Scratch" [level=3] [ref=e65]:
+              - generic [ref=e66]: Aperture — A Brand Identity From Scratch
+              - img [ref=e67]
+            - paragraph [ref=e70]: A full visual identity system, logo to guidelines.
+            - generic [ref=e71]:
+              - generic [ref=e72]: Brand Identity
+              - generic [ref=e73]: Logo Design
+              - generic [ref=e74]: Graphic Design
+        - link "2025 Designer & Front-End Developer Marketing Site — Designed & Built A marketing site, designed in Figma and built in code. Web Design Front-End Branding" [ref=e76] [cursor=pointer]:
+          - /url: /work/marketing-landing-page
+          - generic [ref=e81]: Web Design
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - generic [ref=e84]: "2025"
+              - generic [ref=e86]: Designer & Front-End Developer
+            - heading "Marketing Site — Designed & Built" [level=3] [ref=e87]:
+              - generic [ref=e88]: Marketing Site — Designed & Built
+              - img [ref=e89]
+            - paragraph [ref=e92]: A marketing site, designed in Figma and built in code.
+            - generic [ref=e93]:
+              - generic [ref=e94]: Web Design
+              - generic [ref=e95]: Front-End
+              - generic [ref=e96]: Branding
+        - link "2024 UX/UI Designer Online Learning Platform — Product UI A focused UI for an online learning experience. UX/UI Design Web App EdTech" [ref=e98] [cursor=pointer]:
+          - /url: /work/learning-platform-ui
+          - generic [ref=e103]: UX/UI Design
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: "2024"
+              - generic [ref=e108]: UX/UI Designer
+            - heading "Online Learning Platform — Product UI" [level=3] [ref=e109]:
+              - generic [ref=e110]: Online Learning Platform — Product UI
+              - img [ref=e111]
+            - paragraph [ref=e114]: A focused UI for an online learning experience.
+            - generic [ref=e115]:
+              - generic [ref=e116]: UX/UI Design
+              - generic [ref=e117]: Web App
+              - generic [ref=e118]: EdTech
+        - link "2024 Product Designer Onboarding That Converts A first-run experience built around the first win. UX/UI Design Mobile Conversion" [ref=e120] [cursor=pointer]:
+          - /url: /work/mobile-app-onboarding
+          - generic [ref=e125]: UX/UI Design
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - generic [ref=e128]: "2024"
+              - generic [ref=e130]: Product Designer
+            - heading "Onboarding That Converts" [level=3] [ref=e131]:
+              - generic [ref=e132]: Onboarding That Converts
+              - img [ref=e133]
+            - paragraph [ref=e136]: A first-run experience built around the first win.
+            - generic [ref=e137]:
+              - generic [ref=e138]: UX/UI Design
+              - generic [ref=e139]: Mobile
+              - generic [ref=e140]: Conversion
+        - link "2023 Design Systems Lead A Design System That Scales A token-driven design system, built to scale. Design System UI Design Front-End" [ref=e142] [cursor=pointer]:
+          - /url: /work/design-system
+          - generic [ref=e147]: Design System
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - generic [ref=e150]: "2023"
+              - generic [ref=e152]: Design Systems Lead
+            - heading "A Design System That Scales" [level=3] [ref=e153]:
+              - generic [ref=e154]: A Design System That Scales
+              - img [ref=e155]
+            - paragraph [ref=e158]: A token-driven design system, built to scale.
+            - generic [ref=e159]:
+              - generic [ref=e160]: Design System
+              - generic [ref=e161]: UI Design
+              - generic [ref=e162]: Front-End
+        - link "2023 Creative Director / Designer Esports Social Media & Brand Kit Social graphics & brand kit for an esports org. Graphic Design Social Media Branding" [ref=e164] [cursor=pointer]:
+          - /url: /work/esports-social-branding
+          - generic [ref=e169]: Graphic Design
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: "2023"
+              - generic [ref=e174]: Creative Director / Designer
+            - heading "Esports Social Media & Brand Kit" [level=3] [ref=e175]:
+              - generic [ref=e176]: Esports Social Media & Brand Kit
+              - img [ref=e177]
+            - paragraph [ref=e180]: Social graphics & brand kit for an esports org.
+            - generic [ref=e181]:
+              - generic [ref=e182]: Graphic Design
+              - generic [ref=e183]: Social Media
+              - generic [ref=e184]: Branding
+    - generic [ref=e187]:
+      - generic [ref=e189]:
+        - generic [ref=e193]: Your portrait
+        - generic [ref=e194]:
+          - paragraph [ref=e195]: Kansas City
+          - paragraph [ref=e196]: based & available remote
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - generic [ref=e199]: About me
+          - heading "Design that respects people's time and attention." [level=2] [ref=e201]
+        - generic [ref=e203]:
+          - paragraph [ref=e204]: I'm a multidisciplinary designer based in Kansas City. I picked up graphic design at 10, started freelancing at 13 — mostly social media work for esports orgs and influencers — and never really stopped. That early hustle taught me to ship fast and make things look good under real deadlines.
+          - paragraph [ref=e205]: In 2022 I turned design into a full-time career, and at my current company I've grown a graphic-design role into web design and front-end development — designing pages, owning the design system, and shipping it all in code. Whether it's a brand, an interface, or the code behind it, I sweat the details so the work feels effortless.
+        - generic [ref=e207]:
+          - generic [ref=e208]: Web Design
+          - generic [ref=e209]: Front-End Development
+          - generic [ref=e210]: Design Systems
+          - generic [ref=e211]: UX/UI Design
+          - generic [ref=e212]: Graphic Design
+          - generic [ref=e213]: Brand Identity
+        - generic [ref=e215]:
+          - generic [ref=e216]:
+            - term [ref=e217]: 13+
+            - definition [ref=e218]: Years designing
+          - generic [ref=e219]:
+            - term [ref=e220]: 6+
+            - definition [ref=e221]: Brands & orgs served
+          - generic [ref=e222]:
+            - term [ref=e223]: Design → code
+            - definition [ref=e224]: Own it end-to-end
+    - generic [ref=e226]:
+      - generic [ref=e228]:
+        - generic [ref=e229]:
+          - generic [ref=e230]: Experience
+          - heading "A track record of shipping." [level=2] [ref=e232]
+          - paragraph [ref=e233]: The short version of where I've worked and what I've shipped. Want the full picture? Grab the PDF.
+        - link "Download résumé" [ref=e234] [cursor=pointer]:
+          - /url: /resume.pdf
+          - img [ref=e235]
+          - text: Download résumé
+      - generic [ref=e238]:
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - heading "Web Designer & Front-End Developer · International Academy of Science" [level=3] [ref=e242]:
+              - text: Web Designer & Front-End Developer
+              - generic [ref=e243]: · International Academy of Science
+            - paragraph [ref=e244]: 2022 — Present
+          - paragraph [ref=e245]: United States
+          - paragraph [ref=e246]: Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus — an online learning program — own and maintain the design system, then transform those designs into shippable web pages in code.
+          - list [ref=e247]:
+            - listitem [ref=e248]: Design web pages for Acellus, an online learning platform.
+            - listitem [ref=e250]: Created and maintain the design system that keeps the product consistent.
+            - listitem [ref=e252]: Transform designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.
+            - listitem [ref=e254]: Use Claude Code to boost development efficiency and productivity.
+        - generic [ref=e257]:
+          - generic [ref=e258]:
+            - heading "Creative Director · Noxious Gaming" [level=3] [ref=e259]:
+              - text: Creative Director
+              - generic [ref=e260]: · Noxious Gaming
+            - paragraph [ref=e261]: 1 year
+          - paragraph [ref=e262]: Remote
+          - paragraph [ref=e263]: Led creative direction for an esports organization — setting the visual identity and producing social and brand designs across the org.
+          - list [ref=e264]:
+            - listitem [ref=e265]: Directed the visual identity and creative output for the organization.
+            - listitem [ref=e267]: Produced social media and brand designs for players and the org.
+        - generic [ref=e270]:
+          - generic [ref=e271]:
+            - heading "Graphic Designer · Buzzkill Esports" [level=3] [ref=e272]:
+              - text: Graphic Designer
+              - generic [ref=e273]: · Buzzkill Esports
+            - paragraph [ref=e274]: 6 months
+          - paragraph [ref=e275]: Remote
+          - paragraph [ref=e276]: Designed social media graphics and brand assets for an esports organization.
+          - list [ref=e277]:
+            - listitem [ref=e278]: Created social media designs and matchday graphics.
+        - generic [ref=e281]:
+          - generic [ref=e282]:
+            - heading "Graphic Designer · Animosity Esports" [level=3] [ref=e283]:
+              - text: Graphic Designer
+              - generic [ref=e284]: · Animosity Esports
+            - paragraph [ref=e285]: 6 months
+          - paragraph [ref=e286]: Remote
+          - paragraph [ref=e287]: Designed social media graphics and brand assets for an esports organization.
+          - list [ref=e288]:
+            - listitem [ref=e289]: Created social media designs and matchday graphics.
+        - generic [ref=e292]:
+          - generic [ref=e293]:
+            - heading "Freelance Designer · Self-employed" [level=3] [ref=e294]:
+              - text: Freelance Designer
+              - generic [ref=e295]: · Self-employed
+            - paragraph [ref=e296]: 2014 — 2022
+          - paragraph [ref=e297]: Remote
+          - paragraph [ref=e298]: Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where my brand and design work began.
+          - list [ref=e299]:
+            - listitem [ref=e300]: Built a client base of esports orgs and influencers as a teenager.
+            - listitem [ref=e302]: Specialized in social media designs and brand assets across multiple organizations.
+      - generic [ref=e305]:
+        - generic [ref=e306]:
+          - img [ref=e308]
+          - heading "Education & certifications" [level=3] [ref=e311]
+        - generic [ref=e312]:
+          - generic [ref=e313]:
+            - term [ref=e314]: Self-taught Designer — 13+ years
+            - definition [ref=e315]: Graphic & UX/UI design · Since 2012
+          - generic [ref=e316]:
+            - term [ref=e317]: Foundations of Cybersecurity
+            - definition [ref=e318]: Coursera · September 2025
+          - generic [ref=e319]:
+            - term [ref=e320]: "Play It Safe: Manage Security Risks"
+            - definition [ref=e321]: Coursera · September 2025
+          - generic [ref=e322]:
+            - term [ref=e323]: "Connect and Protect: Networks and Network Security"
+            - definition [ref=e324]: Coursera · September 2025
+          - generic [ref=e325]:
+            - term [ref=e326]: "Tools of the Trade: Linux and SQL"
+            - definition [ref=e327]: Coursera · September 2025
+          - generic [ref=e328]:
+            - term [ref=e329]: Assets, Threats, and Vulnerabilities
+            - definition [ref=e330]: Coursera · October 2025
+    - generic [ref=e332]:
+      - generic [ref=e334]:
+        - generic [ref=e335]: Skills & tools
+        - heading "A full-stack design toolkit." [level=2] [ref=e337]
+        - paragraph [ref=e338]: From brand and graphics to product interfaces and the code that ships them — here's how I take work from idea to launch.
+      - generic [ref=e339]:
+        - generic [ref=e341]:
+          - img [ref=e343]
+          - heading "Graphic Design" [level=3] [ref=e348]
+          - paragraph [ref=e349]: Where it all started.
+          - list [ref=e350]:
+            - listitem [ref=e351]: Brand Identity
+            - listitem [ref=e353]: Social Media
+            - listitem [ref=e355]: Layout
+            - listitem [ref=e357]: Visual Design
+        - generic [ref=e360]:
+          - img [ref=e362]
+          - heading "Branding" [level=3] [ref=e365]
+          - paragraph [ref=e366]: Identities that stick.
+          - list [ref=e367]:
+            - listitem [ref=e368]: Logo Design
+            - listitem [ref=e370]: Brand Identity
+            - listitem [ref=e372]: Style Guides
+            - listitem [ref=e374]: Typography
+        - generic [ref=e377]:
+          - img [ref=e379]
+          - heading "UX/UI Design" [level=3] [ref=e381]
+          - paragraph [ref=e382]: Interfaces that feel obvious.
+          - list [ref=e383]:
+            - listitem [ref=e384]: UI Design
+            - listitem [ref=e386]: Prototyping
+            - listitem [ref=e388]: Interaction
+            - listitem [ref=e390]: Design Systems
+        - generic [ref=e393]:
+          - img [ref=e395]
+          - heading "Front-End" [level=3] [ref=e399]
+          - paragraph [ref=e400]: Shipping design in code.
+          - list [ref=e401]:
+            - listitem [ref=e402]: React
+            - listitem [ref=e404]: TypeScript
+            - listitem [ref=e406]: Tailwind CSS
+            - listitem [ref=e408]: TanStack
+      - generic [ref=e411]:
+        - generic [ref=e412]: Figma
+        - generic [ref=e413]: Photoshop
+        - generic [ref=e414]: Illustrator
+        - generic [ref=e415]: Affinity
+        - generic [ref=e416]: React
+        - generic [ref=e417]: TypeScript
+        - generic [ref=e418]: Tailwind CSS
+        - generic [ref=e419]: TanStack
+        - generic [ref=e420]: Claude Code
+    - generic [ref=e424]:
+      - generic [ref=e425]:
+        - generic [ref=e426]: Contact
+        - heading "Have a project in mind? Let's talk." [level=2] [ref=e428]
+        - paragraph [ref=e429]: I'm currently taking on a few new projects. Tell me a little about what you're building and I'll get back to you within a day or two.
+        - generic [ref=e430]:
+          - link "hello@ianriley.com" [ref=e431] [cursor=pointer]:
+            - /url: mailto:hello@ianriley.com
+            - img [ref=e433]
+            - text: hello@ianriley.com
+          - generic [ref=e436]:
+            - img [ref=e438]
+            - text: Kansas City, United States
+        - generic [ref=e441]:
+          - link "Dribbble" [ref=e442] [cursor=pointer]:
+            - /url: https://dribbble.com/aleshyp
+          - link "LinkedIn" [ref=e443] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/ian-riley-242a4a300/
+          - link "Behance" [ref=e444] [cursor=pointer]:
+            - /url: https://www.behance.net/aleshyp
+      - generic [ref=e447]:
+        - generic [ref=e448]:
+          - generic [ref=e449]:
+            - generic [ref=e450]: Name
+            - textbox "Name" [ref=e451]:
+              - /placeholder: Jane Doe
+          - generic [ref=e452]:
+            - generic [ref=e453]: Email
+            - textbox "Email" [ref=e454]:
+              - /placeholder: jane@company.com
+        - generic [ref=e455]:
+          - generic [ref=e456]: Company (optional)
+          - textbox "Company (optional)" [ref=e457]:
+            - /placeholder: Acme Inc.
+        - generic [ref=e458]:
+          - generic [ref=e459]: Project details
+          - textbox "Project details" [ref=e460]:
+            - /placeholder: Tell me about your project, timeline, and goals…
+        - button "Send message" [ref=e461]:
+          - text: Send message
+          - img [ref=e462]
+        - paragraph [ref=e465]: Demo form — no message is actually sent.
+  - contentinfo [ref=e466]:
+    - generic [ref=e468]:
+      - generic [ref=e469]:
+        - generic [ref=e470]:
+          - paragraph [ref=e471]: Let's build something people love.
+          - link "hello@ianriley.com" [ref=e472] [cursor=pointer]:
+            - /url: mailto:hello@ianriley.com
+            - img [ref=e473]
+            - text: hello@ianriley.com
+        - navigation "Social links" [ref=e476]:
+          - list [ref=e477]:
+            - listitem [ref=e478]:
+              - link "Dribbble" [ref=e479] [cursor=pointer]:
+                - /url: https://dribbble.com/aleshyp
+            - listitem [ref=e480]:
+              - link "LinkedIn" [ref=e481] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/ian-riley-242a4a300/
+            - listitem [ref=e482]:
+              - link "Behance" [ref=e483] [cursor=pointer]:
+                - /url: https://www.behance.net/aleshyp
+      - generic [ref=e484]:
+        - paragraph [ref=e485]: © 2026 Ian Riley. Designed & built with care.
+        - generic [ref=e486]:
+          - link "Work" [ref=e487] [cursor=pointer]:
+            - /url: /#work
+          - link "About" [ref=e488] [cursor=pointer]:
+            - /url: /#about
+          - link "Experience" [ref=e489] [cursor=pointer]:
+            - /url: /#experience
+          - link "Skills" [ref=e490] [cursor=pointer]:
+            - /url: /#skills
+          - link "Contact" [ref=e491] [cursor=pointer]:
+            - /url: /#contact
+          - button "Back to top" [ref=e492]:
+            - img [ref=e493]
+  - alert [ref=e495]

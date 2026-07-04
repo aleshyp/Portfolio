@@ -7,8 +7,8 @@ import { site } from "@/data/site";
  * URL, dimensions, and content-type) — no static asset needed. Rendered at
  * build/request time with the Satori-backed ImageResponse.
  *
- * Brand colors mirror tailwind.config.ts `brand` (emerald) so the card matches
- * the site. 1200×630 is the standard OG size.
+ * Brand colors mirror the `brand` (emerald) tokens in globals.css @theme so the
+ * card matches the site. 1200×630 is the standard OG size.
  */
 
 export const alt = `${site.name} — ${site.role}`;

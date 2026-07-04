@@ -1,6 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4 is CSS-first: the design tokens that used to live in
+   tailwind.config.ts now live here in @theme, exposed as CSS custom properties.
+   Utilities (bg-brand-600, text-ink-muted, shadow-soft, rounded-4xl,
+   animate-fade-up, font-display …) are generated from these names. */
+
+/* Class-based dark mode. v4 defaults to the `prefers-color-scheme` media
+   strategy; next-themes toggles a `.dark` class, so we redefine the `dark:`
+   variant to match that class (or any descendant of it). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
+
+  --color-ink: #0b1220;
+  --color-ink-soft: #1e293b;
+  --color-ink-muted: #475569;
+  /* faint darkened from #94a3b8 → slate-500 so small de-emphasized text
+     still clears WCAG AA 4.5:1 on white (4.76:1). Pair with dark:text-slate-400
+     in dark mode, where slate-400 clears 7.3:1 on the ink background. */
+  --color-ink-faint: #64748b;
+
+  /* sparing warm highlight */
+  --color-accent: #f59e0b;
+  --color-accent-soft: #fbbf24;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), sans-serif;
+
+  --shadow-soft: 0 1px 2px rgba(2, 44, 34, 0.04), 0 8px 24px rgba(2, 44, 34, 0.06);
+  --shadow-lift: 0 12px 40px rgba(2, 44, 34, 0.12);
+  --shadow-glow: 0 0 0 1px rgba(16, 185, 129, 0.15), 0 12px 40px rgba(16, 185, 129, 0.18);
+
+  --radius-4xl: 2rem;
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
 
 :root {
   --background: #ffffff;
