@@ -119,7 +119,13 @@
       "PowerShell(npm run build 2>&1 | Select-Object -Last 14; Write-Output \"===BUILD exit: $LASTEXITCODE===\")",
       "Bash(curl -s -o /dev/null http://localhost:3210/)",
       "Bash(sleep 1)",
-      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Upgrade tooling + low-risk majors \\(TS 6, @types/node 24, framer-motion 12, lucide-react 1\\); fix a11y spec\"; Write-Output \"exit: $LASTEXITCODE\"; git log --oneline -1)"
+      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Upgrade tooling + low-risk majors \\(TS 6, @types/node 24, framer-motion 12, lucide-react 1\\); fix a11y spec\"; Write-Output \"exit: $LASTEXITCODE\"; git log --oneline -1)",
+      "PowerShell(foreach \\($p in @\\(\"react\",\"react-dom\",\"@types/react\",\"@types/react-dom\"\\)\\) { $v = npm view $p version; Write-Output \"$p -> $v\" }; Write-Output \"--- next peer ---\"; npm view next@16.2.10 peerDependencies.react)",
+      "PowerShell(npm install 2>&1 | Select-Object -Last 6; Write-Output \"===install exit: $LASTEXITCODE===\")",
+      "PowerShell(npm view next-themes@0.4.6 peerDependencies)",
+      "PowerShell(npm ls react react-dom 2>&1)",
+      "PowerShell(npm run lint 2>&1 | Select-Object -Last 6; Write-Output \"===LINT exit: $LASTEXITCODE===\"; npm run build 2>&1 | Select-Object -Last 8; Write-Output \"===BUILD exit: $LASTEXITCODE===\")",
+      "PowerShell(cd c:\\\\Users\\\\iancr\\\\Portfolio; git add -A; git -c user.name=\"Claude\" -c user.email=\"noreply@anthropic.com\" commit -q -m \"Upgrade React 18 -> 19 \\(+ @types/react/react-dom 19\\)\" 2>&1 | Select-Object -Last 1; Write-Output \"exit: $LASTEXITCODE\"; git log --oneline -1)"
     ],
     "additionalDirectories": [
       "c:\\Users\\iancr\\.claude\\skills\\design-guidelines",
