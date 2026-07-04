@@ -41,7 +41,7 @@ export const projects: Project[] = [
     tags: ["Brand Identity", "Logo Design", "Graphic Design"],
     role: "Lead Designer",
     year: "2025",
-    client: "Aperture (placeholder)",
+    client: "Aperture",
     duration: "6 weeks",
     results: [
       { label: "Brand assets delivered", value: "40+" },
