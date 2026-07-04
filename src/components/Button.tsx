@@ -13,7 +13,7 @@ const variants: Record<Variant, string> = {
   outline:
     "border border-brand-200 bg-white text-brand-700 hover:border-brand-300 hover:bg-brand-50 hover:-translate-y-0.5 active:translate-y-0 active:bg-brand-100 dark:border-brand-500/30 dark:bg-white/5 dark:text-brand-300 dark:hover:border-brand-500/50 dark:hover:bg-white/10 dark:active:bg-white/[0.08]",
   ghost:
-    "text-ink-soft hover:text-brand-700 hover:bg-brand-50 active:bg-brand-100 dark:text-ink-faint dark:hover:text-brand-300 dark:hover:bg-white/5 dark:active:bg-white/[0.08]",
+    "text-fg-soft hover:text-brand-700 hover:bg-brand-50 active:bg-brand-100 dark:text-fg-faint dark:hover:text-brand-300 dark:hover:bg-white/5 dark:active:bg-white/[0.08]",
 };
 
 const sizes: Record<Size, string> = {

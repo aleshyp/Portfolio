@@ -11,15 +11,15 @@ export function Projects() {
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <Eyebrow>Selected work</Eyebrow>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink dark:text-slate-100 sm:text-4xl">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
               Case studies in clarity and craft.
             </h2>
-            <p className="mt-4 text-ink-muted dark:text-slate-400">
+            <p className="mt-4 text-fg-muted">
               A few projects where thoughtful design moved the numbers — and made
               things genuinely nicer to use.
             </p>
           </div>
-          <p className="text-sm font-medium text-ink-faint dark:text-slate-400">
+          <p className="text-sm font-medium text-fg-faint">
             {projects.length} projects
           </p>
         </div>

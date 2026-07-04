@@ -53,7 +53,7 @@ export function Hero() {
 
           <motion.h1
             variants={item}
-            className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-ink dark:text-slate-100 sm:text-6xl"
+            className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-fg sm:text-6xl"
           >
             Hi, I&apos;m {site.firstName}. I design{" "}
             <span className="text-gradient">clean, human-centered</span>{" "}
@@ -62,7 +62,7 @@ export function Hero() {
 
           <motion.p
             variants={item}
-            className="mx-auto mt-6 max-w-2xl text-lg text-ink-muted dark:text-slate-400 sm:text-xl"
+            className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
             A {site.role.toLowerCase()} based in {site.location}, blending
             graphic design and UX/UI — and the front-end code to ship it — into
@@ -84,7 +84,7 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="mt-16 flex items-center justify-center gap-2 text-sm text-ink-faint dark:text-slate-400"
+            className="mt-16 flex items-center justify-center gap-2 text-sm text-fg-faint"
           >
             <Sparkles size={15} className="text-brand-400" />
             <span>Designing for esports orgs, influencers &amp; brands since 2014</span>

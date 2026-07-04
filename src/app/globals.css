@@ -23,13 +23,42 @@
   --color-brand-900: #064e3b;
   --color-brand-950: #022c22;
 
+  /* ── Ink (fixed dark-navy palette) ────────────────────────────────────
+     A fixed scale of dark navy/slate values. These do NOT theme-flip —
+     they are used both as light-mode text AND as dark-mode BACKGROUNDS
+     (bg-ink, dark:to-ink, glass dark:bg-ink/70). Repointing them per theme
+     would break those backgrounds. For text that must flip with the theme,
+     use the FOREGROUND tokens (fg / fg-soft / fg-muted / fg-faint) below.
+
+     Contrast note: ink-faint #64748b (slate-500) clears 4.76:1 on white. */
   --color-ink: #0b1220;
   --color-ink-soft: #1e293b;
   --color-ink-muted: #475569;
-  /* faint darkened from #94a3b8 → slate-500 so small de-emphasized text
-     still clears WCAG AA 4.5:1 on white (4.76:1). Pair with dark:text-slate-400
-     in dark mode, where slate-400 clears 7.3:1 on the ink background. */
   --color-ink-faint: #64748b;
+
+  /* ── Foreground (theme-aware text) ────────────────────────────────────
+     The four levels of TEXT emphasis, re-pointed per theme in the `.dark`
+     block below so one utility resolves correctly in both. Prefer these
+     over `text-ink dark:text-slate-*` for body/heading copy.
+
+       fg        headings / highest-emphasis text
+       fg-soft   body copy / secondary headings
+       fg-muted  supporting body text            (AA: 4.5:1+)
+       fg-faint  captions, metadata, eyebrows    (AA: 4.5:1+)  */
+  --color-fg: #0b1220;        /* = ink        (light) */
+  --color-fg-soft: #1e293b;   /* = ink-soft   (light) */
+  --color-fg-muted: #475569;  /* = ink-muted  (light) */
+  --color-fg-faint: #64748b;  /* = ink-faint  (light) */
+
+  /* ── Surfaces ─────────────────────────────────────────────────────────
+     Card / panel backgrounds and their hairline borders. Theme-aware via
+     the `.dark` overrides below. Use bg-surface / bg-surface-raised /
+     border-subtle instead of bg-white dark:bg-white/[0.03] etc.
+     These have NO palette dual-use, so repointing them is safe. */
+  --color-surface: #ffffff;         /* default card background            */
+  --color-surface-raised: #f8faf9;  /* subtly raised / nested panel       */
+  --color-surface-solid: #ffffff;   /* OPAQUE card (overlays a photo/bg)  */
+  --color-border-subtle: #d1fae5;   /* brand-100 hairline (matches cards) */
 
   /* sparing warm highlight */
   --color-accent: #f59e0b;
@@ -89,6 +118,21 @@
   --background: #0b1220;
   --background-soft: #0f1729;
   --foreground: #e2e8f0;
+
+  /* Dark-mode re-points for the theme-aware tokens. This is the whole
+     point of the token system: the light↔dark hierarchy lives HERE, in one
+     place, not scattered across components. `ink*` is intentionally NOT
+     repointed (it doubles as a dark background — see @theme). Values match
+     the previous hand-rolled dark:text-slate-* conventions (100→200→400). */
+  --color-fg: #f1f5f9;        /* slate-100 — headings                     */
+  --color-fg-soft: #e2e8f0;   /* slate-200 — body                         */
+  --color-fg-muted: #94a3b8;  /* slate-400 — supporting  (7.3:1 on ink bg) */
+  --color-fg-faint: #94a3b8;  /* slate-400 — captions/metadata            */
+
+  --color-surface: rgba(255, 255, 255, 0.03); /* was bg-white/[0.03]      */
+  --color-surface-raised: rgba(255, 255, 255, 0.05); /* was bg-white/5    */
+  --color-surface-solid: #1e293b; /* slate-800 — opaque overlay card      */
+  --color-border-subtle: rgba(255, 255, 255, 0.1); /* was border-white/10 */
 }
 
 @layer base {

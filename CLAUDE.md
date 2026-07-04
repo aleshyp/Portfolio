@@ -1,12 +1,15 @@
 # Portfolio
 
-Personal portfolio site. Next.js 14 (App Router) · Tailwind CSS 3.4 · TypeScript · Framer Motion · next-themes · lucide-react.
+Personal portfolio site. Next.js 16 (App Router, Turbopack) · Tailwind CSS 4 (CSS-first `@theme`) · TypeScript · Framer Motion · next-themes · lucide-react.
 
 ## Design & UI work
 
-Before building, reviewing, or refining any UI in this project, use the **`design-guidelines`** skill (invoke `/design-guidelines` or reference it). It's the source of truth for layout/spacing, color, typography, components & interaction states, accessibility (WCAG 2.2 AA), responsive design, motion, performance (Core Web Vitals), and Tailwind conventions — tuned to this stack.
+Two complementary skills — use both:
 
-Run its **Review Pass** before considering UI work done.
+- **`design-system`** (`/design-system`) — this repo's *concrete* system: the actual tokens (`fg-*`, `surface-*`, `ink`, `brand`), primitives, and light/dark rules. The full reference is [`DESIGN.md`](DESIGN.md) in the repo root. **The rule that prevents the most dark-mode bugs:** text uses theme-aware `fg-*` tokens (`text-fg`, `text-fg-muted`…), **not** `text-ink dark:text-slate-*`. `ink` is a fixed dark-navy used for *backgrounds* and does not flip.
+- **`design-guidelines`** (`/design-guidelines`) — general UX/UI best practice: layout/spacing, color, typography, components & states, accessibility (WCAG 2.2 AA), responsive, motion, Core Web Vitals.
+
+Run the **Review Pass** (both skills) before considering UI work done.
 
 ## Testing
 
@@ -18,7 +21,7 @@ Before adding user input (forms, params), wiring a backend/API route, handling e
 
 ## Project conventions
 
-- **Design tokens** live in `tailwind.config.ts`: `brand` (emerald 50–950), `ink` (DEFAULT/soft/muted/faint), `accent` (amber). Use these tokens — don't hardcode hex or use arbitrary values (`text-[#…]`, `p-[13px]`). Add to the theme instead.
+- **Design tokens** live in `src/app/globals.css` (Tailwind v4 `@theme` block; the old `tailwind.config.ts` is gone). Light values in `@theme`, dark re-points in the `.dark` block. Two-layer color model: **`fg-*`** (theme-aware text) vs **`ink*`** (fixed dark-navy, used as backgrounds) — see `DESIGN.md`. Also `surface`/`surface-raised`/`surface-solid`/`border-subtle` (theme-aware), `brand` (emerald 50–950), `accent` (amber, sparing). Don't hardcode hex or use arbitrary values (`text-[#…]`, `p-[13px]`) — add to `@theme`.
 - **Fonts:** `font-sans` (Inter) and `font-display` (Sora), loaded via `next/font` in `layout.tsx`.
 - **`cn()`** helper in `src/lib/utils.ts` is a simple class joiner (no `tailwind-merge` dedupe).
 - **Motion:** shared `AnimatedReveal` / `StaggerGroup` / `StaggerItem` in `components/AnimatedReveal.tsx`; all motion honors `prefers-reduced-motion` via `useReducedMotion()`.

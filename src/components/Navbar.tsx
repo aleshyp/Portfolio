@@ -33,7 +33,7 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled || open
-          ? "glass border-b border-brand-100/60 shadow-soft dark:border-white/10"
+          ? "glass border-b border-border-subtle shadow-soft"
           : "bg-transparent",
       )}
     >
@@ -41,7 +41,7 @@ export function Navbar() {
         <nav className="flex h-16 items-center justify-between sm:h-20">
           <Link
             href="/"
-            className="group flex items-center gap-2.5 rounded-lg text-base font-semibold text-ink dark:text-slate-100"
+            className="group flex items-center gap-2.5 rounded-lg text-base font-semibold text-fg"
             onClick={() => setOpen(false)}
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white shadow-soft transition-transform duration-300 group-hover:scale-105">
@@ -56,7 +56,7 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="relative rounded-full px-4 py-2 text-sm font-medium text-ink-muted transition-colors duration-200 hover:text-brand-700 dark:text-ink-faint dark:hover:text-brand-300"
+                  className="relative rounded-full px-4 py-2 text-sm font-medium text-fg-muted transition-colors duration-200 hover:text-brand-700 dark:text-fg-faint dark:hover:text-brand-300"
                 >
                   {item.label}
                 </Link>
@@ -79,7 +79,7 @@ export function Navbar() {
           <div className="flex items-center gap-1 lg:hidden">
             <ThemeToggle />
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-ink-soft transition-colors hover:bg-brand-50 dark:text-ink-faint dark:hover:bg-white/5"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-fg-soft transition-colors hover:bg-brand-50 dark:text-fg-faint dark:hover:bg-white/5"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
@@ -98,7 +98,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="border-b border-brand-100/60 bg-white shadow-soft backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-ink"
+            className="border-b border-border-subtle bg-white shadow-soft backdrop-blur-xl lg:hidden dark:bg-ink"
           >
             <Container>
               <ul className="flex flex-col gap-1 py-4">
@@ -107,7 +107,7 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-xl px-4 py-3 text-base font-medium text-ink-soft transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-ink-faint dark:hover:bg-white/5 dark:hover:text-brand-300"
+                      className="block rounded-xl px-4 py-3 text-base font-medium text-fg-soft transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-fg-faint dark:hover:bg-white/5 dark:hover:text-brand-300"
                     >
                       {item.label}
                     </Link>
