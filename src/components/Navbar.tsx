@@ -1,0 +1,132 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { site } from "@/data/site";
+import { Container } from "./Container";
+import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "@/lib/utils";
+
+export function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  return (
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        scrolled || open
+          ? "glass border-b border-brand-100/60 shadow-soft dark:border-white/10"
+          : "bg-transparent",
+      )}
+    >
+      <Container>
+        <nav className="flex h-16 items-center justify-between sm:h-20">
+          <Link
+            href="/"
+            className="group flex items-center gap-2.5 rounded-lg text-base font-semibold text-ink dark:text-slate-100"
+            onClick={() => setOpen(false)}
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white shadow-soft transition-transform duration-300 group-hover:scale-105">
+              {site.firstName[0]}
+            </span>
+            <span className="whitespace-nowrap font-display">{site.name}</span>
+          </Link>
+
+          {/* Desktop nav */}
+          <ul className="hidden items-center gap-1 lg:flex">
+            {site.nav.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="relative rounded-full px-4 py-2 text-sm font-medium text-ink-muted transition-colors duration-200 hover:text-brand-700 dark:text-ink-faint dark:hover:text-brand-300"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            <li className="ml-1">
+              <ThemeToggle />
+            </li>
+            <li className="ml-1">
+              <Link
+                href="/#contact"
+                className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift dark:bg-brand-700 dark:hover:bg-brand-600"
+              >
+                Let&apos;s talk
+              </Link>
+            </li>
+          </ul>
+
+          {/* Mobile controls */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <ThemeToggle />
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-ink-soft transition-colors hover:bg-brand-50 dark:text-ink-faint dark:hover:bg-white/5"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </nav>
+      </Container>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="border-b border-brand-100/60 bg-white shadow-soft backdrop-blur-xl lg:hidden dark:border-white/10 dark:bg-ink"
+          >
+            <Container>
+              <ul className="flex flex-col gap-1 py-4">
+                {site.nav.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-xl px-4 py-3 text-base font-medium text-ink-soft transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-ink-faint dark:hover:bg-white/5 dark:hover:text-brand-300"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+                <li className="pt-2">
+                  <Link
+                    href="/#contact"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-xl bg-brand-700 px-4 py-3 text-center text-base font-medium text-white transition-colors hover:bg-brand-800 active:bg-brand-900 dark:hover:bg-brand-600"
+                  >
+                    Let&apos;s talk
+                  </Link>
+                </li>
+              </ul>
+            </Container>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}

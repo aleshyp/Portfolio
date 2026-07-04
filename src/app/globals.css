@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --background-soft: #f8faf9;
+  --foreground: #0b1220;
+}
+
+.dark {
+  --background: #0b1220;
+  --background-soft: #0f1729;
+  --foreground: #e2e8f0;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Decorative blurred backdrops use negative offsets; keep them from
+       creating a horizontal scrollbar on narrow viewports. */
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #a7f3d0;
+    color: #064e3b;
+  }
+
+  .dark ::selection {
+    background-color: #065f46;
+    color: #d1fae5;
+  }
+
+  /* Crisp, accessible focus ring (WCAG 2.2 SC 2.4.13: ≥2px, ≥3:1 contrast).
+     Applied globally so every focusable element gets a consistent brand ring;
+     components should NOT override this with outline-none unless they provide
+     an equally visible replacement. */
+  :focus-visible {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .dark :focus-visible {
+    /* brand-400 reads better on dark backgrounds */
+    outline-color: #34d399;
+  }
+
+  /* Thin, themed scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #a7f3d0 transparent;
+  }
+
+  .dark * {
+    scrollbar-color: #065f46 transparent;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-brand-400 bg-clip-text text-transparent;
+  }
+
+  .grid-pattern {
+    background-image:
+      linear-gradient(to right, rgba(16, 185, 129, 0.14) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(16, 185, 129, 0.14) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .dark .grid-pattern {
+    background-image:
+      linear-gradient(to right, rgba(16, 185, 129, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(16, 185, 129, 0.06) 1px, transparent 1px);
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl backdrop-saturate-150 dark:bg-ink/70;
+  }
+}
+
+@layer utilities {
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

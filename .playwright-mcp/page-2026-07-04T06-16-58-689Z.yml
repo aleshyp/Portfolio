@@ -1,0 +1,131 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - navigation [ref=e5]:
+      - link "I Ian Riley" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: I
+        - generic [ref=e8]: Ian Riley
+      - generic [ref=e9]:
+        - button "Switch to dark mode" [ref=e10] [cursor=pointer]:
+          - img [ref=e12]
+        - button "Open menu" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+  - main [ref=e16]:
+    - article [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - link "Back to work" [ref=e20] [cursor=pointer]:
+            - /url: /#work
+            - img [ref=e21]
+            - text: Back to work
+          - generic [ref=e23]:
+            - generic [ref=e24]: UX/UI Design
+            - generic [ref=e25]: Web App
+            - generic [ref=e26]: EdTech
+          - heading "Online Learning Platform — Product UI" [level=1] [ref=e27]
+          - paragraph [ref=e28]: A clean, focused interface for an online learning experience — designed to keep students moving through lessons without friction.
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - term [ref=e32]: Client
+            - definition [ref=e33]: EdTech (placeholder)
+          - generic [ref=e34]:
+            - term [ref=e35]: Role
+            - definition [ref=e36]: UX/UI Designer
+          - generic [ref=e37]:
+            - term [ref=e38]: Year
+            - definition [ref=e39]: "2024"
+          - generic [ref=e40]:
+            - term [ref=e41]: Duration
+            - definition [ref=e42]: 4 months
+      - generic [ref=e48]: Hero visual
+      - generic [ref=e50]:
+        - generic [ref=e51]:
+          - generic [ref=e52]: Overview
+          - paragraph [ref=e54]: Online learning lives or dies on focus. This project reworked a course experience so students always knew where they were, what was next, and how far they had to go — with the interface stepping back so the content could lead.
+        - generic [ref=e56]:
+          - paragraph [ref=e57]: Results
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - term [ref=e60]: +29%
+              - definition [ref=e61]: Lesson completion
+            - generic [ref=e62]:
+              - term [ref=e63]: −40%
+              - definition [ref=e64]: Navigation steps
+            - generic [ref=e65]:
+              - term [ref=e66]: 84 SUS
+              - definition [ref=e67]: Usability score
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - text: "01"
+              - heading "The problem" [level=2] [ref=e73]
+            - paragraph [ref=e74]: Students were dropping off mid-course. The old layout buried progress, mixed navigation with content, and made it easy to lose your place — small frictions that added up to lost momentum.
+          - generic [ref=e78]: Screen 1
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - text: "02"
+              - heading "Design goals" [level=2] [ref=e82]
+            - paragraph [ref=e83]: "Make the next action obvious on every screen, surface progress clearly, and reduce the visual noise around the lesson itself. Every decision was weighed against one question: does this help the student keep going?"
+          - generic [ref=e87]: Screen 2
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - text: "03"
+              - heading "The solution" [level=2] [ref=e91]
+            - paragraph [ref=e92]: A calm lesson view with a persistent progress rail, a simplified course map, and consistent patterns for video, reading, and assessment — with clear, rewarding feedback as students completed each step.
+          - generic [ref=e96]: Screen 3
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - text: "04"
+              - heading "Outcome" [level=2] [ref=e100]
+            - paragraph [ref=e101]: Lesson completion rose 29% and the path through a course got noticeably shorter. Students described the experience as 'easy to stick with' — exactly the goal.
+          - generic [ref=e105]: Screen 4
+      - generic [ref=e108]:
+        - paragraph [ref=e109]: Next project
+        - link "Onboarding That Converts View case study" [ref=e110] [cursor=pointer]:
+          - /url: /work/mobile-app-onboarding
+          - heading "Onboarding That Converts" [level=2] [ref=e111]
+          - generic [ref=e112]:
+            - text: View case study
+            - img [ref=e113]
+  - contentinfo [ref=e115]:
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - paragraph [ref=e120]: Let's build something people love.
+          - link "hello@ianriley.com" [ref=e121] [cursor=pointer]:
+            - /url: mailto:hello@ianriley.com
+            - img [ref=e122]
+            - text: hello@ianriley.com
+        - navigation "Social links" [ref=e125]:
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - link "Dribbble" [ref=e128] [cursor=pointer]:
+                - /url: https://dribbble.com/aleshyp
+            - listitem [ref=e129]:
+              - link "LinkedIn" [ref=e130] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/ian-riley-242a4a300/
+            - listitem [ref=e131]:
+              - link "Behance" [ref=e132] [cursor=pointer]:
+                - /url: https://www.behance.net/aleshyp
+      - generic [ref=e133]:
+        - paragraph [ref=e134]: © 2026 Ian Riley. Designed & built with care.
+        - generic [ref=e135]:
+          - link "Work" [ref=e136] [cursor=pointer]:
+            - /url: /#work
+          - link "About" [ref=e137] [cursor=pointer]:
+            - /url: /#about
+          - link "Experience" [ref=e138] [cursor=pointer]:
+            - /url: /#experience
+          - link "Skills" [ref=e139] [cursor=pointer]:
+            - /url: /#skills
+          - link "Contact" [ref=e140] [cursor=pointer]:
+            - /url: /#contact
+          - button "Back to top" [ref=e141] [cursor=pointer]:
+            - img [ref=e142]
+  - alert [ref=e144]
