@@ -340,7 +340,7 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
 export const apertureScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "logomark",
-    alt: "Aperture logo — a violet six-blade aperture iris with a glowing amber center, beside the wordmark set in Sora, on a deep indigo field.",
+    alt: "Aperture logo reveal — the violet lens mark with its glowing amber center animates in beside the 'Aperture' wordmark and the tagline 'Focus the frame.', on a deep indigo field.",
   },
   {
     scene: "logo-construction",
