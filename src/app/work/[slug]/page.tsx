@@ -7,10 +7,23 @@ import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
+import { ApertureHero } from "@/components/ApertureHero";
 import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
+import { LearningAsset, learningScenes } from "@/components/LearningAsset";
 import { Badge, Eyebrow } from "@/components/Badge";
+import { cn } from "@/lib/utils";
 
 type Params = { slug: string };
+
+// Aperture's non-hero scenes map to exported Figma PNG frames (@2x, 3200×1800)
+// under /public. Keyed by ApertureAsset scene name so the SVG stays the fallback
+// for any scene without a PNG.
+const aperturePng: Record<string, string> = {
+  "logo-construction": "/work/aperture/02-logo-construction@2x.png",
+  palette: "/work/aperture/03-palette@2x.png",
+  "type-specimen": "/work/aperture/04-type-specimen@2x.png",
+  usage: "/work/aperture/05-usage@2x.png",
+};
 
 export function generateStaticParams(): Params[] {
   return projects.map((p) => ({ slug: p.slug }));
@@ -55,27 +68,64 @@ export default async function CaseStudy({
 
   const next = getNextProject(project.slug);
 
-  // A couple of case studies ship real (SVG) deliverables instead of gradient
-  // placeholders: Aperture (brand identity) and Northwind (marketing site).
-  // Each has its own ordered scene set + asset component; everything else still
-  // uses the Placeholder until real imagery exists.
+  // A few case studies ship real (SVG) deliverables instead of gradient
+  // placeholders: Aperture (brand identity), Northwind (marketing site), and
+  // Lumin (the online-learning product UI). Each has its own ordered scene set +
+  // asset component; everything else still uses the Placeholder until real
+  // imagery exists.
   const assetSet:
-    | { scenes: { scene: string; alt: string }[]; kind: "aperture" | "marketing" }
+    | {
+        scenes: { scene: string; alt: string }[];
+        kind: "aperture" | "marketing" | "learning";
+      }
     | null =
     project.slug === "brand-identity-system"
       ? { scenes: apertureScenes, kind: "aperture" }
       : project.slug === "marketing-landing-page"
         ? { scenes: marketingScenes, kind: "marketing" }
-        : null;
+        : project.slug === "learning-platform-ui"
+          ? { scenes: learningScenes, kind: "learning" }
+          : null;
 
   // Renders scene N from the active asset set (hero = 0), or null if none.
   const renderScene = (index: number, className: string) => {
     const item = assetSet?.scenes[index];
     if (!item) return null;
     if (assetSet!.kind === "aperture") {
+      // Aperture ships real Figma deliverables: the hero (scene 0) is the brand
+      // logo-reveal animation; scenes 1–4 are exported PNG frames.
+      if (index === 0) {
+        return (
+          <div className={cn("overflow-hidden bg-ink shadow-soft", className)}>
+            <ApertureHero alt={item.alt} />
+          </div>
+        );
+      }
+      const png = aperturePng[item.scene];
+      if (png) {
+        return (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={png}
+            alt={item.alt}
+            width={3200}
+            height={1800}
+            className={cn("block object-cover shadow-soft", className)}
+          />
+        );
+      }
       return (
         <ApertureAsset
           scene={item.scene as Parameters<typeof ApertureAsset>[0]["scene"]}
+          alt={item.alt}
+          className={className}
+        />
+      );
+    }
+    if (assetSet!.kind === "learning") {
+      return (
+        <LearningAsset
+          scene={item.scene as Parameters<typeof LearningAsset>[0]["scene"]}
           alt={item.alt}
           className={className}
         />
