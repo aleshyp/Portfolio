@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUp, Mail } from "lucide-react";
 import { site } from "@/data/site";
 import { Container } from "./Container";
@@ -50,10 +51,26 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col items-start justify-between gap-4 border-t border-border-subtle pt-8 text-sm text-fg-faint sm:flex-row sm:items-center">
-            <p>
-              © {new Date().getFullYear()} {site.name}. Designed &amp; built with
-              care.
-            </p>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/personal-branding/ian-riley-logo-emerald.svg"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 dark:hidden"
+              />
+              <Image
+                src="/personal-branding/ian-riley-logo-emerald-dark.svg"
+                alt=""
+                width={32}
+                height={32}
+                className="hidden h-8 w-8 dark:block"
+              />
+              <p>
+                © {new Date().getFullYear()} {site.name}. Designed &amp; built
+                with care.
+              </p>
+            </div>
             <div className="flex items-center gap-6">
               {site.nav.map((item) => (
                 <Link

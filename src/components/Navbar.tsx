@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/data/site";
@@ -43,11 +44,26 @@ export function Navbar() {
             href="/"
             className="group flex items-center gap-2.5 rounded-lg text-base font-semibold text-fg"
             onClick={() => setOpen(false)}
+            aria-label={`${site.name} — home`}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white shadow-soft transition-transform duration-300 group-hover:scale-105">
-              {site.firstName[0]}
-            </span>
-            <span className="whitespace-nowrap font-display">{site.name}</span>
+            {/* Framed "IR" mark. Two files so the frame/microtext flips with the
+                theme (dark-navy frame on light, light frame on dark). */}
+            <Image
+              src="/personal-branding/ian-riley-logo-emerald.svg"
+              alt={site.name}
+              width={36}
+              height={36}
+              priority
+              className="h-9 w-9 transition-transform duration-300 group-hover:scale-105 dark:hidden"
+            />
+            <Image
+              src="/personal-branding/ian-riley-logo-emerald-dark.svg"
+              alt={site.name}
+              width={36}
+              height={36}
+              priority
+              className="hidden h-9 w-9 transition-transform duration-300 group-hover:scale-105 dark:block"
+            />
           </Link>
 
           {/* Desktop nav */}
