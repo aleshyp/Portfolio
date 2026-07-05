@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwind icon — a coral-and-cobalt compass needle in a rounded cobalt tile">
+  <!-- Northwind mark: a north-pointing compass needle inside a soft rounded-square tile.
+       Palette: Cobalt #2563EB (tile + south half), Coral #FB6F5B (north half), Paper #FFFFFF.
+       The full 36px source mark is scaled up to a 512 artboard for handoff/export. -->
+  <rect width="512" height="512" rx="142" fill="#2563EB"/>
+  <!-- needle: full diamond in white, north (upper) half overlaid in coral -->
+  <g transform="translate(256 256)">
+    <!-- vertical diamond: top tip, right, bottom notch, left -->
+    <path d="M 0 -142 L 85 100 L 0 -14 L -85 100 Z" fill="#FFFFFF"/>
+    <!-- north half (coral), the pointing tip -->
+    <path d="M 0 -142 L 85 100 L 0 -14 Z" fill="#FB6F5B"/>
+  </g>
+</svg>
