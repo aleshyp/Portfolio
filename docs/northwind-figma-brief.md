@@ -6,7 +6,9 @@ in this portfolio (`src/data/projects.ts`, slug `marketing-landing-page`) — a
 team-analytics SaaS. The live site already ships hand-built SVG stand-ins for
 these screens (`src/components/MarketingAsset.tsx`); this brief exists to upgrade
 them to polished, exportable Figma artwork **without drifting from the
-established identity**. Match the palette, wordmark, and type below exactly.
+established identity**. Match the palette, wordmark, and type below exactly. The
+identity is a bright **cyan** mark + wordmark with a single **coral** accent
+(the real logo files live in `public/work/northwind/`).
 
 ---
 
@@ -22,35 +24,43 @@ established identity**. Match the palette, wordmark, and type below exactly.
 > an organized Figma file with named frames, components, auto-layout, and
 > export-ready artboards at **1600×900 (16:9)**.
 >
-> **Brand mark:** a small **compass needle** inside a soft rounded-square tile —
-> a cobalt north-pointing needle whose north half is coral (a "true north /
-> northwind" idea). It sits left of the **"Northwind"** wordmark. Keep the mark
-> simple enough to read at favicon size.
+> **Brand mark:** a paired **up/down triangle** glyph inside a soft rounded-square
+> tile — a bright **cyan** tile with the triangles in ink (the upward triangle
+> solid, the downward one dimmed, an "up and to the right" signal idea). It sits
+> left of the **"Northwind"** wordmark. Keep the mark simple enough to read at
+> favicon size. (Source of truth: `public/work/northwind/Logo Mark — Export
+> Ready.svg` and `Logo — Export Ready.svg`.)
 >
 > **Palette (use these exact values):**
 > | Token | Hex | Role |
 > |-------|-----|------|
-> | Ink | `#0B1B3A` | Deep navy; primary text / device body |
-> | Cobalt | `#2563EB` | Primary brand |
-> | Cobalt Deep | `#1E40AF` | Cobalt shade for gradients |
-> | Sky | `#60A5FA` | Chart bars / secondary accent |
+> | Ink | `#0B1B3A` | Deep navy; primary text / device body / mark triangles |
+> | Cyan | `#22D3EE` | Primary brand (tile + large fills) |
+> | Cyan Text | `#0E7490` | AA-safe cyan for text / thin lines on light |
+> | Cyan Deep | `#0E9FB8` | Cyan shade for gradients |
+> | Sky | `#67E8F9` | Chart bars / secondary accent (cyan tint) |
 > | Coral | `#FB6F5B` | CTA + highlight (the one warm accent) |
 > | Coral Soft | `#FDA894` | Coral tint |
-> | Mist | `#EEF3FF` | Page background tint |
-> | Cloud | `#F6F8FD` | Panel / section fill |
-> | Line | `#DCE4F5` | Hairline borders |
+> | Mist | `#ECFEFF` | Page background tint |
+> | Cloud | `#F6FCFD` | Panel / section fill |
+> | Line | `#D3EEF3` | Hairline borders |
 > | Slate | `#5B6B8C` | Muted body text |
+>
+> **Contrast note:** bright cyan `#22D3EE` fails WCAG AA as text on white — use
+> **Cyan Text** `#0E7490` for any small text or thin line on a light background,
+> and reserve bright cyan for fills. The CTA band uses an **ink→cyan-deep**
+> gradient (not flat cyan) so white text stays legible.
 >
 > **Type:** Display/headings **Sora** (700–800, tight tracking). Body/labels
 > **Inter**. Primary buttons are **coral** pills; secondary buttons are outline.
-> Headline: **"See what your team actually ships."** ("ships" set in cobalt.)
+> Headline: **"See what your team actually ships."** ("ships" set in cyan-text.)
 >
 > **Deliverables (one 1600×900 frame each, named as listed):**
 > 1. **`01-hero`** — The landing hero: top nav (wordmark + Product/Pricing/Docs +
 >    a coral "Start free"), the headline over a slate subhead, a coral "Start free
 >    trial" + outline "Book a demo" CTA pair, and a "logos" trust strip. On the
 >    right, a **product-preview card** ("This week") showing a weekly bar chart
->    (sky bars, one coral peak) with a rising cobalt trend line. Light mist→paper
+>    (sky bars, one coral peak) with a rising cyan-text trend line. Light mist→paper
 >    background.
 > 2. **`02-value-props`** — A "WHY NORTHWIND" section titled "Clarity, not more
 >    charts." with **three feature cards** on a cloud background. Each card has a
@@ -58,20 +68,21 @@ established identity**. Match the palette, wordmark, and type below exactly.
 >    **Weekly signals** (rising-bars icon), **Zero setup** (lightning-bolt icon),
 >    **Shared context** (overlapping-avatars icon).
 > 3. **`03-social-proof`** — A conversion section on paper: a three-stat row
->    (**+22%** trial conversion · **4.9/5** rating · **12k+** teams) in big cobalt
->    Sora, a bordered testimonial card ("We replaced three dashboards with one
->    Monday-morning email." — Priya Nair, Head of Engineering, Lumen Labs), and a
->    cobalt-gradient **CTA band** with a coral "Start free" button.
+>    (**+22%** trial conversion · **4.9/5** rating · **12k+** teams) in big
+>    cyan-text Sora, a bordered testimonial card ("We replaced three dashboards
+>    with one Monday-morning email." — Priya Nair, Head of Engineering, Lumen
+>    Labs), and an **ink→cyan-deep** gradient **CTA band** with a coral "Start
+>    free" button.
 > 4. **`04-mobile`** — The responsive story: a **phone frame** (ink body, notch)
 >    rendering the hero at mobile width — wordmark, stacked headline, full-width
 >    coral "Start free trial", and a mini preview card with bars — beside a
 >    "RESPONSIVE / Designed mobile-first." caption. Mist background.
 >
-> **Rules:** Build the **wordmark**, the **compass mark**, and the **button** as
+> **Rules:** Build the **wordmark**, the **triangle mark**, and the **button** as
 > reusable components (button variants: filled/outline). Use auto-layout for the
 > nav, the value-prop cards, and the stat row. Coral is the *only* warm color —
 > use it for CTAs and single highlights, never large fills. Keep AA contrast for
-> all text on its background. Export each frame as PNG @2x and SVG. Do not
+> all text on its background (use Cyan Text `#0E7490`, not bright cyan, for text). Export each frame as PNG @2x and SVG. Do not
 > introduce colors outside the palette.
 
 ---
@@ -89,7 +100,7 @@ If you want the case study to feel even fuller, ask the agent for:
 - **A component/spec sheet** — the button, input, card, and chart tokens with
   spacing and states, to back up the "designed **and** built, no handoff gap"
   story that is the whole point of this case study.
-- **Favicon / app-icon grid** — the compass mark at 16 / 32 / 64 / 512 px.
+- **Favicon / app-icon grid** — the triangle mark at 16 / 32 / 64 / 512 px.
 
 ## Wiring the Figma exports back into the site
 

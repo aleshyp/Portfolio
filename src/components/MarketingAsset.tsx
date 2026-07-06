@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
  *
  * Hand-built SVG "mockups" standing in for the real marketing site described in
  * the Northwind case study (a team-analytics SaaS). Like Aperture, Northwind is
- * a DISTINCT fictional client, so it carries its OWN identity — a confident
- * cobalt blue with a coral accent — deliberately separate from the portfolio's
- * emerald/ink tokens AND from Aperture's indigo/amber. Each set standing on its
- * own is the point: these are client brands, not the portfolio's brand.
+ * a DISTINCT fictional client, so it carries its OWN identity — a bright cyan
+ * with a coral accent — deliberately separate from the portfolio's emerald/ink
+ * tokens AND from Aperture's indigo/amber. Each set standing on its own is the
+ * point: these are client brands, not the portfolio's brand.
  *
  * The scenes render the site itself: a hero landing view, a value-prop section,
  * a social-proof / analytics-dashboard section, and the mobile responsive view.
- * A common browser/device chrome and the cobalt→coral system tie them together.
+ * A common browser/device chrome and the cyan→coral system tie them together.
  *
  * Swap any of these for a real <Image /> (a Figma export or screenshot) when
  * ready. Each scene is decorative-with-meaning, so we expose an accessible
@@ -20,17 +20,20 @@ import { cn } from "@/lib/utils";
  */
 
 // Northwind's own palette (self-contained; not portfolio tokens on purpose).
+// Brand refreshed to a cyan mark + wordmark (see public/work/northwind/ exports);
+// `cobalt` is kept as the primary brand token name but now points at the cyan.
 const N = {
   ink: "#0B1B3A", // deep navy text/ink
-  cobalt: "#2563EB",
-  cobaltDeep: "#1E40AF",
-  sky: "#60A5FA",
+  cobalt: "#22D3EE", // primary brand (cyan tile / large fills)
+  cobaltText: "#0E7490", // AA-safe cyan for text / thin lines on light bg
+  cobaltDeep: "#0E9FB8", // cyan shade for gradients
+  sky: "#67E8F9", // chart bars / secondary accent (cyan tint)
   coral: "#FB6F5B",
   coralSoft: "#FDA894",
   paper: "#FFFFFF",
-  mist: "#EEF3FF", // page background tint
-  cloud: "#F6F8FD", // panel fill
-  line: "#DCE4F5",
+  mist: "#ECFEFF", // page background tint (cyan-tinted)
+  cloud: "#F6FCFD", // panel fill
+  line: "#D3EEF3", // hairline borders (cyan-tinted)
   slate: "#5B6B8C", // muted body text
 };
 
@@ -93,14 +96,22 @@ function BrowserChrome({
   );
 }
 
-/** Northwind wordmark: a small "compass needle" mark + name. */
+/**
+ * Northwind wordmark: the cyan tile mark (up/down triangles) + name.
+ * Mark geometry mirrors public/work/northwind/Logo Mark — Export Ready.svg
+ * (a 32×32 tile), placed on the scene's 36×36 tile at (0,-26): triangles are
+ * scaled ×1.125 and shifted up 26px to match.
+ */
 function Wordmark({ x, y, scale = 1 }: { x: number; y: number; scale?: number }) {
   return (
     <g transform={`translate(${x} ${y}) scale(${scale})`}>
-      {/* needle mark inside a soft rounded square */}
+      {/* mark tile */}
       <rect x="0" y="-26" width="36" height="36" rx="10" fill={N.cobalt} />
-      <path d="M 18 -21 L 24 2 L 18 -4 L 12 2 Z" fill={N.paper} />
-      <path d="M 18 -21 L 24 2 L 18 -4 Z" fill={N.coral} />
+      {/* up triangle (solid) + down triangle (dimmed), from the export */}
+      <g transform="translate(0 -26) scale(1.125)">
+        <path d="M16 6.5L20.1136 13.625H11.8864L16 6.5Z" fill={N.ink} />
+        <path opacity="0.4" d="M16 25.5L11.8864 18.375H20.1136L16 25.5Z" fill={N.ink} />
+      </g>
       <text x="48" y="3" fill={N.ink} fontFamily="Sora, sans-serif" fontSize="30" fontWeight="700" letterSpacing="-1">
         Northwind
       </text>
@@ -197,7 +208,7 @@ function Hero() {
         your team
       </text>
       <text x="110" y="480" fill={N.ink} fontFamily="Sora, sans-serif" fontSize="80" fontWeight="800" letterSpacing="-3">
-        actually <tspan fill={N.cobalt}>ships</tspan>.
+        actually <tspan fill={N.cobaltText}>ships</tspan>.
       </text>
       <text x="112" y="548" fill={N.slate} fontFamily="Inter, sans-serif" fontSize="28">
         Northwind turns raw activity into clear,
@@ -227,7 +238,7 @@ function Hero() {
         ))}
         <line x1="856" y1="620" x2="1464" y2="620" stroke={N.line} strokeWidth="2" />
         {/* rising trend line */}
-        <path d="M 878 560 L 952 520 L 1026 540 L 1100 470 L 1174 490 L 1248 410 L 1322 440" fill="none" stroke={N.cobalt} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 878 560 L 952 520 L 1026 540 L 1100 470 L 1174 490 L 1248 410 L 1322 440" fill="none" stroke={N.cobaltText} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
       </g>
 
       {/* trust strip */}
@@ -254,7 +265,7 @@ function ValueProps() {
   return (
     <Frame>
       <rect width="1600" height="900" fill={N.cloud} />
-      <text x="800" y="180" fill={N.cobalt} fontFamily="Inter, sans-serif" fontSize="24" fontWeight="600" letterSpacing="6" textAnchor="middle">
+      <text x="800" y="180" fill={N.cobaltText} fontFamily="Inter, sans-serif" fontSize="24" fontWeight="600" letterSpacing="6" textAnchor="middle">
         WHY NORTHWIND
       </text>
       <text x="800" y="260" fill={N.ink} fontFamily="Sora, sans-serif" fontSize="58" fontWeight="800" letterSpacing="-2" textAnchor="middle">
@@ -314,9 +325,10 @@ function SocialProof() {
   return (
     <Frame>
       <defs>
+        {/* ink→deep-cyan keeps white CTA text legible (bright cyan is too light) */}
         <linearGradient id="nw-cta" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={N.cobaltDeep} />
-          <stop offset="100%" stopColor={N.cobalt} />
+          <stop offset="0%" stopColor={N.ink} />
+          <stop offset="100%" stopColor={N.cobaltDeep} />
         </linearGradient>
       </defs>
       <rect width="1600" height="900" fill={N.paper} />
@@ -326,7 +338,7 @@ function SocialProof() {
         const cx = 267 + i * 533;
         return (
           <g key={s.label}>
-            <text x={cx} y="230" fill={N.cobalt} fontFamily="Sora, sans-serif" fontSize="90" fontWeight="800" textAnchor="middle" letterSpacing="-3">
+            <text x={cx} y="230" fill={N.cobaltText} fontFamily="Sora, sans-serif" fontSize="90" fontWeight="800" textAnchor="middle" letterSpacing="-3">
               {s.value}
             </text>
             <text x={cx} y="280" fill={N.slate} fontFamily="Inter, sans-serif" fontSize="28" textAnchor="middle">
@@ -371,7 +383,7 @@ function Mobile() {
   return (
     <Frame>
       <rect width="1600" height="900" fill={N.mist} />
-      <text x="200" y="360" fill={N.cobalt} fontFamily="Inter, sans-serif" fontSize="24" fontWeight="600" letterSpacing="6">
+      <text x="200" y="360" fill={N.cobaltText} fontFamily="Inter, sans-serif" fontSize="24" fontWeight="600" letterSpacing="6">
         RESPONSIVE
       </text>
       <text x="200" y="440" fill={N.ink} fontFamily="Sora, sans-serif" fontSize="60" fontWeight="800" letterSpacing="-2">
@@ -401,7 +413,7 @@ function Mobile() {
       <text x={px + 40} y={py + 250} fill={N.ink} fontFamily="Sora, sans-serif" fontSize="34" fontWeight="800" letterSpacing="-1">
         your team
       </text>
-      <text x={px + 40} y={py + 290} fill={N.cobalt} fontFamily="Sora, sans-serif" fontSize="34" fontWeight="800" letterSpacing="-1">
+      <text x={px + 40} y={py + 290} fill={N.cobaltText} fontFamily="Sora, sans-serif" fontSize="34" fontWeight="800" letterSpacing="-1">
         ships.
       </text>
       <rect x={px + 40} y={py + 320} width={pw - 80} height="48" rx="24" fill={N.coral} />
