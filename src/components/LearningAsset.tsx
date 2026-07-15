@@ -460,7 +460,7 @@ function CourseMap() {
                 fontWeight="600"
                 textAnchor="middle"
               >
-                You're here
+                You’re here
               </text>
             )}
           </g>
@@ -704,7 +704,7 @@ function Completion() {
         LESSON COMPLETE
       </text>
       <text x="440" y="336" fill={L.paper} fontFamily="Sora, sans-serif" fontSize="56" fontWeight="800" letterSpacing="-1.5">
-        Nice — you're on a roll.
+        Nice — you’re on a roll.
       </text>
       <text x="440" y="386" fill={L.lilac} fontFamily="Inter, sans-serif" fontSize="26">
         3 of 5 modules done · keep the streak going.
@@ -742,8 +742,11 @@ export function LearningAsset({ scene, className, alt }: LearningAssetProps) {
   const Scene = scenes[scene];
   return (
     <div
-      role="img"
-      aria-label={alt}
+      // Empty alt = decorative (e.g. a card thumbnail whose heading already
+      // names the project): expose nothing rather than a paragraph of alt text.
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
       className={cn("relative overflow-hidden bg-white shadow-soft", className)}
     >
       <Scene />
@@ -759,7 +762,7 @@ export const learningScenes: { scene: Scene; alt: string }[] = [
   },
   {
     scene: "course-map",
-    alt: "Course map — five modules laid out as a linear path (Welcome, Core concepts, Your first build, Going deeper, Ship it) with completed steps checked in green and a 'You're here' marker under the current step.",
+    alt: "Course map — five modules laid out as a linear path (Welcome, Core concepts, Your first build, Going deeper, Ship it) with completed steps checked in green and a 'You’re here' marker under the current step.",
   },
   {
     scene: "progress",

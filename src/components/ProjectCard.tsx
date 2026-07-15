@@ -6,7 +6,20 @@ import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { Placeholder } from "./Placeholder";
 
-export function ProjectCard({ project }: { project: Project }) {
+/**
+ * `thumbnail` is rendered by the parent (a server component) and passed in,
+ * rather than imported here: the asset components are server-rendered SVG, and
+ * this card is a client component for its hover/reveal motion. Passing the
+ * element as a prop keeps the assets on the server side of the boundary. Falls
+ * back to the gradient Placeholder when a project has no assets yet.
+ */
+export function ProjectCard({
+  project,
+  thumbnail,
+}: {
+  project: Project;
+  thumbnail?: React.ReactNode;
+}) {
   const reduce = useReducedMotion();
 
   return (
@@ -25,19 +38,36 @@ export function ProjectCard({ project }: { project: Project }) {
         href={`/work/${project.slug}`}
         className="group flex h-full flex-col overflow-hidden rounded-4xl border border-border-subtle bg-surface shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:hover:border-brand-500/30"
       >
-        <div className="overflow-hidden">
-          <Placeholder
-            label={project.tags[0]}
-            seed={project.accent}
-            className="aspect-[16/10] w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-          />
+        {/* aria-hidden: the thumbnail is decorative HERE. Each scene carries a
+            paragraph-length aria-label for the case study, where it IS the
+            content — but inside this link that text would be absorbed into the
+            link's accessible name, so the card would announce as a wall of
+            description instead of the project title below. */}
+        <div className="overflow-hidden" aria-hidden="true">
+          {/* 16:9 to match the scene artboards — the assets fit-inside rather
+              than crop, so a taller well would letterbox them. */}
+          <div className="aspect-video w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+            {thumbnail ?? (
+              <Placeholder
+                label={project.tags[0]}
+                seed={project.accent}
+                className="h-full w-full"
+              />
+            )}
+          </div>
         </div>
 
         <div className="flex flex-1 flex-col p-6 sm:p-7">
-          <div className="flex items-center gap-3 text-xs font-medium text-fg-faint">
+          <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-fg-faint">
             <span>{project.year}</span>
             <span className="h-1 w-1 rounded-full bg-brand-300" />
             <span>{project.role}</span>
+            {project.concept && (
+              <>
+                <span className="h-1 w-1 rounded-full bg-brand-300" />
+                <span>Concept</span>
+              </>
+            )}
           </div>
 
           <h3 className="mt-3 flex items-start justify-between gap-3 font-display text-xl font-semibold text-fg">

@@ -2,6 +2,7 @@ import { Section } from "@/components/Section";
 import { AnimatedReveal, StaggerGroup } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
 import { ProjectCard } from "@/components/ProjectCard";
+import { renderProjectScene } from "@/components/projectAssets";
 import { projects } from "@/data/projects";
 
 export function Projects() {
@@ -27,7 +28,17 @@ export function Projects() {
 
       <StaggerGroup className="mt-12 grid gap-6 sm:gap-8 md:grid-cols-2">
         {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            // The case-study hero (scene 0) doubles as the card thumbnail.
+            // Decorative here — the card's heading names the project — and no
+            // video in a six-card grid. See renderProjectScene.
+            thumbnail={renderProjectScene(project.slug, 0, "h-full w-full", {
+              allowVideoHero: false,
+              decorative: true,
+            })}
+          />
         ))}
       </StaggerGroup>
     </Section>

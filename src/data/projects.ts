@@ -21,15 +21,24 @@ export type Project = {
   /** Number of gallery placeholders to render. */
   gallery: number;
   accent: number; // seed for placeholder gradients
+  /**
+   * True when the client and its metrics are invented rather than measured.
+   * Drives the visible "Concept project" badge on the card and case study, so a
+   * reader is never left to assume the numbers are a real track record. Drop the
+   * flag (and swap in the real figures) if a study is ever backed by real work.
+   */
+  concept?: boolean;
 };
 
 /**
- * PLACEHOLDER case studies.
- * These are realistic, recruiter-friendly stand-ins covering the range of work
- * Ian does — brand, web, product UI, design systems, and social. Swap the
- * copy for your real projects and add <Image /> assets when you're ready.
+ * Case studies — the single source of truth for the Work grid and detail pages.
  *
- * This is the single source of truth for the Work grid and the detail pages.
+ * Every study here is CONCEPT work: the clients are invented and the metrics are
+ * illustrative targets, not measured outcomes. Each carries `concept: true`,
+ * which renders a visible badge — that label is the honest signal a reader needs,
+ * so don't remove it without replacing the invented numbers with real ones.
+ *
+ * The range is deliberate — brand, web, product UI, design systems, and motion.
  */
 export const projects: Project[] = [
   {
@@ -70,6 +79,7 @@ export const projects: Project[] = [
     ],
     gallery: 4,
     accent: 0,
+    concept: true,
   },
   {
     slug: "marketing-landing-page",
@@ -109,17 +119,18 @@ export const projects: Project[] = [
     ],
     gallery: 3,
     accent: 1,
+    concept: true,
   },
   {
     slug: "learning-platform-ui",
-    title: "Online Learning Platform — Product UI",
+    title: "Lumin — Online Learning Platform UI",
     summary:
       "A clean, focused interface for an online learning experience — designed to keep students moving through lessons without friction.",
     blurb: "A focused UI for an online learning experience.",
     tags: ["UX/UI Design", "Web App", "EdTech"],
     role: "UX/UI Designer",
     year: "2024",
-    client: "EdTech (placeholder)",
+    client: "Lumin (online learning)",
     duration: "4 months",
     results: [
       { label: "Lesson completion", value: "+29%" },
@@ -148,17 +159,18 @@ export const projects: Project[] = [
     ],
     gallery: 4,
     accent: 2,
+    concept: true,
   },
   {
     slug: "mobile-app-onboarding",
-    title: "Onboarding That Converts",
+    title: "Fernweh — Onboarding That Converts",
     summary:
       "A reimagined first-run experience that gets new users to their first meaningful win in under two minutes.",
     blurb: "A first-run experience built around the first win.",
     tags: ["UX/UI Design", "Mobile", "Conversion"],
     role: "Product Designer",
     year: "2024",
-    client: "App (placeholder)",
+    client: "Fernweh (travel planning)",
     duration: "3 months",
     results: [
       { label: "Activation", value: "+31%" },
@@ -166,38 +178,39 @@ export const projects: Project[] = [
       { label: "Day-7 retention", value: "+19%" },
     ],
     overview:
-      "Plenty of signups, weak activation. The fix wasn't more explanation — it was momentum. We rebuilt onboarding to celebrate a real first action instead of walking through every feature.",
+      "Fernweh is a trip-planning app with plenty of signups and weak activation. The fix wasn't more explanation — it was momentum. Onboarding was rebuilt around one real first action: saving your first trip, in under two minutes.",
     blocks: [
       {
         heading: "The problem",
-        body: "New users faced a long setup wizard before seeing any value. Many never reached the 'aha' moment, and early churn was steep.",
+        body: "New users faced a nine-step setup wizard — permissions, preferences, a profile — before they ever saw a destination. Most never reached the moment the app is actually good at, and early churn was steep.",
       },
       {
         heading: "Strategy",
-        body: "I mapped the shortest path to a genuine first win and pulled everything else out of the critical path. Personalization moved later, where it actually earned its place.",
+        body: "I mapped the shortest path to a genuine first win — one saved trip — and pulled everything else out of the critical path. Notifications and personalization moved to the moment they earn their place: after the user has something worth being notified about.",
       },
       {
         heading: "Craft",
-        body: "Encouraging microcopy, clean visuals, and a clear sense of 'you're almost there' kept users moving. Each step did exactly one thing — no more.",
+        body: "Encouraging microcopy, a visible sense of 'you're almost there', and one job per step. The permission ask now arrives with a reason attached instead of a cold system dialog on launch.",
       },
       {
         heading: "Outcome",
-        body: "Activation rose 31% and day-7 retention climbed 19%, with the average user reaching their first win in under two minutes.",
+        body: "The target: activation up 31% and day-7 retention up 19%, with the average user saving their first trip in under two minutes.",
       },
     ],
     gallery: 3,
     accent: 3,
+    concept: true,
   },
   {
     slug: "design-system",
-    title: "A Design System That Scales",
+    title: "Halyard — A Design System That Scales",
     summary:
       "A token-driven component library that unified a product across platforms and kept design and engineering in sync.",
     blurb: "A token-driven design system, built to scale.",
     tags: ["Design System", "UI Design", "Front-End"],
     role: "Design Systems Lead",
     year: "2023",
-    client: "Product team (placeholder)",
+    client: "Halyard (fintech platform)",
     duration: "5 months",
     results: [
       { label: "Design-dev parity", value: "+60%" },
@@ -205,7 +218,7 @@ export const projects: Project[] = [
       { label: "Components", value: "100+" },
     ],
     overview:
-      "Inconsistent spacing, color, and components meant every screen was a little different and every handoff was a negotiation. A shared, token-based system gave design and engineering one source of truth.",
+      "Halyard's product had grown across three teams and two platforms. Inconsistent spacing, color, and components meant every screen was a little different and every handoff was a negotiation. A shared, token-based system gave design and engineering one source of truth.",
     blocks: [
       {
         heading: "The challenge",
@@ -221,50 +234,52 @@ export const projects: Project[] = [
       },
       {
         heading: "Impact",
-        body: "Design-dev parity improved 60%, feature velocity doubled, and accessibility became built-in rather than bolted on.",
+        body: "The goal: design-dev parity up 60%, feature velocity doubled, and accessibility built into every component rather than bolted on at review.",
       },
     ],
     gallery: 4,
     accent: 4,
+    concept: true,
   },
   {
-    slug: "esports-social-branding",
-    title: "Esports Social Media & Brand Kit",
+    slug: "motion-brand-identity",
+    title: "Cadence — Brand in Motion",
     summary:
-      "Matchday graphics, player announcements, and a social template kit for an esports organization — built for a fast, consistent posting cadence.",
-    blurb: "Social graphics & brand kit for an esports org.",
-    tags: ["Graphic Design", "Social Media", "Branding"],
-    role: "Creative Director / Designer",
+      "A motion system for a brand launch — an animated logo, kinetic type, and a set of reusable transitions that gave a static identity a living, on-screen voice.",
+    blurb: "An animated identity system for a brand launch.",
+    tags: ["Motion Design", "Animation", "Branding"],
+    role: "Motion Designer",
     year: "2023",
-    client: "Esports org (placeholder)",
-    duration: "Ongoing",
+    client: "Cadence (music streaming)",
+    duration: "7 weeks",
     results: [
-      { label: "Templates built", value: "20+" },
-      { label: "Turnaround", value: "Same-day" },
-      { label: "Platforms", value: "X · IG · YT" },
+      { label: "Motion assets delivered", value: "24" },
+      { label: "Avg. render length", value: "6s" },
+      { label: "Reusable presets", value: "10+" },
     ],
     overview:
-      "Esports moves fast, and the brand has to keep up. This is the kind of high-volume social work I cut my teeth on — a flexible template system that keeps an organization looking sharp across every announcement, matchday, and roster change.",
+      "Cadence, a music-streaming service, had a strong static identity that fell flat the moment it hit video, social, and product. I designed a motion system — how the logo builds, how type enters, how scenes transition — so the brand felt just as considered in motion as it did on the page.",
     blocks: [
       {
-        heading: "The need",
-        body: "Esports orgs post constantly — lineups, scores, signings, hype. Doing each one from scratch isn't sustainable, and inconsistency makes a team look smaller than it is.",
+        heading: "The brief",
+        body: "The identity was made for print and screens that don't move. But launch content lived on video, reels, and product loops, and every animator improvised — so the brand moved differently every time it appeared.",
       },
       {
-        heading: "A system, not one-offs",
-        body: "I built a kit of modular templates — matchday, win/loss, player reveal, schedule — all sharing a consistent visual language so anything posted instantly reads as the brand.",
+        heading: "Principles of motion",
+        body: "I defined how the brand moves before animating a single frame: easing curves, timing, and a point of view on weight and momentum — so a logo reveal and a lower-third feel like they belong to the same system.",
       },
       {
-        heading: "Built for speed",
-        body: "Templates were organized so graphics could go out same-day, even during live events, without sacrificing polish. This is where I learned to design fast and consistently under real deadlines.",
+        heading: "The system",
+        body: "An animated logo build, kinetic-type templates, and a library of scene transitions and presets, delivered as editable After Effects files so the team could produce on-brand motion without me in the loop for every clip.",
       },
       {
         heading: "Outcome",
-        body: "A recognizable, cohesive social presence that scaled with the org — and a workflow the team could run without rebuilding the wheel for every post.",
+        body: "The brand now enters, moves, and transitions the same way everywhere it plays. Launch content shipped faster, and the identity finally felt alive instead of pasted onto video.",
       },
     ],
     gallery: 4,
     accent: 5,
+    concept: true,
   },
 ];
 

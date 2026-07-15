@@ -6,24 +6,11 @@ import { projects, getProject, getNextProject } from "@/data/projects";
 import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
-import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
-import { ApertureHero } from "@/components/ApertureHero";
-import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
-import { LearningAsset, learningScenes } from "@/components/LearningAsset";
+import { getAssetSet, renderProjectScene } from "@/components/projectAssets";
 import { Badge, Eyebrow } from "@/components/Badge";
-import { cn } from "@/lib/utils";
+import { ConceptBadge } from "@/components/ConceptBadge";
 
 type Params = { slug: string };
-
-// Aperture's non-hero scenes map to exported Figma PNG frames (@2x, 3200×1800)
-// under /public. Keyed by ApertureAsset scene name so the SVG stays the fallback
-// for any scene without a PNG.
-const aperturePng: Record<string, string> = {
-  "logo-construction": "/work/aperture/02-logo-construction@2x.png",
-  palette: "/work/aperture/03-palette@2x.png",
-  "type-specimen": "/work/aperture/04-type-specimen@2x.png",
-  usage: "/work/aperture/05-usage@2x.png",
-};
 
 export function generateStaticParams(): Params[] {
   return projects.map((p) => ({ slug: p.slug }));
@@ -68,77 +55,12 @@ export default async function CaseStudy({
 
   const next = getNextProject(project.slug);
 
-  // A few case studies ship real (SVG) deliverables instead of gradient
-  // placeholders: Aperture (brand identity), Northwind (marketing site), and
-  // Lumin (the online-learning product UI). Each has its own ordered scene set +
-  // asset component; everything else still uses the Placeholder until real
-  // imagery exists.
-  const assetSet:
-    | {
-        scenes: { scene: string; alt: string }[];
-        kind: "aperture" | "marketing" | "learning";
-      }
-    | null =
-    project.slug === "brand-identity-system"
-      ? { scenes: apertureScenes, kind: "aperture" }
-      : project.slug === "marketing-landing-page"
-        ? { scenes: marketingScenes, kind: "marketing" }
-        : project.slug === "learning-platform-ui"
-          ? { scenes: learningScenes, kind: "learning" }
-          : null;
-
-  // Renders scene N from the active asset set (hero = 0), or null if none.
-  const renderScene = (index: number, className: string) => {
-    const item = assetSet?.scenes[index];
-    if (!item) return null;
-    if (assetSet!.kind === "aperture") {
-      // Aperture ships real Figma deliverables: the hero (scene 0) is the brand
-      // logo-reveal animation; scenes 1–4 are exported PNG frames.
-      if (index === 0) {
-        return (
-          <div className={cn("overflow-hidden bg-ink shadow-soft", className)}>
-            <ApertureHero alt={item.alt} />
-          </div>
-        );
-      }
-      const png = aperturePng[item.scene];
-      if (png) {
-        return (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={png}
-            alt={item.alt}
-            width={3200}
-            height={1800}
-            className={cn("block object-cover shadow-soft", className)}
-          />
-        );
-      }
-      return (
-        <ApertureAsset
-          scene={item.scene as Parameters<typeof ApertureAsset>[0]["scene"]}
-          alt={item.alt}
-          className={className}
-        />
-      );
-    }
-    if (assetSet!.kind === "learning") {
-      return (
-        <LearningAsset
-          scene={item.scene as Parameters<typeof LearningAsset>[0]["scene"]}
-          alt={item.alt}
-          className={className}
-        />
-      );
-    }
-    return (
-      <MarketingAsset
-        scene={item.scene as Parameters<typeof MarketingAsset>[0]["scene"]}
-        alt={item.alt}
-        className={className}
-      />
-    );
-  };
+  // Scene sets + the renderer live in @/components/projectAssets, shared with the
+  // Work grid so a card thumbnail and its case-study hero can't drift apart. The
+  // Placeholder fallbacks below stay for any study added later without assets.
+  const assetSet = getAssetSet(project.slug);
+  const renderScene = (index: number, className: string) =>
+    renderProjectScene(project.slug, index, className);
 
   return (
     <article className="pt-28 sm:pt-36">
@@ -153,10 +75,11 @@ export default async function CaseStudy({
             Back to work
           </Link>
 
-          <div className="mt-8 flex flex-wrap gap-2">
+          <div className="mt-8 flex flex-wrap items-center gap-2">
             {project.tags.map((tag) => (
               <Badge key={tag}>{tag}</Badge>
             ))}
+            {project.concept && <ConceptBadge />}
           </div>
 
           <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
@@ -225,6 +148,13 @@ export default async function CaseStudy({
                   </div>
                 ))}
               </dl>
+              {project.concept && (
+                <p className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-fg-faint">
+                  Concept project — {project.client.split(" (")[0]} is an
+                  invented client, and these figures are the targets the design
+                  was measured against, not results from a live product.
+                </p>
+              )}
             </div>
           </AnimatedReveal>
         </div>
