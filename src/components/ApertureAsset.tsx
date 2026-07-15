@@ -327,8 +327,11 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
   const Scene = scenes[scene];
   return (
     <div
-      role="img"
-      aria-label={alt}
+      // Empty alt = decorative (e.g. a card thumbnail whose heading already
+      // names the project): expose nothing rather than a paragraph of alt text.
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
       className={cn("relative overflow-hidden bg-white shadow-soft", className)}
     >
       <Scene />
