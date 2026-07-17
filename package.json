@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test e2e/a11y.spec.ts",
-    "test:lh": "node scripts/lh-gate.mjs"
+    "test:lh": "node scripts/lh-gate.mjs",
+    "issue": "node scripts/new-issue.mjs",
+    "pr": "node scripts/open-pr.mjs",
+    "land": "node scripts/land.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.42.2",
