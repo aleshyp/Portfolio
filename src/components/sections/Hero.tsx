@@ -22,6 +22,22 @@ export function Hero() {
     },
   };
 
+  // The <h1> is this page's LCP element, so it must NOT fade from opacity 0:
+  // Largest Contentful Paint is only recorded once the text reaches its final
+  // opacity, which meant the staggered fade above pushed LCP from ~156ms to
+  // ~1.05s locally (~3.1s under Lighthouse's CPU throttling — over the 2.5s
+  // budget in scripts/lh-gate.mjs). Painting it opaque immediately and animating
+  // only the transform keeps the entrance while letting LCP land on first frame;
+  // transforms don't affect LCP timing. Keep opacity out of this variant.
+  const heading = {
+    hidden: reduce ? { opacity: 1 } : { opacity: 1, y: 18 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    },
+  };
+
   return (
     <section className="relative overflow-hidden pt-32 sm:pt-40">
       {/* soft emerald backdrop */}
@@ -52,7 +68,7 @@ export function Hero() {
           )}
 
           <motion.h1
-            variants={item}
+            variants={heading}
             className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-fg sm:text-6xl"
           >
             Hi, I&apos;m {site.firstName}. I design{" "}

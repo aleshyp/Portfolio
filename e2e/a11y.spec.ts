@@ -45,7 +45,11 @@ async function freezeAnimations(page: import("@playwright/test").Page) {
   });
 }
 
-const routes = ["/", "/work/learning-platform-ui"];
+// One representative case study per asset family — the studies share a layout,
+// so scanning every slug would mostly re-test the same markup. The two here
+// differ in what they render: learning-platform-ui uses the standard scene set,
+// portfolio-design-system carries the hand-built SVG scenes with long alt text.
+const routes = ["/", "/work/learning-platform-ui", "/work/portfolio-design-system"];
 
 // The interactive sections ("use client") only respond once React has hydrated.
 // Clicking before then races the handler attachment. The theme toggle's
