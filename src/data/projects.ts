@@ -33,7 +33,12 @@ export type Project = {
 /**
  * Case studies — the single source of truth for the Work grid and detail pages.
  *
- * Every study here is CONCEPT work: the clients are invented and the metrics are
+ * The first study ("This Site") is REAL: it documents this codebase, and every
+ * figure in it is verifiable from the repo (token count in globals.css, budgets
+ * in scripts/lh-gate.mjs, scans in e2e/a11y.spec.ts). It carries no `concept`
+ * flag. If you change the system, update the study — it makes falsifiable claims.
+ *
+ * Every OTHER study is CONCEPT work: the clients are invented and the metrics are
  * illustrative targets, not measured outcomes. Each carries `concept: true`,
  * which renders a visible badge — that label is the honest signal a reader needs,
  * so don't remove it without replacing the invented numbers with real ones.
@@ -41,6 +46,49 @@ export type Project = {
  * The range is deliberate — brand, web, product UI, design systems, and motion.
  */
 export const projects: Project[] = [
+  {
+    slug: "portfolio-design-system",
+    title: "This Site — A Design System, Shipped",
+    summary:
+      "The site you're reading. A token-driven Tailwind design system with light/dark theming, WCAG 2.2 AA enforced by an automated axe-core suite, and a Lighthouse budget that fails the build on regression — designed and built end to end.",
+    blurb: "The design system behind this site — designed, built, and tested.",
+    tags: ["Design System", "Front-End", "Accessibility"],
+    role: "Designer & Front-End Developer",
+    year: "2026",
+    client: "Personal project",
+    duration: "Ongoing",
+    results: [
+      { label: "Accessibility budget", value: "100" },
+      { label: "Design tokens", value: "33" },
+      { label: "Design → live", value: "1 person" },
+    ],
+    overview:
+      "Most portfolios show the output of design work. This one is the work. Every screen here is built from a documented token system, themed light and dark from a single source of truth, and held to WCAG 2.2 AA by tests that run before anything ships. It's the clearest evidence I can give of how I actually work: design decisions written down, encoded as tokens, and enforced by automation instead of good intentions.",
+    blocks: [
+      {
+        heading: "The problem with a two-layer color model",
+        body: "Dark mode breaks in a predictable way: a color that reads as text in one theme is a background in the other. I hit this directly — the dark navy in this palette is both the light-mode text color and the dark-mode page background, so re-pointing it for dark mode inverted the page. The fix was to split the palette in two: an `ink` layer that never flips (used for backgrounds) and an `fg` layer that does (used only for text). One utility, `text-fg-muted`, now reads correctly in both themes with no per-component dark overrides. That single rule eliminated the largest category of theme bugs in the codebase.",
+      },
+      {
+        heading: "Tokens as the contract",
+        body: "33 color tokens live in one CSS file — light values in Tailwind v4's `@theme` block, dark re-points in a `.dark` block — across four layers: foreground text, fixed ink, theme-aware surfaces, and brand. Hardcoded hex and arbitrary values are banned; if a value doesn't exist, it becomes a token rather than a one-off. On top of that sit 20 primitives — Button, Badge, Container, Section, ProjectCard, the shared motion components — so a new card is an existing recipe, not fresh inline styles. The whole system is documented in a DESIGN.md that ships with the code and is versioned alongside it, which means the rules can't silently drift from the implementation.",
+      },
+      {
+        heading: "Accessibility as a build gate, not a review step",
+        body: "An axe-core suite scans every route against WCAG 2.2 AA — home, all six case studies, the 404, and the contact form in its error state — plus a keyboard test asserting that submitting the form moves focus to the confirmation, so screen-reader and keyboard users aren't stranded on a button that no longer exists. Getting those scans trustworthy took real debugging: they flaked because axe was sampling contrast mid-animation, reading a badge at 3.2:1 that actually rests at 5.2:1. The fix was to emulate `prefers-reduced-motion` and freeze CSS transitions before scanning, so axe judges settled colors. That work also surfaced a genuine contrast failure — the brand green used for primary actions was too light against white, and moving it a step darker fixed it site-wide.",
+      },
+      {
+        heading: "Holding the line",
+        body: "A Lighthouse gate runs against a production build and exits non-zero if anything regresses past budget: accessibility and SEO must score 100, performance 90, best practices 95, with Core Web Vitals capped at LCP under 2.5s, CLS under 0.1, and TBT under 200ms. Playwright covers the user journeys, responsive behavior at three breakpoints, and SEO metadata. All motion honors `prefers-reduced-motion` through both a CSS media query and `useReducedMotion()` in JavaScript, because framer-motion animates via JS and ignores the CSS one.",
+      },
+      {
+        heading: "Why this is the case study",
+        body: "This is a small project, and I'm not claiming otherwise — there's no team, no stakeholders, no user research. What it does show is the part of the craft that's hardest to fake: a system with rules that survive contact with a real codebase, accessibility treated as a requirement rather than a cleanup pass, and design decisions documented well enough that someone else could build against them. It's the same way I approach product work; here the whole thing happens to be open for inspection.",
+      },
+    ],
+    gallery: 0,
+    accent: 4,
+  },
   {
     slug: "brand-identity-system",
     title: "Aperture — A Brand Identity From Scratch",
