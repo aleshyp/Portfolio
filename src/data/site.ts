@@ -1,8 +1,14 @@
 /**
  * The canonical origin for the site. All metadata (canonical URLs, OG/Twitter,
  * sitemap, robots) derives from this. Override per-environment with
- * NEXT_PUBLIC_SITE_URL; falls back to the production domain.
- * TODO: confirm this is the live domain before launch.
+ * NEXT_PUBLIC_SITE_URL.
+ *
+ * PRE-LAUNCH: ianriley.com is NOT registered yet, so this fallback is a stated
+ * intent rather than a live origin. Nothing breaks locally or in CI, but a
+ * production deploy without NEXT_PUBLIC_SITE_URL set will publish canonical
+ * URLs, a sitemap, and OG tags pointing at a domain that doesn't resolve —
+ * which search engines and link unfurlers both act on. Either register the
+ * domain or set the env var to the real origin before going live.
  */
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://ianriley.com";
@@ -18,10 +24,17 @@ export const site = {
   tagline:
     "I design clean, human-centered work across brand, product, and the web.",
   location: "Kansas City, United States",
+  // PRE-LAUNCH: this mailbox does not exist yet (it depends on the unregistered
+  // domain above). It is displayed and linked as a mailto: in both the Contact
+  // section and the Footer, so until the mailbox is live, mail sent here bounces
+  // — and that is the fallback path the contact form itself points people to on
+  // submit failure. Set up the mailbox, or swap in a working address.
   email: "hello@ianriley.com",
-  // TODO: update once the domain & mailbox are live
   available: true,
-  // TODO: replace /resume.pdf in /public with your real résumé file
+  // PRE-LAUNCH: /public/resume.pdf is a one-page placeholder stub, not a real
+  // résumé. The Experience section links it as a visible "Résumé" button, so
+  // anyone clicking it today downloads the stub. Replace the file in /public
+  // (the path and link need no change), or hide the button until it's real.
   resumeUrl: "/resume.pdf",
   socials: {
     dribbble: "https://dribbble.com/aleshyp",
@@ -38,8 +51,7 @@ export const site = {
 } as const;
 
 /**
- * Résumé / work history.
- * NOTE: add your current company name where marked TODO below.
+ * Résumé / work history. Rendered by the Experience section, most recent first.
  */
 export type ExperienceItem = {
   role: string;
