@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/data/site";
 import { Container } from "./Container";
 import { ThemeToggle } from "./ThemeToggle";
+import { Button, buttonClasses } from "./Button";
+import { IconButton } from "./IconButton";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -82,26 +84,22 @@ export function Navbar() {
               <ThemeToggle />
             </li>
             <li className="ml-1">
-              <Link
-                href="/#contact"
-                className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lift dark:bg-brand-700 dark:hover:bg-brand-600"
-              >
+              <Button href="/#contact" variant="ink">
                 Let&apos;s talk
-              </Link>
+              </Button>
             </li>
           </ul>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-1 lg:hidden">
             <ThemeToggle />
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-fg-soft transition-colors hover:bg-brand-50 dark:text-fg-faint dark:hover:bg-white/5"
+            <IconButton
+              label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
             >
               {open ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            </IconButton>
           </div>
         </nav>
       </Container>
@@ -133,7 +131,12 @@ export function Navbar() {
                   <Link
                     href="/#contact"
                     onClick={() => setOpen(false)}
-                    className="block rounded-xl bg-brand-700 px-4 py-3 text-center text-base font-medium text-white transition-colors hover:bg-brand-800 active:bg-brand-900 dark:hover:bg-brand-600"
+                    className={buttonClasses({
+                      fullWidth: true,
+                      // The mobile menu uses a softer radius than the pill-shaped
+                      // CTAs elsewhere, matching the nav links stacked above it.
+                      className: "rounded-xl px-4 py-3 text-base",
+                    })}
                   >
                     Let&apos;s talk
                   </Link>

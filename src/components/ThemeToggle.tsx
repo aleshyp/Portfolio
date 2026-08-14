@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
+import { IconButton } from "./IconButton";
 
 /** Light/dark toggle. Renders a stable placeholder until mounted to avoid hydration mismatch. */
 export function ThemeToggle({ className }: { className?: string }) {
@@ -20,23 +20,22 @@ export function ThemeToggle({ className }: { className?: string }) {
   const isDark = resolvedTheme === "dark";
 
   return (
-    <button
-      type="button"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={
-        mounted
-          ? `Switch to ${isDark ? "light" : "dark"} mode`
-          : "Toggle theme"
+    <IconButton
+      label={
+        mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Toggle theme"
       }
-      className={cn(
-        "flex h-10 w-10 items-center justify-center rounded-xl text-fg-soft transition-colors hover:bg-brand-50 dark:text-fg-faint dark:hover:bg-white/5",
-        className,
-      )}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className={className}
     >
-      {/* Suppress hydration warning: the icon depends on client-only theme state. */}
-      <span suppressHydrationWarning className="relative flex h-[18px] w-[18px] items-center justify-center">
+      {/* Suppress hydration warning: the icon depends on client-only theme state.
+          size-4.5 (18px) matches the lucide glyph so the icon swap doesn't
+          shift layout; size-4/5 (16/20px) would both nudge it. */}
+      <span
+        suppressHydrationWarning
+        className="relative flex size-4.5 items-center justify-center"
+      >
         {mounted && isDark ? <Sun size={18} /> : <Moon size={18} />}
       </span>
-    </button>
+    </IconButton>
   );
 }

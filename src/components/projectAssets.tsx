@@ -6,6 +6,10 @@ import { OnboardingAsset, onboardingScenes } from "@/components/OnboardingAsset"
 import { SystemAsset, systemScenes } from "@/components/SystemAsset";
 import { MotionAsset } from "@/components/MotionAsset";
 import { motionScenes } from "@/components/motionScenes";
+import {
+  PortfolioSystemAsset,
+  portfolioSystemScenes,
+} from "@/components/PortfolioSystemAsset";
 import { cn } from "@/lib/utils";
 
 /**
@@ -38,6 +42,7 @@ type AssetKind =
   | "learning"
   | "onboarding"
   | "system"
+  | "portfolio-system"
   | "motion";
 
 type AssetSet = {
@@ -46,6 +51,10 @@ type AssetSet = {
 };
 
 const assetSets: Record<string, AssetSet> = {
+  "portfolio-design-system": {
+    scenes: portfolioSystemScenes,
+    kind: "portfolio-system",
+  },
   "brand-identity-system": { scenes: apertureScenes, kind: "aperture" },
   "marketing-landing-page": { scenes: marketingScenes, kind: "marketing" },
   "learning-platform-ui": { scenes: learningScenes, kind: "learning" },
@@ -147,6 +156,15 @@ export function renderProjectScene(
     return (
       <OnboardingAsset
         scene={item.scene as Parameters<typeof OnboardingAsset>[0]["scene"]}
+        alt={alt}
+        className={className}
+      />
+    );
+  }
+  if (assetSet.kind === "portfolio-system") {
+    return (
+      <PortfolioSystemAsset
+        scene={item.scene as Parameters<typeof PortfolioSystemAsset>[0]["scene"]}
         alt={alt}
         className={className}
       />

@@ -9,6 +9,8 @@ import { Placeholder } from "@/components/Placeholder";
 import { getAssetSet, renderProjectScene } from "@/components/projectAssets";
 import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
+import { Card } from "@/components/Card";
+import { buttonClasses } from "@/components/Button";
 
 type Params = { slug: string };
 
@@ -134,7 +136,7 @@ export default async function CaseStudy({
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
-            <div className="rounded-3xl border border-border-subtle bg-background-soft p-6 dark:bg-surface">
+            <Card variant="soft" className="p-6">
               <p className="text-sm font-medium uppercase tracking-wider text-fg-faint">
                 Results
               </p>
@@ -155,7 +157,7 @@ export default async function CaseStudy({
                   was measured against, not results from a live product.
                 </p>
               )}
-            </div>
+            </Card>
           </AnimatedReveal>
         </div>
       </Container>
@@ -208,7 +210,18 @@ export default async function CaseStudy({
               <h2 className="font-display text-3xl font-bold tracking-tight text-fg transition-colors duration-300 group-hover:text-brand-700 dark:group-hover:text-brand-300 sm:text-4xl">
                 {next.title}
               </h2>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-sm font-medium text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-brand-800 group-hover:shadow-lift dark:group-hover:bg-brand-600">
+              {/* Looks like a primary Button but can't BE one: it sits inside
+                  the wrapping <Link> above, and nesting a link in a link is
+                  invalid — so it borrows the recipe instead of the element.
+                  The group-hover: classes let the whole row drive the effect;
+                  the variant's own hover: styles coincide with them (hovering
+                  this span necessarily hovers the group) rather than fighting. */}
+              <span
+                className={buttonClasses({
+                  className:
+                    "shrink-0 group-hover:-translate-y-0.5 group-hover:bg-brand-800 group-hover:shadow-lift dark:group-hover:bg-brand-600",
+                })}
+              >
                 View case study
                 <ArrowRight size={16} />
               </span>

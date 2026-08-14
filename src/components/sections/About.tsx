@@ -1,6 +1,8 @@
 import { Section } from "@/components/Section";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
+import { Pill } from "@/components/Pill";
+import { Prose } from "@/components/Prose";
 import { Placeholder } from "@/components/Placeholder";
 import { site } from "@/data/site";
 
@@ -54,34 +56,28 @@ export function About() {
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
-            <div className="mt-6 space-y-4 text-fg-muted">
+            <Prose className="mt-6 max-w-none">
               <p>
                 I&apos;m a {site.role.toLowerCase()} based in Kansas City. I
-                picked up graphic design at 10, started freelancing at 13 —
-                mostly social media work for esports orgs and influencers — and
-                never really stopped. That early hustle taught me to ship fast
-                and make things look good under real deadlines.
+                picked up graphic design at 10 and started freelancing at 13,
+                mostly social media work for esports orgs and influencers. I
+                never really stopped. Doing that as a teenager taught me to work
+                fast and make things look good on a real deadline.
               </p>
               <p>
-                In 2022 I turned design into a full-time career, and at my
-                current company I&apos;ve grown a graphic-design role into web
-                design and front-end development — designing pages, owning the
-                design system, and shipping it all in code. Whether it&apos;s a
-                brand, an interface, or the code behind it, I sweat the details
-                so the work feels effortless.
+                In 2022 I turned design into a full-time career. At my current
+                company I&apos;ve grown a graphic-design role into web design
+                and front-end development: I design the pages, own the design
+                system, and build both in code. Details are where most of my
+                time goes, and I think it shows in the finished work.
               </p>
-            </div>
+            </Prose>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.15}>
             <div className="mt-8 flex flex-wrap gap-2">
               {focusAreas.map((area) => (
-                <span
-                  key={area}
-                  className="rounded-full border border-border-subtle bg-surface-raised px-3.5 py-1.5 text-sm font-medium text-fg-soft"
-                >
-                  {area}
-                </span>
+                <Pill key={area}>{area}</Pill>
               ))}
             </div>
           </AnimatedReveal>
@@ -90,7 +86,7 @@ export function About() {
             <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border-subtle pt-8 sm:gap-6">
               {stats.map((s) => (
                 <div key={s.label}>
-                  <dt className="font-display text-2xl font-bold leading-tight text-fg sm:text-3xl [text-wrap:balance]">
+                  <dt className="font-display text-2xl font-bold leading-tight text-balance text-fg sm:text-3xl">
                     {s.value}
                   </dt>
                   <dd className="mt-1 text-sm text-fg-muted">{s.label}</dd>

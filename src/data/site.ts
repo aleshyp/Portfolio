@@ -16,7 +16,7 @@ export const site = {
   firstName: "Ian",
   role: "Multidisciplinary Designer",
   tagline:
-    "I design clean, human-centered products — across brand, product, and the web.",
+    "I design clean, human-centered work across brand, product, and the web.",
   location: "Kansas City, United States",
   email: "hello@ianriley.com",
   // TODO: update once the domain & mailbox are live
@@ -57,7 +57,7 @@ export const experience: ExperienceItem[] = [
     period: "2022 — Present",
     location: "United States",
     summary:
-      "Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus — an online learning program — own and maintain the design system, then transform those designs into shippable web pages in code.",
+      "Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus, an online learning program, own and maintain the design system, then build those designs into shippable pages in code.",
     highlights: [
       "Design web pages for Acellus, an online learning platform.",
       "Created and maintain the design system that keeps the product consistent.",
@@ -71,7 +71,7 @@ export const experience: ExperienceItem[] = [
     period: "1 year",
     location: "Remote",
     summary:
-      "Led creative direction for an esports organization — setting the visual identity and producing social and brand designs across the org.",
+      "Led creative direction for an esports organization, setting the visual identity and producing social and brand designs across the org.",
     highlights: [
       "Directed the visual identity and creative output for the organization.",
       "Produced social media and brand designs for players and the org.",
@@ -101,7 +101,7 @@ export const experience: ExperienceItem[] = [
     period: "2014 — 2022",
     location: "Remote",
     summary:
-      "Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where my brand and design work began.",
+      "Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where the brand and design work began.",
     highlights: [
       "Built a client base of esports orgs and influencers as a teenager.",
       "Specialized in social media designs and brand assets across multiple organizations.",

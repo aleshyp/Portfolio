@@ -1,7 +1,7 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useStableReducedMotion } from "@/lib/useStableReducedMotion";
 import type { MotionScene } from "./motionScenes";
 
 /**
@@ -578,8 +578,9 @@ const scenes: Record<Scene, (p: { still: boolean }) => React.JSX.Element> = {
 
 export function MotionAsset({ scene, className, alt }: MotionAssetProps) {
   // The animated scenes (logo build, easing) render their end state instead of
-  // playing when the user asks for reduced motion.
-  const still = useReducedMotion() ?? false;
+  // playing when the user asks for reduced motion. This drives markup, not just
+  // animation props, so it has to survive hydration — see the hook's note.
+  const still = useStableReducedMotion();
   const Scene = scenes[scene];
   return (
     <div

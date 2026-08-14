@@ -3,6 +3,7 @@ import { Section } from "@/components/Section";
 import { AnimatedReveal, StaggerGroup, StaggerItem } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
 import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
 import { experience, education, site } from "@/data/site";
 
 export function Experience() {
@@ -13,11 +14,11 @@ export function Experience() {
           <div className="max-w-2xl">
             <Eyebrow>Experience</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-              A track record of shipping.
+              Where I&apos;ve worked.
             </h2>
             <p className="mt-4 text-fg-muted">
-              The short version of where I&apos;ve worked and what I&apos;ve
-              shipped. Want the full picture? Grab the PDF.
+              The short version of the last decade or so. The résumé has the
+              full detail if you need it.
             </p>
           </div>
           <Button
@@ -37,7 +38,7 @@ export function Experience() {
       <StaggerGroup className="mt-12 space-y-4">
         {experience.map((item) => (
           <StaggerItem key={`${item.company}-${item.period}`}>
-            <div className="group relative rounded-3xl border border-border-subtle bg-surface p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:p-8">
+            <Card interactive className="group relative p-6 sm:p-8">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
                 <h3 className="font-display text-lg font-semibold text-fg">
                   {item.role}
@@ -67,14 +68,14 @@ export function Experience() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           </StaggerItem>
         ))}
       </StaggerGroup>
 
       {/* Education */}
       <AnimatedReveal delay={0.1}>
-        <div className="mt-12 rounded-3xl border border-border-subtle bg-background-soft p-6 dark:bg-surface sm:p-8">
+        <Card variant="soft" className="mt-12 p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
               <GraduationCap size={20} />
@@ -95,7 +96,7 @@ export function Experience() {
               </div>
             ))}
           </dl>
-        </div>
+        </Card>
       </AnimatedReveal>
     </Section>
   );

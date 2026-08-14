@@ -8,6 +8,8 @@ import {
 import { Section } from "@/components/Section";
 import { AnimatedReveal, StaggerGroup, StaggerItem } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
+import { Card } from "@/components/Card";
+import { Pill } from "@/components/Pill";
 
 type SkillGroup = {
   icon: LucideIcon;
@@ -26,13 +28,13 @@ const groups: SkillGroup[] = [
   {
     icon: Sparkles,
     title: "Branding",
-    description: "Identities that stick.",
+    description: "Marks and systems built to last.",
     items: ["Logo Design", "Brand Identity", "Style Guides", "Typography"],
   },
   {
     icon: Layout,
     title: "UX/UI Design",
-    description: "Interfaces that feel obvious.",
+    description: "Interfaces you don't have to think about.",
     items: ["UI Design", "Prototyping", "Interaction", "Design Systems"],
   },
   {
@@ -62,11 +64,11 @@ export function Skills() {
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow className="justify-center">Skills &amp; tools</Eyebrow>
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-            A full-stack design toolkit.
+            What I work with.
           </h2>
           <p className="mt-4 text-fg-muted">
-            From brand and graphics to product interfaces and the code that
-            ships them — here&apos;s how I take work from idea to launch.
+            Brand and graphics, product interfaces, and the code that ships
+            them. Roughly the path a project takes from idea to launch.
           </p>
         </div>
       </AnimatedReveal>
@@ -76,7 +78,7 @@ export function Skills() {
           const Icon = group.icon;
           return (
             <StaggerItem key={group.title}>
-              <div className="group h-full rounded-3xl border border-border-subtle bg-surface p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+              <Card interactive className="group h-full p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-400 dark:group-hover:bg-brand-600 dark:group-hover:text-white">
                   <Icon size={22} />
                 </div>
@@ -97,7 +99,7 @@ export function Skills() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Card>
             </StaggerItem>
           );
         })}
@@ -106,12 +108,9 @@ export function Skills() {
       <AnimatedReveal delay={0.1}>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-2.5">
           {tools.map((tool) => (
-            <span
-              key={tool}
-              className="rounded-full border border-border-subtle bg-surface-raised px-4 py-2 text-sm font-medium text-fg-soft shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700 dark:hover:border-brand-500/30 dark:hover:text-brand-300"
-            >
+            <Pill key={tool} className="shadow-soft">
               {tool}
-            </span>
+            </Pill>
           ))}
         </div>
       </AnimatedReveal>

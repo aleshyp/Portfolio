@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStableReducedMotion } from "@/lib/useStableReducedMotion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -26,7 +26,7 @@ type ApertureHeroProps = {
 };
 
 export function ApertureHero({ className, alt }: ApertureHeroProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useStableReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
 
