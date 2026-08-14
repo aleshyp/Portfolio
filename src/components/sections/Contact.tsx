@@ -5,7 +5,9 @@ import { Mail, MapPin, Send, Check, Loader2 } from "lucide-react";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Container } from "@/components/Container";
 import { Eyebrow } from "@/components/Badge";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/Button";
+import { Field } from "@/components/Field";
+import { Pill } from "@/components/Pill";
 import { site } from "@/data/site";
 
 const socials = [
@@ -106,7 +108,10 @@ export function Contact() {
   return (
     <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
       <Container>
-        <div className="overflow-hidden rounded-4xl border border-brand-100 bg-gradient-to-br from-brand-950 via-brand-900 to-emerald-950 text-white shadow-lift">
+        {/* Permanently-dark panel: it stays dark in BOTH themes, so everything
+            inside uses the fixed `on-dark` tokens rather than the theme-aware
+            foreground and surface tokens, which would flip out from under it. */}
+        <div className="overflow-hidden rounded-4xl border border-brand-100 bg-linear-to-br from-brand-950 via-brand-900 to-emerald-950 text-on-dark shadow-lift">
           <div className="relative grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
             {/* soft glow */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
@@ -120,24 +125,24 @@ export function Contact() {
               <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
                 Have a project in mind? Let&apos;s talk.
               </h2>
-              <p className="mt-4 max-w-md text-brand-50">
-                I&apos;m currently taking on a few new projects. Tell me a little
-                about what you&apos;re building and I&apos;ll get back to you
-                within a day or two.
+              <p className="mt-4 max-w-md text-on-dark-muted">
+                I have room for a few new projects right now. Tell me what
+                you&apos;re building and I&apos;ll get back to you within a day
+                or two.
               </p>
 
               <div className="mt-8 space-y-4">
                 <a
                   href={`mailto:${site.email}`}
-                  className="flex items-center gap-3 rounded-lg text-brand-100 transition-colors hover:text-white"
+                  className="flex items-center gap-3 rounded-lg text-on-dark-muted transition-colors hover:text-on-dark"
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-on-dark">
                     <Mail size={18} />
                   </span>
                   {site.email}
                 </a>
-                <div className="flex items-center gap-3 text-brand-100">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                <div className="flex items-center gap-3 text-on-dark-muted">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-on-dark">
                     <MapPin size={18} />
                   </span>
                   {site.location}
@@ -146,36 +151,30 @@ export function Contact() {
 
               <div className="mt-8 flex gap-2">
                 {socials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-brand-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:text-white"
-                  >
+                  <Pill key={s.label} href={s.href} external tone="onDark">
                     {s.label}
-                  </a>
+                  </Pill>
                 ))}
               </div>
             </AnimatedReveal>
 
             {/* Right: placeholder form */}
             <AnimatedReveal delay={0.1}>
-              <div className="rounded-3xl bg-white/[0.06] p-6 backdrop-blur-sm ring-1 ring-white/10 sm:p-8">
+              <div className="rounded-3xl bg-surface-on-dark p-6 ring-1 ring-border-on-dark backdrop-blur-sm sm:p-8">
                 {submitted ? (
                   <div
                     ref={confirmationRef}
                     role="status"
                     tabIndex={-1}
-                    className="flex h-full min-h-[320px] flex-col items-center justify-center text-center focus:outline-none"
+                    className="flex h-full min-h-80 flex-col items-center justify-center text-center focus:outline-none"
                   >
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 text-white">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-success text-on-dark">
                       <Check size={26} />
                     </span>
                     <p className="mt-5 font-display text-xl font-semibold">
                       Thanks for reaching out!
                     </p>
-                    <p className="mt-2 text-sm text-brand-100">
+                    <p className="mt-2 text-sm text-on-dark-muted">
                       {WEB3FORMS_KEY
                         ? "I'll get back to you within a day or two."
                         : "This is a demo form. Add a Web3Forms key to receive real messages."}
@@ -218,43 +217,21 @@ export function Contact() {
                       required={false}
                       autoComplete="organization"
                     />
-                    <div>
-                      <label
-                        htmlFor="message"
-                        className="mb-1.5 block text-sm font-medium text-brand-100"
-                      >
-                        Project details
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        aria-invalid={errors.message ? true : undefined}
-                        aria-describedby={
-                          errors.message ? "message-error" : undefined
-                        }
-                        placeholder="Tell me about your project, timeline, and goals…"
-                        className={cn(
-                          "w-full resize-none rounded-xl border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-950",
-                          errors.message
-                            ? "border-red-400 focus-visible:ring-red-400"
-                            : "border-white/15 focus:border-brand-300 focus-visible:ring-brand-300",
-                        )}
-                      />
-                      {errors.message && (
-                        <p
-                          id="message-error"
-                          className="mt-1.5 text-sm text-red-300"
-                        >
-                          {errors.message}
-                        </p>
-                      )}
-                    </div>
-                    <button
+                    <Field
+                      label="Project details"
+                      id="message"
+                      multiline
+                      placeholder="What are you building, and when do you need it?"
+                      error={errors.message}
+                    />
+                    <Button
                       type="submit"
+                      variant="onDark"
+                      size="lg"
+                      fullWidth
                       disabled={pending}
                       aria-busy={pending}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-brand-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-50 hover:shadow-lift active:translate-y-0 active:shadow-soft disabled:pointer-events-none disabled:opacity-70"
+                      className="text-sm font-semibold disabled:opacity-70"
                     >
                       {pending ? (
                         <>
@@ -267,17 +244,17 @@ export function Contact() {
                           <Send size={16} />
                         </>
                       )}
-                    </button>
+                    </Button>
                     {submitError && (
                       <p
                         role="alert"
-                        className="text-center text-sm text-red-300"
+                        className="text-center text-sm text-danger-soft"
                       >
                         {submitError}
                       </p>
                     )}
                     {!WEB3FORMS_KEY && (
-                      <p className="text-center text-xs text-brand-100">
+                      <p className="text-center text-xs text-on-dark-muted">
                         Demo form — no message is actually sent.
                       </p>
                     )}
@@ -292,52 +269,3 @@ export function Contact() {
   );
 }
 
-function Field({
-  label,
-  id,
-  type = "text",
-  placeholder,
-  required = true,
-  autoComplete,
-  error,
-}: {
-  label: string;
-  id: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-  autoComplete?: string;
-  error?: string;
-}) {
-  return (
-    <div>
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-sm font-medium text-brand-100"
-      >
-        {label}
-      </label>
-      <input
-        id={id}
-        name={id}
-        type={type}
-        required={required}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className={cn(
-          "w-full rounded-xl border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-950",
-          error
-            ? "border-red-400 focus-visible:ring-red-400"
-            : "border-white/15 focus:border-brand-300 focus-visible:ring-brand-300",
-        )}
-      />
-      {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-sm text-red-300">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}

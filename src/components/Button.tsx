@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "outline" | "ghost";
+type Variant = "primary" | "outline" | "ghost" | "ink" | "onDark";
 type Size = "md" | "lg";
 
 const base =
@@ -14,6 +14,12 @@ const variants: Record<Variant, string> = {
     "border border-brand-200 bg-white text-brand-700 hover:border-brand-300 hover:bg-brand-50 hover:-translate-y-0.5 active:translate-y-0 active:bg-brand-100 dark:border-brand-500/30 dark:bg-white/5 dark:text-brand-300 dark:hover:border-brand-500/50 dark:hover:bg-white/10 dark:active:bg-white/[0.08]",
   ghost:
     "text-fg-soft hover:text-brand-700 hover:bg-brand-50 active:bg-brand-100 dark:text-fg-faint dark:hover:text-brand-300 dark:hover:bg-white/5 dark:active:bg-white/[0.08]",
+  // Navy fill in light, brand fill in dark — the navbar's "Let's talk" CTA,
+  // deliberately distinct from `primary` so it doesn't read as a second one.
+  ink: "bg-ink text-white hover:bg-brand-700 hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0 dark:bg-brand-700 dark:hover:bg-brand-600",
+  // Inverted: for use ON a permanently-dark panel (the Contact band).
+  onDark:
+    "bg-on-dark text-brand-800 hover:bg-brand-50 hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0 active:shadow-soft",
 };
 
 const sizes: Record<Size, string> = {
@@ -24,6 +30,8 @@ const sizes: Record<Size, string> = {
 type CommonProps = {
   variant?: Variant;
   size?: Size;
+  /** Stretches to fill its container — for stacked mobile menus and forms. */
+  fullWidth?: boolean;
   className?: string;
   children: React.ReactNode;
 };
@@ -38,9 +46,41 @@ type ButtonAsButton = CommonProps &
     href?: undefined;
   };
 
+/**
+ * Class recipe, exported for the one case that can't use the component: the
+ * case-study "View case study" affordance, which is a <span> inside a wrapping
+ * <Link>. It looks like a button but can't BE one — nesting a link inside a
+ * link is invalid HTML — so it borrows the classes instead of the element.
+ */
+export function buttonClasses({
+  variant = "primary",
+  size = "md",
+  fullWidth = false,
+  className,
+}: {
+  variant?: Variant;
+  size?: Size;
+  fullWidth?: boolean;
+  className?: string;
+} = {}): string {
+  return cn(
+    base,
+    variants[variant],
+    sizes[size],
+    fullWidth && "w-full",
+    className,
+  );
+}
+
 export function Button(props: ButtonAsLink | ButtonAsButton) {
-  const { variant = "primary", size = "md", className, children } = props;
-  const classes = cn(base, variants[variant], sizes[size], className);
+  const {
+    variant = "primary",
+    size = "md",
+    fullWidth = false,
+    className,
+    children,
+  } = props;
+  const classes = buttonClasses({ variant, size, fullWidth, className });
 
   if ("href" in props && props.href) {
     if (props.external) {
@@ -62,10 +102,19 @@ export function Button(props: ButtonAsLink | ButtonAsButton) {
     );
   }
 
-  const { variant: _v, size: _s, className: _c, children: _ch, ...rest } =
-    props as ButtonAsButton;
+  const {
+    variant: _v,
+    size: _s,
+    fullWidth: _fw,
+    className: _c,
+    children: _ch,
+    ...rest
+  } = props as ButtonAsButton;
+  // Default to type="button": a bare <button> inside a form implicitly submits
+  // it, which is a trap for anyone reusing this outside a submit context.
+  // Callers that DO want to submit pass type="submit" explicitly.
   return (
-    <button className={classes} {...rest}>
+    <button type="button" className={classes} {...rest}>
       {children}
     </button>
   );

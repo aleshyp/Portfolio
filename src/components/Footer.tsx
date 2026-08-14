@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ArrowUp, Mail } from "lucide-react";
 import { site } from "@/data/site";
 import { Container } from "./Container";
+import { IconButton } from "./IconButton";
+import { Pill } from "./Pill";
 
 const socialLinks = [
   { label: "Dribbble", href: site.socials.dribbble },
@@ -36,14 +38,9 @@ export function Footer() {
               <ul className="flex flex-wrap gap-2">
                 {socialLinks.map((s) => (
                   <li key={s.label}>
-                    <a
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex rounded-full border border-border-subtle bg-surface-raised px-4 py-2 text-sm font-medium text-fg-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-soft dark:hover:border-brand-500/30 dark:hover:text-brand-300"
-                    >
+                    <Pill href={s.href} external>
                       {s.label}
-                    </a>
+                    </Pill>
                   </li>
                 ))}
               </ul>
@@ -68,7 +65,7 @@ export function Footer() {
               />
               <p>
                 © {new Date().getFullYear()} {site.name}. Designed &amp; built
-                with care.
+                by me.
               </p>
             </div>
             <div className="flex items-center gap-6">
@@ -81,15 +78,13 @@ export function Footer() {
                   {item.label}
                 </Link>
               ))}
-              <button
-                onClick={() =>
-                  window.scrollTo({ top: 0, behavior: "smooth" })
-                }
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle text-fg-soft transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 dark:hover:border-brand-500/30 dark:hover:text-brand-300"
-                aria-label="Back to top"
+              <IconButton
+                shape="circle"
+                label="Back to top"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <ArrowUp size={16} />
-              </button>
+              </IconButton>
             </div>
           </div>
         </div>

@@ -60,6 +60,35 @@
   --color-surface-solid: #ffffff;   /* OPAQUE card (overlays a photo/bg)  */
   --color-border-subtle: #d1fae5;   /* brand-100 hairline (matches cards) */
 
+  /* ── On-dark (fixed; for permanently-dark panels) ─────────────────────
+     A panel that stays dark in BOTH themes (the Contact band) can't use the
+     theme-aware fg and surface tokens: those flip, and on an always-dark
+     ground the light values are unreadable. It hand-rolled ~20 raw
+     utilities (text-white, text-brand-100, bg-white/5, border-white/15,
+     ring-white/10, placeholder:text-white/40) which no dark:* grep could catch.
+
+     Like `ink`, these are FIXED — they describe "text/surface on a dark ground",
+     not "text in dark theme", so there is nothing to re-point in .dark. Reach
+     for them for any inverted band (CTA, pricing, testimonial). */
+  --color-on-dark: #ffffff;                            /* highest-emphasis   */
+  --color-on-dark-muted: #d1fae5;                      /* = brand-100, body  */
+  --color-on-dark-faint: rgba(255, 255, 255, 0.4);     /* placeholders       */
+  --color-surface-on-dark: rgba(255, 255, 255, 0.06);  /* panel/well fill    */
+  --color-surface-on-dark-raised: rgba(255, 255, 255, 0.05); /* input fill   */
+  --color-border-on-dark: rgba(255, 255, 255, 0.15);   /* input hairline     */
+  --color-border-on-dark-strong: rgba(255, 255, 255, 0.4); /* hover/emphasis */
+
+  /* ── Semantic status ──────────────────────────────────────────────────
+     Error/success were the only semantic colors without tokens — the contact
+     form reached straight for red-400/red-300. These currently render ONLY on
+     the dark Contact panel, so the values are picked to clear AA on the
+     brand-950 ground (danger-soft 6.9:1, success 5.2:1) rather than on white.
+     If a status color is ever needed on a light surface, add a paired
+     -on-light value instead of re-pointing these. */
+  --color-danger: #f87171;       /* red-400  — borders, focus rings          */
+  --color-danger-soft: #fca5a5;  /* red-300  — error message text            */
+  --color-success: #10b981;      /* brand-500 — confirmation affordance      */
+
   /* sparing warm highlight */
   --color-accent: #f59e0b;
   --color-accent-soft: #fbbf24;
