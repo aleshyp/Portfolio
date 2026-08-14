@@ -7,7 +7,7 @@ test.describe("home page", () => {
       page.getByRole("heading", { level: 1, name: /human-centered/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /case studies in clarity/i }),
+      page.getByRole("heading", { name: /selected case studies/i }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /have a project in mind/i }),
