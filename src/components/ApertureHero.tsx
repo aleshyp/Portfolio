@@ -17,7 +17,14 @@ import { cn } from "@/lib/utils";
  */
 
 const SRC = "/work/aperture/aperture-animation.webm";
-const POSTER = "/work/aperture/logo-anim-poster.jpg";
+
+/**
+ * The animation's end frame. Exported because the Work grid uses it as the card
+ * thumbnail (no video in a six-card grid) — one path so the card and the hero
+ * can't drift apart. See renderProjectScene.
+ */
+export const APERTURE_POSTER = "/work/aperture/logo-anim-poster.jpg";
+const POSTER = APERTURE_POSTER;
 
 type ApertureHeroProps = {
   className?: string;

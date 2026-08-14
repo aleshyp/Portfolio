@@ -1,5 +1,5 @@
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
-import { ApertureHero } from "@/components/ApertureHero";
+import { ApertureHero, APERTURE_POSTER } from "@/components/ApertureHero";
 import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
 import { LearningAsset, learningScenes } from "@/components/LearningAsset";
 import { OnboardingAsset, onboardingScenes } from "@/components/OnboardingAsset";
@@ -71,7 +71,7 @@ type RenderOptions = {
   /**
    * Aperture's hero is a <video> logo reveal. It's right for the case study, but
    * a card thumbnail shouldn't autoplay video in a six-card grid — pass false to
-   * fall back to the static SVG logomark.
+   * fall back to the video's poster (its end frame) as a static image.
    */
   allowVideoHero?: boolean;
   /**
@@ -109,10 +109,18 @@ export function renderProjectScene(
     // logo-reveal animation; scenes 1–4 are exported PNG frames.
     if (index === 0) {
       if (!allowVideoHero) {
-        // The logomark scene is the animation's end frame — the same image the
-        // video rests on, without the playback cost.
+        // The video's poster IS the animation's end frame — the same image the
+        // video rests on, without the playback cost. (The hand-drawn `logomark`
+        // SVG predates the real Figma deliverable and no longer matches it.)
         return (
-          <ApertureAsset scene="logomark" alt={alt} className={className} />
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={APERTURE_POSTER}
+            alt={alt}
+            width={1600}
+            height={900}
+            className={cn("block object-cover shadow-soft", className)}
+          />
         );
       }
       return (
