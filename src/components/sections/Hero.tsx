@@ -80,9 +80,9 @@ export function Hero() {
             variants={item}
             className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
-            A {site.role.toLowerCase()} based in {site.location}, blending
-            graphic design and UX/UI — and the front-end code to ship it — into
-            work that feels effortless.
+            A {site.role.toLowerCase()} based in {site.location}. I work across
+            graphic design and UX/UI, and I write the front-end code that ships
+            it.
           </motion.p>
 
           <motion.div

@@ -22,7 +22,7 @@ const sora = Sora({
 const titleDefault = `${site.name} — ${site.role}`;
 
 const ogDescription =
-  "Clean, human-centered design across graphic and UX/UI — from brand to polished, accessible interfaces.";
+  "Clean, human-centered design across graphic and UX/UI, from brand identity through to polished, accessible interfaces.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     default: titleDefault,
     template: `%s · ${site.name}`,
   },
-  description: `${site.name} is a ${site.role.toLowerCase()} crafting clean, human-centered work across graphic design and UX/UI — from brand to polished, accessible interfaces.`,
+  description: `${site.name} is a ${site.role.toLowerCase()} working across graphic design and UX/UI, from brand identity through to polished, accessible interfaces.`,
   keywords: [
     "Graphic Designer",
     "UX/UI Designer",
