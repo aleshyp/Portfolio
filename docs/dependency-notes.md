@@ -3,7 +3,7 @@
 Why certain packages are deliberately held back. Re-check when the blocking
 upstream work lands; until then, `npm outdated` showing these is expected.
 
-Last verified: 2026-08-11.
+Last verified: 2026-08-14.
 
 ## Held back
 
@@ -54,13 +54,28 @@ the `engines.node` floor in `package.json`.
 
 ## Cleared
 
-### framer-motion 12 → 13 — done
+### framer-motion 12 → 13 — done, merged 2026-08-14
 
-Upgraded on its own branch. No source changes needed; the APIs this repo uses
-(`motion`, `AnimatePresence`, `useReducedMotion`, `Variants`) are unchanged.
-Verified with typecheck, production build, and the full Playwright suite
-(73 passed), which covers the `AnimatePresence` hamburger menu, staggered
-reveals, and `prefers-reduced-motion` paths.
+No source changes needed; the APIs this repo uses (`motion`, `AnimatePresence`,
+`useReducedMotion`, `Variants`) are unchanged. Verified with typecheck,
+production build, and the full Playwright suite, which covers the
+`AnimatePresence` hamburger menu, staggered reveals, and
+`prefers-reduced-motion` paths.
+
+This sat finished-but-unmerged on `chore/framer-motion-13` for three days
+while this file already called it done — `package.json` was the source of
+truth and still said `^12`. **When recording something as cleared here, check
+that the version bump is actually on `main`.**
+
+### next / eslint-config-next 16.3.0 → 16.3.1 — done
+
+Patch release, taken 2026-08-14. It surfaced a latent reduced-motion hydration
+mismatch that 16.3.0 tolerated: components picking *markup* from
+`useReducedMotion()` (which returns `null` server-side) rendered differently on
+the client's first pass, and the failed hydration showed up as an a11y scan
+reporting a missing `lang` attribute. Fixed with `useStableReducedMotion()` in
+`src/lib/` — see that hook's docstring for which components need it and, just
+as importantly, which must NOT use it.
 
 ## Re-checking
 
@@ -68,7 +83,18 @@ reveals, and `prefers-reduced-motion` paths.
 npm outdated                  # what has moved
 npm audit --omit=dev          # what actually ships (CI gates on high)
 npm run lint                  # the real test for the eslint/TS majors above
+npm run test:e2e              # run it more than once; see below
 ```
+
+As of 2026-08-14 `npm outdated` should list exactly three packages — `eslint`,
+`typescript`, and `@types/node` — all three deliberate, all three explained
+above. Anything else on that list is genuinely behind.
+
+A note on the e2e suite: it is the real gate for upgrades that touch rendering,
+but a single green run doesn't prove much. The a11y scans were failing ~4 runs
+in 10 from a race unrelated to any dependency, which is easy to misread as an
+upgrade regression. Run it several times, and kill stray `next dev` processes
+between runs or the next run inherits a broken server.
 
 CI (`.github/workflows/ci.yml`) also runs `npm audit` weekly, so new advisories
 against unchanged code surface without anyone remembering to look.
