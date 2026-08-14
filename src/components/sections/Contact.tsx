@@ -116,8 +116,13 @@ export function Contact() {
             {/* soft glow */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
 
-            {/* Left: invitation */}
-            <AnimatedReveal>
+            {/* Left: invitation.
+                min-w-0: grid items default to min-width:auto, so the long
+                unbreakable email address below forced this track to 290px
+                inside a 260px panel at ~320px wide — clipped by the panel's
+                overflow-hidden rather than scrolling, so it read as truncated
+                text. Same reason the right column carries it. */}
+            <AnimatedReveal className="min-w-0">
               <Eyebrow className="text-brand-300">
                 <span className="bg-brand-300" />
                 Contact
@@ -149,7 +154,7 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="mt-8 flex gap-2">
+              <div className="mt-8 flex flex-wrap gap-2">
                 {socials.map((s) => (
                   <Pill key={s.label} href={s.href} external tone="onDark">
                     {s.label}
@@ -159,7 +164,7 @@ export function Contact() {
             </AnimatedReveal>
 
             {/* Right: placeholder form */}
-            <AnimatedReveal delay={0.1}>
+            <AnimatedReveal delay={0.1} className="min-w-0">
               <div className="rounded-3xl bg-surface-on-dark p-6 ring-1 ring-border-on-dark backdrop-blur-sm sm:p-8">
                 {submitted ? (
                   <div
