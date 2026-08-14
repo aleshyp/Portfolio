@@ -72,9 +72,20 @@ test.describe("contact form", () => {
     await page.getByLabel("Name").fill("Jane Doe");
     await page.getByLabel("Email").fill("jane@company.com");
     await page.getByLabel(/project details/i).fill("Hello there, this is a test.");
-    await page.getByRole("button", { name: /send message/i }).click();
-    // Loading state (button flips to "Sending…").
-    await expect(page.getByRole("button", { name: /sending/i })).toBeVisible();
+    // Locate the submit by its stable attribute, NOT by accessible name: the
+    // label flips from "Send message" to "Sending…" on submit, and Playwright
+    // re-resolves a locator on every assertion, so a name-based handle stops
+    // matching the moment the state it is meant to observe begins.
+    const submit = page.locator('form button[type="submit"]');
+    await submit.click();
+
+    // Loading state, asserted via aria-busy rather than the "Sending…" text.
+    // Both flip together, but without a configured Web3Forms key the demo path
+    // holds the state for only 900ms, so a loaded worker can miss a text match.
+    // aria-busy is also what assistive tech announces, making it the more
+    // meaningful assertion.
+    await expect(submit).toHaveAttribute("aria-busy", "true");
+
     // Then the confirmation replaces the form.
     await expect(page.getByText(/thanks for reaching out/i)).toBeVisible();
   });
