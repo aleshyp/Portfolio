@@ -68,7 +68,10 @@ export function Footer() {
                 by me.
               </p>
             </div>
-            <div className="flex items-center gap-6">
+            {/* Wraps: five nav links + the back-to-top button exceed a ~320px
+                viewport on one line, which pushed the row ~109px past the
+                screen edge (masked by body's overflow-x: hidden). */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
               {site.nav.map((item) => (
                 <Link
                   key={item.href}
