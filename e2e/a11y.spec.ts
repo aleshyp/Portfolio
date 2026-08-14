@@ -45,6 +45,25 @@ async function freezeAnimations(page: import("@playwright/test").Page) {
   });
 }
 
+// `page.goto` resolves on the `load` event, which under parallel worker load can
+// land before the App Router has committed the real document. axe then scans a
+// transitional shell and reports things that cannot actually be missing from the
+// root layout — `html-has-lang` and `document-title` together, the tell-tale
+// pair. Waiting for both to be present pins the scan to the real page.
+//
+// This was an intermittent ~1-in-6 failure on /work/portfolio-design-system
+// (the heaviest route — it carries the hand-built SVG scenes), independent of
+// any dependency version.
+async function waitForDocumentReady(page: import("@playwright/test").Page) {
+  // Only the two attributes axe misreports are checked. Waiting on
+  // `readyState === "complete"` as well is both unnecessary (axe scans the DOM,
+  // not pending sub-resources) and actively harmful: under parallel load it can
+  // outlast the 30s test timeout on the SVG-heavy routes.
+  await page.waitForFunction(
+    () => document.documentElement.lang !== "" && document.title !== "",
+  );
+}
+
 // One representative case study per asset family — the studies share a layout,
 // so scanning every slug would mostly re-test the same markup. The two here
 // differ in what they render: learning-platform-ui uses the standard scene set,
@@ -66,6 +85,7 @@ async function waitForHydration(page: import("@playwright/test").Page) {
 for (const route of routes) {
   test(`no a11y violations: ${route}`, async ({ page }) => {
     await page.goto(route);
+    await waitForDocumentReady(page);
     await freezeAnimations(page);
     const { violations } = await new AxeBuilder({ page })
       .withTags(WCAG)
