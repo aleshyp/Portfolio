@@ -4,7 +4,7 @@
        Wordmark: "Northwind" in Sora 700, Ink #0B1B3A.
        NOTE: references the Sora font by name; embed/convert-to-outlines in Figma
        if Sora is not installed. Keep in sync with
-       public/work/northwind/Logo — Export Ready.svg. -->
+       public/work/northwind/logo-full.svg. -->
   <!-- mark tile (96×96, rounded) -->
   <rect x="8" y="16" width="96" height="96" rx="24" fill="#22D3EE"/>
   <g transform="translate(8 16) scale(3)">

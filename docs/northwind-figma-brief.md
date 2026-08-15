@@ -28,8 +28,8 @@ identity is a bright **cyan** mark + wordmark with a single **coral** accent
 > tile — a bright **cyan** tile with the triangles in ink (the upward triangle
 > solid, the downward one dimmed, an "up and to the right" signal idea). It sits
 > left of the **"Northwind"** wordmark. Keep the mark simple enough to read at
-> favicon size. (Source of truth: `public/work/northwind/Logo Mark — Export
-> Ready.svg` and `Logo — Export Ready.svg`.)
+> favicon size. (Source of truth: `public/work/northwind/logo-mark.svg` and
+> `logo-full.svg`.)
 >
 > **Palette (use these exact values):**
 > | Token | Hex | Role |
