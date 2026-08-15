@@ -2,40 +2,40 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useStableReducedMotion } from "@/lib/useStableReducedMotion";
+import { LOGO_REVEALS } from "@/components/logoReveals";
 import { cn } from "@/lib/utils";
 
 /**
- * Aperture case-study hero animation.
+ * Case-study hero animation: a brand logo-reveal.
  *
- * Plays the brand's logo-reveal (a 16:9 WebM) ONCE when it scrolls into view,
- * then rests on the final logomark frame. Honors prefers-reduced-motion: those
- * users get the static poster (the animation's end frame) with no playback —
- * consistent with the rest of the site's motion language (see AnimatedReveal).
+ * Plays a 16:9 WebM ONCE when it scrolls into view, then rests on the final
+ * logomark frame. Honors prefers-reduced-motion: those users get the static
+ * poster (the animation's end frame) with no playback — consistent with the
+ * rest of the site's motion language (see AnimatedReveal).
  *
  * The poster doubles as the pre-play / loading image, so the hero never flashes
  * a black box before the video is ready.
+ *
+ * Shared by every project whose hero is a logo reveal (Aperture, Northwind,
+ * Lumin).
+ * Each project's paths live in ./logoReveals — a server-importable module, so
+ * the Work grid (a server component) can read the poster without crossing this
+ * file's client boundary.
  */
 
-const SRC = "/work/aperture/aperture-animation.webm";
-
-/**
- * The animation's end frame. Exported because the Work grid uses it as the card
- * thumbnail (no video in a six-card grid) — one path so the card and the hero
- * can't drift apart. See renderProjectScene.
- */
-export const APERTURE_POSTER = "/work/aperture/logo-anim-poster.jpg";
-const POSTER = APERTURE_POSTER;
-
-type ApertureHeroProps = {
+type LogoRevealHeroProps = {
   className?: string;
+  /** Project slug — selects the animation from LOGO_REVEALS. */
+  slug: string;
   /** Accessible description of the animation. */
   alt: string;
 };
 
-export function ApertureHero({ className, alt }: ApertureHeroProps) {
+export function LogoRevealHero({ className, slug, alt }: LogoRevealHeroProps) {
   const shouldReduceMotion = useStableReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
+  const reveal = LOGO_REVEALS[slug];
 
   useEffect(() => {
     if (shouldReduceMotion) return;
@@ -62,12 +62,16 @@ export function ApertureHero({ className, alt }: ApertureHeroProps) {
     return () => observer.disconnect();
   }, [shouldReduceMotion, hasPlayed]);
 
+  // A slug with no registered animation renders nothing rather than an empty
+  // <video>; callers fall back to the project's other scenes.
+  if (!reveal) return null;
+
   // Reduced motion: render the poster as a plain image, no <video> playback.
   if (shouldReduceMotion) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={POSTER}
+        src={reveal.poster}
         alt={alt}
         width={1600}
         height={900}
@@ -80,14 +84,15 @@ export function ApertureHero({ className, alt }: ApertureHeroProps) {
     <video
       ref={videoRef}
       className={cn("block h-full w-full object-cover", className)}
-      poster={POSTER}
+      poster={reveal.poster}
       muted
       playsInline
       preload="metadata"
-      aria-label={alt}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
       // No `loop`, no `controls`: it plays through once and rests on frame 1-of-end.
     >
-      <source src={SRC} type="video/webm" />
+      <source src={reveal.src} type="video/webm" />
     </video>
   );
 }

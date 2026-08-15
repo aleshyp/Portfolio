@@ -1,5 +1,6 @@
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
-import { ApertureHero, APERTURE_POSTER } from "@/components/ApertureHero";
+import { LogoRevealHero } from "@/components/LogoRevealHero";
+import { LOGO_REVEALS } from "@/components/logoReveals";
 import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
 import { LearningAsset, learningScenes } from "@/components/LearningAsset";
 import { OnboardingAsset, onboardingScenes } from "@/components/OnboardingAsset";
@@ -122,31 +123,37 @@ export function renderProjectScene(
   // when alt is falsy, so nothing reaches the accessibility tree.
   const alt = decorative ? "" : item.alt;
 
-  if (assetSet.kind === "aperture") {
-    // Aperture ships real Figma deliverables: the hero (scene 0) is the brand
-    // logo-reveal animation; scenes 1–4 are exported PNG frames.
-    if (index === 0) {
-      if (!allowVideoHero) {
-        // The video's poster IS the animation's end frame — the same image the
-        // video rests on, without the playback cost. (The hand-drawn `logomark`
-        // SVG predates the real Figma deliverable and no longer matches it.)
-        return (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={APERTURE_POSTER}
-            alt={alt}
-            width={1600}
-            height={900}
-            className={cn("block object-cover shadow-soft", className)}
-          />
-        );
-      }
+  // Aperture, Northwind and Lumin all open on a brand logo-reveal WebM (scene 0).
+  // One branch serves them all so the case studies can't drift apart.
+  const reveal = index === 0 ? LOGO_REVEALS[slug] : undefined;
+  if (reveal) {
+    if (!allowVideoHero) {
+      // The video's poster IS the animation's end frame — the same image the
+      // video rests on, without the playback cost. (Aperture's hand-drawn
+      // `logomark` SVG predates the real Figma deliverable and no longer
+      // matches it.)
       return (
-        <div className={cn("overflow-hidden bg-ink shadow-soft", className)}>
-          <ApertureHero alt={alt} />
-        </div>
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={reveal.poster}
+          alt={alt}
+          width={1600}
+          height={900}
+          className={cn("block object-cover shadow-soft", className)}
+        />
       );
     }
+    return (
+      <div
+        className={cn("overflow-hidden shadow-soft", className)}
+        style={{ backgroundColor: reveal.backdrop }}
+      >
+        <LogoRevealHero slug={slug} alt={alt} />
+      </div>
+    );
+  }
+
+  if (assetSet.kind === "aperture") {
     const png = aperturePng[item.scene];
     if (png) {
       return (

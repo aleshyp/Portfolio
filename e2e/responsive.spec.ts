@@ -46,10 +46,17 @@ test("no broken images or failed requests on home", async ({ page }) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 
+  // A broken image is one that FINISHED loading with no intrinsic size (a 404'd
+  // or malformed src). `!img.complete` is deliberately NOT part of this check:
+  // below-the-fold images are loading="lazy" (next/image's default), so while
+  // the viewport sits at the top they are never requested at all and stay
+  // `complete === false` forever — healthy, but indistinguishable from broken
+  // by that flag. It flagged the footer logos, which decode fine at 160×160.
+  // Failed requests for those images are still caught by `failed` below.
   const broken = await page.evaluate(() =>
     [...document.images]
-      .filter((img) => !img.complete || img.naturalWidth === 0)
-      .map((img) => img.currentSrc),
+      .filter((img) => img.complete && img.naturalWidth === 0)
+      .map((img) => img.currentSrc || img.src),
   );
   expect(broken, "broken images").toEqual([]);
   expect(failed, "failed requests").toEqual([]);

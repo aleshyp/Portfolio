@@ -98,7 +98,7 @@ function BrowserChrome({
 
 /**
  * Northwind wordmark: the cyan tile mark (up/down triangles) + name.
- * Mark geometry mirrors public/work/northwind/Logo Mark — Export Ready.svg
+ * Mark geometry mirrors public/work/northwind/logo-mark.svg
  * (a 32×32 tile), placed on the scene's 36×36 tile at (0,-26): triangles are
  * scaled ×1.125 and shifted up 26px to match.
  */
@@ -461,8 +461,18 @@ export function MarketingAsset({ scene, className, alt }: MarketingAssetProps) {
   );
 }
 
-/** Ordered scenes for the case-study gallery (hero first, then blocks). */
-export const marketingScenes: { scene: Scene; alt: string }[] = [
+/**
+ * Ordered scenes for the case-study gallery (hero first, then blocks).
+ *
+ * Scene 0 is the brand logo-reveal animation (a WebM, rendered by
+ * LogoRevealHero rather than by this component's SVG scenes) — the same
+ * arrangement as Aperture. The homepage screenshot follows it.
+ */
+export const marketingScenes: { scene: Scene | "logo-reveal"; alt: string }[] = [
+  {
+    scene: "logo-reveal",
+    alt: "Northwind logo animation — the cobalt app icon and 'Northwind' wordmark resolving on a dark navy field.",
+  },
   {
     scene: "hero",
     alt: "Northwind homepage hero — a nav bar, the headline 'See what your team actually ships,' start-trial and demo buttons, and a product preview card with a weekly bar chart and rising trend line.",

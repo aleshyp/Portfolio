@@ -37,7 +37,7 @@ function getServerSnapshot() {
  * query for live changes.
  *
  * Use this ONLY where the preference picks different *markup* — a different
- * element (`ApertureHero`'s <img> vs <video>) or different SSR'd attribute
+ * element (`LogoRevealHero`'s <img> vs <video>) or different SSR'd attribute
  * values (`MotionAsset`'s SVG geometry). Those are the cases React can't patch.
  *
  * Do NOT swap it in for components that merely hand the value to Framer Motion

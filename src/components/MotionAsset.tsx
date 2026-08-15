@@ -19,7 +19,7 @@ import type { MotionScene } from "./motionScenes";
  * easing scene ACTUALLY ANIMATE, in SVG/SMIL — no video asset, no JS timeline.
  * Both honor prefers-reduced-motion by rendering the animation's end state
  * statically, consistent with the site's motion language (see AnimatedReveal
- * and ApertureHero). The remaining scenes are static artifacts: the easing
+ * and LogoRevealHero). The remaining scenes are static artifacts: the easing
  * curves, the kinetic-type frames, and the transition library.
  *
  * Swap any of these for a real <Image /> or video when ready. Each scene is

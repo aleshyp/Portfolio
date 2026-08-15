@@ -754,8 +754,18 @@ export function LearningAsset({ scene, className, alt }: LearningAssetProps) {
   );
 }
 
-/** Ordered scenes for the case-study gallery (hero first, then blocks). */
-export const learningScenes: { scene: Scene; alt: string }[] = [
+/**
+ * Ordered scenes for the case-study gallery (hero first, then blocks).
+ *
+ * Scene 0 is the brand logo-reveal animation (a WebM, rendered by
+ * LogoRevealHero rather than by this component's SVG scenes) — the same
+ * arrangement as Aperture and Northwind. The lesson view follows it.
+ */
+export const learningScenes: { scene: Scene | "logo-reveal"; alt: string }[] = [
+  {
+    scene: "logo-reveal",
+    alt: "Lumin logo animation — the amber four-point spark mark and 'Lumin' wordmark resolving on a soft lavender field.",
+  },
   {
     scene: "lesson-view",
     alt: "Lumin lesson view — a course sidebar with completed and current lessons, a large video player with a scrubber, an always-visible course-progress bar at 45%, and an obvious 'Next lesson' button.",
