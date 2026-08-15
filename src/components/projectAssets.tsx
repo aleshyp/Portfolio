@@ -10,6 +10,7 @@ import {
   PortfolioSystemAsset,
   portfolioSystemScenes,
 } from "@/components/PortfolioSystemAsset";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
@@ -34,6 +35,23 @@ const aperturePng: Record<string, string> = {
   palette: "/work/aperture/03-palette@2x.png",
   "type-specimen": "/work/aperture/04-type-specimen@2x.png",
   usage: "/work/aperture/05-usage@2x.png",
+};
+
+// Northwind's scenes map to exported Figma frames under /public, same arrangement
+// as Aperture above. Keyed by MarketingAsset scene name, so the hand-built SVG in
+// MarketingAsset stays the fallback for any scene without an export.
+//
+// These are WebP re-encodes of the 3200×1800 Figma JPGs, downscaled to 2400w
+// (the widest they're ever displayed, at 2x on a ~1200px container): 6.2 MB of
+// JPG became 282 KB with no visible quality loss — flat UI screenshots compress
+// far better as WebP than as photographic JPG. The source JPGs are kept in the
+// repo as the re-encode masters. Unlike Aperture's raw <img> PNGs above, these
+// go through next/image for srcset + lazy-loading.
+const marketingWebp: Record<string, string> = {
+  hero: "/work/northwind/v5-01-hero.webp",
+  "value-props": "/work/northwind/v5-02-value-props.webp",
+  "social-proof": "/work/northwind/v5-03-social-proof.webp",
+  mobile: "/work/northwind/v5-04-mobile.webp",
 };
 
 type AssetKind =
@@ -193,6 +211,25 @@ export function renderProjectScene(
         scene={item.scene as Parameters<typeof MotionAsset>[0]["scene"]}
         alt={alt}
         className={className}
+      />
+    );
+  }
+  const webp = marketingWebp[item.scene];
+  if (webp) {
+    return (
+      <Image
+        src={webp}
+        alt={alt}
+        width={2400}
+        height={1350}
+        // Case study: one column, capped at the prose container. Work grid: up to
+        // three cards across. Without this, next/image assumes 100vw and ships a
+        // far larger file than any slot actually renders.
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        // The hero is the case study's LCP element — load it eagerly. Scenes
+        // below the fold stay lazy (next/image's default).
+        priority={index === 0}
+        className={cn("block object-cover shadow-soft", className)}
       />
     );
   }
