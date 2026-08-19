@@ -11,6 +11,7 @@ import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
 import { Card } from "@/components/Card";
 import { buttonClasses } from "@/components/Button";
+import { cn } from "@/lib/utils";
 
 type Params = { slug: string };
 
@@ -63,6 +64,11 @@ export default async function CaseStudy({
   const assetSet = getAssetSet(project.slug);
   const renderScene = (index: number, className: string) =>
     renderProjectScene(project.slug, index, className);
+
+  // Most asset sets are 16:9 artboards, so the gallery pins that ratio. Sets
+  // flagged `intrinsicRatio` (full-page screenshots) size themselves from their
+  // own dimensions instead — pinning 16:9 there would crop the page away.
+  const galleryRatio = assetSet?.intrinsicRatio ? "" : "aspect-[16/9]";
 
   return (
     <article className="pt-28 sm:pt-36">
@@ -183,7 +189,10 @@ export default async function CaseStudy({
 
               {/* Insert a gallery image between blocks */}
               {assetSet
-                ? renderScene(i + 1, "mt-10 aspect-[16/9] w-full rounded-4xl")
+                ? renderScene(
+                    i + 1,
+                    cn("mt-10 w-full rounded-4xl", galleryRatio),
+                  )
                 : i < project.gallery && (
                     <Placeholder
                       label={`Screen ${i + 1}`}
