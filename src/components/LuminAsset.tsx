@@ -11,6 +11,20 @@ import { cn } from "@/lib/utils";
  * own intrinsic width/height and the case study sizes the frame from that ratio.
  * Forcing them into a shared 16:9 box would crop away most of the page, which is
  * the part worth showing.
+ *
+ * How these files were produced, if a screen is ever re-exported from Figma:
+ * resize to a max width of 1800px (width, not longest edge — capping the long
+ * edge squeezes a tall full-page capture down to ~700px wide and it goes soft),
+ * then encode WebP at quality 82. That took ~27MB of source JPEGs to under 1MB.
+ *
+ * `onboarding`, `signup` and `website-login` came out of Figma centered on a
+ * much larger blank canvas, and were trimmed to the actual artboard before
+ * resizing (sharp's `.trim({ threshold: 12 })`). Skipping that step leaves the
+ * screen floating in a wide band of whitespace. The other seven need no trim.
+ *
+ * Any re-export must update DIMENSIONS below to the new intrinsic size —
+ * a stale entry doesn't fail the build, it silently distorts the frame and
+ * reintroduces layout shift.
  */
 
 type Scene =
