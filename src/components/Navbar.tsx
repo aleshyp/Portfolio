@@ -48,10 +48,10 @@ export function Navbar() {
             onClick={() => setOpen(false)}
             aria-label={`${site.name} — home`}
           >
-            {/* Framed "IR" mark. Two files so the frame/microtext flips with the
-                theme (dark-navy frame on light, light frame on dark). */}
+            {/* Framed "IR" mark. Two files so the tile flips with the theme
+                (emerald-on-white for light, white-on-navy for dark). */}
             <Image
-              src="/personal-branding/ian-riley-logo-emerald.svg"
+              src="/personal-branding/brutalist-grid-emerald.svg"
               alt={site.name}
               width={36}
               height={36}
@@ -59,7 +59,7 @@ export function Navbar() {
               className="h-9 w-9 transition-transform duration-300 group-hover:scale-105 dark:hidden"
             />
             <Image
-              src="/personal-branding/ian-riley-logo-emerald-dark.svg"
+              src="/personal-branding/brutalist-grid-white.svg"
               alt={site.name}
               width={36}
               height={36}
