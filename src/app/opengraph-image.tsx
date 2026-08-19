@@ -63,7 +63,7 @@ export default function OpenGraphImage() {
             Portfolio
           </div>
 
-          {/* Framed "IR" mark (from ir-glyph-on-dark.svg), inline so Satori can render it. */}
+          {/* Framed "IR" mark (from brutalist-grid-white.svg), inline so Satori can render it. */}
           <svg width="88" height="88" viewBox="0 0 160 160" fill="none">
             <rect x="1.5" y="1.5" width="157" height="157" stroke="#F1F5F9" strokeWidth="3" />
             <path

@@ -50,14 +50,14 @@ export function Footer() {
           <div className="flex flex-col items-start justify-between gap-4 border-t border-border-subtle pt-8 text-sm text-fg-faint sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
               <Image
-                src="/personal-branding/ian-riley-logo-emerald.svg"
+                src="/personal-branding/brutalist-grid-emerald.svg"
                 alt=""
                 width={32}
                 height={32}
                 className="h-8 w-8 dark:hidden"
               />
               <Image
-                src="/personal-branding/ian-riley-logo-emerald-dark.svg"
+                src="/personal-branding/brutalist-grid-white.svg"
                 alt=""
                 width={32}
                 height={32}
