@@ -22,8 +22,7 @@ export const site = {
   tagline:
     "I design brands, products, and websites, and build the front end too.",
   location: "Kansas City, United States",
-  // TODO: this address only works once Cloudflare Email Routing forwards
-  // hello@ianriley.co to a real mailbox. Until then the mailto: link bounces.
+  // Delivered by Cloudflare Email Routing (forwards to a personal inbox).
   email: "hello@ianriley.co",
   available: true,
   // TODO: replace /resume.pdf in /public with your real résumé file
