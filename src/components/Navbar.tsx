@@ -46,7 +46,7 @@ export function Navbar() {
             href="/"
             className="group flex items-center gap-2.5 rounded-lg text-base font-semibold text-fg"
             onClick={() => setOpen(false)}
-            aria-label={`${site.name} — home`}
+            aria-label={`${site.name}, home`}
           >
             {/* Framed "IR" mark. Two files so the tile flips with the theme
                 (emerald-on-white for light, white-on-navy for dark). */}

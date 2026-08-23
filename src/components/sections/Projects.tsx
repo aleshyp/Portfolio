@@ -13,11 +13,11 @@ export function Projects() {
           <div className="max-w-2xl">
             <Eyebrow>Selected work</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-              Selected case studies.
+              A few projects, written up properly.
             </h2>
             <p className="mt-4 text-fg-muted">
-              A few projects worth walking through, with the reasoning behind
-              them rather than just the final screens.
+              What the problem was, what I tried, and where I&apos;d do it
+              differently next time.
             </p>
           </div>
           <p className="text-sm font-medium text-fg-faint">

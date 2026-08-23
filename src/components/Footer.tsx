@@ -22,8 +22,7 @@ export function Footer() {
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
             <div className="max-w-md">
               <p className="font-display text-2xl font-semibold text-fg">
-                Let&apos;s build something{" "}
-                <span className="text-gradient">people love</span>.
+                Still reading? <span className="text-gradient">Say hi</span>.
               </p>
               <a
                 href={`mailto:${site.email}`}
@@ -64,8 +63,8 @@ export function Footer() {
                 className="hidden h-8 w-8 dark:block"
               />
               <p>
-                © {new Date().getFullYear()} {site.name}. Designed &amp; built
-                by me.
+                © {new Date().getFullYear()} {site.name}. Every pixel my own
+                fault.
               </p>
             </div>
             {/* Wraps: five nav links + the back-to-top button exceed a ~320px

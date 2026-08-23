@@ -72,17 +72,17 @@ export function Hero() {
             className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-fg sm:text-6xl"
           >
             Hi, I&apos;m {site.firstName}. I design{" "}
-            <span className="text-gradient">clean, human-centered</span>{" "}
-            brands &amp; products.
+            <span className="text-gradient">brands &amp; products</span>{" "}
+            and build them too.
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
-            A {site.role.toLowerCase()} based in {site.location}. I work across
-            graphic design and UX/UI, and I write the front-end code that ships
-            it.
+            Designer in {site.location}. I do graphic design and UX/UI, and I
+            write the front-end code, so the thing you approve is the thing that
+            ships.
           </motion.p>
 
           <motion.div

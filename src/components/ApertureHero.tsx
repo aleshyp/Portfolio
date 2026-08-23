@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { usePlayOnceInView } from "@/lib/usePlayOnceInView";
 import { useStableReducedMotion } from "@/lib/useStableReducedMotion";
 import { cn } from "@/lib/utils";
 
 /**
  * Aperture case-study hero animation.
  *
- * Plays the brand's logo-reveal (a 16:9 WebM) ONCE when it scrolls into view,
- * then rests on the final logomark frame. Honors prefers-reduced-motion: those
- * users get the static poster (the animation's end frame) with no playback —
- * consistent with the rest of the site's motion language (see AnimatedReveal).
+ * Plays the brand's logo-reveal (a 16:9 WebM) ONCE when the user settles on it
+ * (see `usePlayOnceInView`), then rests on the final logomark frame. Honors
+ * prefers-reduced-motion: those users get the static poster (the animation's
+ * end frame) with no playback — consistent with the rest of the site's motion
+ * language (see AnimatedReveal).
  *
  * The poster doubles as the pre-play / loading image, so the hero never flashes
  * a black box before the video is ready.
@@ -28,32 +30,9 @@ type ApertureHeroProps = {
 export function ApertureHero({ className, alt }: ApertureHeroProps) {
   const shouldReduceMotion = useStableReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPlayed, setHasPlayed] = useState(false);
 
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Play once when the hero enters the viewport; hold on the last frame.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && !hasPlayed) {
-            video.play().catch(() => {
-              // Autoplay can be blocked; the poster (final frame) still shows.
-            });
-            setHasPlayed(true);
-            observer.disconnect();
-          }
-        }
-      },
-      { threshold: 0.35 },
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, [shouldReduceMotion, hasPlayed]);
+  // Play once the hero has settled in view; holds on the last frame.
+  usePlayOnceInView(videoRef, { enabled: !shouldReduceMotion });
 
   // Reduced motion: render the poster as a plain image, no <video> playback.
   if (shouldReduceMotion) {

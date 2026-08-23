@@ -263,7 +263,7 @@ function TypeSpecimen() {
       <rect width="1600" height="900" fill={A.ink} />
       <Iris cx={1360} cy={200} r={150} open={0.44} bladeFill={A.indigo} />
       <text x="120" y="230" fill={A.amberSoft} fontFamily="Inter, sans-serif" fontSize="34" letterSpacing="10">
-        TYPEFACE — SORA / INTER
+        TYPEFACE · SORA / INTER
       </text>
       <text x="112" y="430" fill={A.paper} fontFamily="Sora, sans-serif" fontSize="230" fontWeight="700" letterSpacing="-8">
         Aa
@@ -343,22 +343,22 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
 export const apertureScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "logomark",
-    alt: "Aperture logo reveal — the violet lens mark with its glowing amber center animates in beside the 'Aperture' wordmark and the tagline 'Focus the frame.', on a deep indigo field.",
+    alt: "Aperture logo reveal: the violet lens mark with its glowing amber center animates in beside the 'Aperture' wordmark and the tagline 'Focus the frame.', on a deep indigo field.",
   },
   {
     scene: "logo-construction",
-    alt: "Logo construction sheet — the aperture mark built on a modular grid with concentric circle guides and measurement ticks.",
+    alt: "Logo construction sheet showing the aperture mark built on a modular grid with concentric circle guides and measurement ticks.",
   },
   {
     scene: "palette",
-    alt: "Color palette — six swatches from ink and indigo through violet and amber to a light mist, each labeled with its hex value.",
+    alt: "Color palette showing six swatches, from ink and indigo through violet and amber to a light mist, each labeled with its hex value.",
   },
   {
     scene: "type-specimen",
-    alt: "Type specimen — a large Aa in Sora with the tagline 'Focus the frame.' and the full alphabet, on a dark ink background.",
+    alt: "Type specimen showing a large Aa in Sora with the tagline 'Focus the frame.' and the full alphabet, on a dark ink background.",
   },
   {
     scene: "usage",
-    alt: "Usage guidelines — logo clearspace defined as one iris radius, with correct full-color and incorrect desaturated do/don't examples.",
+    alt: "Usage guidelines defining logo clearspace as one iris radius, with correct full-color and incorrect desaturated do/don't examples.",
   },
 ];

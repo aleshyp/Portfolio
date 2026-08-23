@@ -48,10 +48,10 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "portfolio-design-system",
-    title: "This Site — A Design System, Shipped",
+    title: "This Site: A Design System, Shipped",
     summary:
-      "The site you're reading. A token-driven Tailwind design system with light/dark theming, WCAG 2.2 AA enforced by an automated axe-core suite, and a Lighthouse budget that fails the build when something regresses. Designed and built end to end.",
-    blurb: "The design system behind this site — designed, built, and tested.",
+      "The site you're reading. A token-driven Tailwind design system with light and dark theming, WCAG 2.2 AA checked by an axe-core suite, and a Lighthouse budget that fails the build when a score slips. Designed and built end to end.",
+    blurb: "The design system behind this site, built and tested in public.",
     tags: ["Design System", "Front-End", "Accessibility"],
     role: "Designer & Front-End Developer",
     year: "2026",
@@ -63,27 +63,27 @@ export const projects: Project[] = [
       { label: "WCAG 2.2 AA scans", value: "6" },
     ],
     overview:
-      "Most portfolios show the output of design work. This one is also the work itself. Every screen here is built from a documented token system, themed light and dark from a single source of truth, and held to WCAG 2.2 AA by tests that run before anything ships. If you want to know how I actually work, this is the clearest evidence I can offer: decisions written down, encoded as tokens, and checked by automation rather than by good intentions.",
+      "A portfolio usually shows you the output of the work. This one is the work. Every screen is built from a documented token system, themed light and dark from one source of truth, and checked against WCAG 2.2 AA by tests that run before anything ships. It's the clearest evidence I can give you of how I actually work, mostly because you can go read the code and check.",
     blocks: [
       {
         heading: "The problem with a two-layer color model",
-        body: "Dark mode breaks in a predictable way: a color that reads as text in one theme is a background in the other. I hit this directly. The dark navy in this palette is both the light-mode text color and the dark-mode page background, so re-pointing it for dark mode inverted the whole page. The fix was to split the palette in two: an ink layer that never flips, used for backgrounds, and an fg layer that does, used only for text. One utility, text-fg-muted, now reads correctly in both themes with no per-component dark overrides. That single rule took out the biggest category of theme bugs in the codebase.",
+        body: "Dark mode breaks in a predictable way: a color that's text in one theme is a background in the other. I walked straight into it. The dark navy in this palette is both the light-mode text color and the dark-mode page background, so re-pointing it for dark mode inverted the entire page. The fix was to split the palette in two. An ink layer that never flips, for backgrounds, and an fg layer that does, for text only. One utility, text-fg-muted, now reads correctly in both themes with no per-component dark overrides. That one rule killed off most of the theme bugs I'd been chasing.",
       },
       {
         heading: "Tokens as the contract",
-        body: "35 color tokens live in one CSS file, with light values in Tailwind v4's @theme block and dark re-points in a .dark block, across five layers: foreground text, fixed ink, theme-aware surfaces, brand, and a fixed on-dark set for panels that stay dark in both themes. Hardcoded hex and arbitrary values are banned; if a value doesn't exist yet, it becomes a token rather than a one-off. On top of that sit the shared primitives (Button, Badge, Container, Section, ProjectCard, the motion components), so building a new card means reaching for an existing recipe instead of writing fresh inline styles. The whole system is documented in a DESIGN.md that ships with the code and is versioned alongside it, so the rules can't quietly drift away from the implementation.",
+        body: "35 color tokens live in one CSS file, with light values in Tailwind v4's @theme block and dark re-points in a .dark block, across five layers: foreground text, fixed ink, theme-aware surfaces, brand, and a fixed on-dark set for panels that stay dark in both themes. Hardcoded hex and arbitrary values are banned. If a value doesn't exist yet it becomes a token, not a one-off. Above that sit the shared primitives: Button, Badge, Container, Section, ProjectCard, the motion components. Building a new card means reaching for a recipe that already exists instead of writing fresh inline styles. The rules live in a DESIGN.md that ships with the code and gets versioned with it, so they can't quietly drift out of sync with what's actually implemented.",
       },
       {
         heading: "Accessibility as a build gate, not a review step",
-        body: "An axe-core suite scans the site against WCAG 2.2 AA: the home page, representative case studies, the 404, and the contact form in its error state. A keyboard test asserts that submitting the form moves focus to the confirmation, so screen-reader and keyboard users aren't stranded on a button that no longer exists. Getting those scans trustworthy took real debugging. They kept flaking because axe was sampling contrast mid-animation, reading a badge at 3.2:1 that actually rests at 5.2:1. Emulating prefers-reduced-motion and freezing CSS transitions before the scan fixed it, so axe now judges settled colors. That work also turned up a genuine contrast failure: the brand green behind primary actions was too light against white, and stepping it one shade darker fixed it site-wide.",
+        body: "An axe-core suite scans the site against WCAG 2.2 AA: home page, representative case studies, the 404, and the contact form in its error state. A keyboard test checks that submitting the form moves focus to the confirmation, so keyboard and screen-reader users aren't stranded on a button that no longer exists. Getting those scans trustworthy took some digging. They kept flaking, and the reason was that axe was sampling contrast mid-animation. It read a badge at 3.2:1 that actually settles at 5.2:1. Emulating prefers-reduced-motion and freezing CSS transitions before the scan fixed it. Along the way the scans caught a real failure I'd missed by eye: the brand green behind primary buttons was too light against white. One shade darker fixed it site-wide.",
       },
       {
         heading: "Holding the line",
-        body: "A Lighthouse gate runs against a production build and exits non-zero if anything regresses past budget: accessibility and SEO must score 100, performance 90, best practices 95, with CLS under 0.1 and TBT under 200ms. LCP gets its own treatment. Lighthouse reports ~3.0s, which fails the 2.5s target — but its LCP-element audit comes back empty, the tell that the number is simulated from 4x CPU throttling rather than observed. Measured directly with a PerformanceObserver against the same build, real LCP lands under 200ms on the hero h1. So the gate holds LCP to a ratchet against the simulated figure, which still catches a genuine render-blocking regression, and the study doesn't claim a 2.5s pass it hasn't earned. The investigation did surface one real bug: the h1 animated from opacity 0, and LCP is only recorded once text reaches final opacity, so the entrance fade was deferring the metric. It now paints opaque and animates transform only. Playwright covers the user journeys, responsive behavior at three breakpoints, and SEO metadata. All motion honors prefers-reduced-motion through both a CSS media query and useReducedMotion() in JavaScript, because framer-motion animates via JS and ignores the CSS one.",
+        body: "A Lighthouse gate runs against a production build and exits non-zero if anything drops below budget: accessibility and SEO at 100, performance 90, best practices 95, CLS under 0.1, TBT under 200ms. LCP needed a judgment call. Lighthouse reports about 3.0s, which fails the 2.5s target. But its LCP-element audit comes back empty, which is the tell that the number is simulated from 4x CPU throttling rather than actually observed. Measured with a PerformanceObserver against the same build, real LCP lands under 200ms on the hero h1. So the gate ratchets against the simulated figure, which still catches a genuine render-blocking regression, and I don't claim a 2.5s pass I haven't earned. Chasing that number did turn up a real bug: the h1 was animating from opacity 0, and LCP only records once text hits final opacity, so my own entrance fade was pushing the metric back. It now paints opaque and animates transform only. Playwright covers the user journeys, three breakpoints, and SEO metadata. Motion honors prefers-reduced-motion twice over, through a CSS media query and useReducedMotion() in JS, because framer-motion animates in JavaScript and ignores the CSS one.",
       },
       {
         heading: "Why this is the case study",
-        body: "This is a small project and I won't pretend otherwise. There's no team, no stakeholders, no user research. What it does show is the part of the craft that's hardest to fake: a system whose rules survive contact with a real codebase, accessibility treated as a requirement instead of a cleanup pass, and decisions documented well enough that someone else could build against them. I approach product work the same way. The difference here is that the whole thing is open for inspection.",
+        body: "It's a small project and I won't pretend otherwise. No team, no stakeholders, no user research. But the rules held up against a real codebase, accessibility was a requirement rather than a cleanup pass, and the decisions are written down well enough that someone else could build against them. I work the same way on bigger things. The difference is that here you can open the repo and check.",
       },
     ],
     gallery: 3,
@@ -91,10 +91,10 @@ export const projects: Project[] = [
   },
   {
     slug: "brand-identity-system",
-    title: "Aperture — A Brand Identity From Scratch",
+    title: "Aperture: A Brand Identity From Scratch",
     summary:
-      "A complete visual identity (logo, type, color, and usage guidelines) built to scale from a single app icon up to a full marketing site.",
-    blurb: "A full visual identity system, logo to guidelines.",
+      "A full visual identity (logo, type, color, and usage rules) built to hold up everywhere from a favicon to a marketing site.",
+    blurb: "A full visual identity, logo through guidelines.",
     tags: ["Brand Identity", "Logo Design", "Graphic Design"],
     role: "Lead Designer",
     year: "2025",
@@ -106,23 +106,23 @@ export const projects: Project[] = [
       { label: "Guideline pages", value: "28" },
     ],
     overview:
-      "A growing startup had a name and an idea but no visual language. I built the identity from the ground up: a flexible logo, a typographic system, a considered color palette, and a guidelines document the whole team could design against.",
+      "A startup with a name, an idea, and nothing to look at. I built the identity from nothing: a flexible logo, a type system, a color palette, and a guidelines doc the whole team could design against without asking me first.",
     blocks: [
       {
         heading: "The brief",
-        body: "The company needed an identity that felt modern and trustworthy without being generic. It also had to work at a 16px favicon, on a billboard, inside a dark-mode app, and in a printed deck, so flexibility mattered as much as the look itself.",
+        body: "They wanted something modern and trustworthy that didn't look like every other startup. It also had to survive a 16px favicon, a billboard, a dark-mode app, and a printed deck, so how far it stretched mattered as much as how it looked.",
       },
       {
         heading: "Exploration",
-        body: "I started with mood boards and dozens of logo sketches, narrowing to three directions before refining the strongest. Every mark was tested at small sizes and in monochrome to make sure it held up in the real world.",
+        body: "Mood boards, then dozens of sketches, down to three directions, then one. I tested every mark small and in monochrome early, because that's where a logo usually falls apart and it's cheaper to find out in week one.",
       },
       {
         heading: "The system",
-        body: "Beyond the logo, I defined a type scale, a primary and extended color palette with accessible contrast, iconography rules, and layout principles, then packaged it into a guidelines document clear enough to keep the brand consistent as the team grows.",
+        body: "Past the logo: a type scale, a primary and extended palette with contrast that passes, iconography rules, and layout principles. All of it packaged into a guidelines document written to be used by people who aren't designers.",
       },
       {
         heading: "Outcome",
-        body: "The identity now spans the product, the marketing site, and social channels. With the system documented, the team ships on-brand work without needing a designer to sign off on every asset.",
+        body: "The identity runs across the product, the marketing site, and social. The part I care about: with the system written down, the team ships on-brand work without a designer signing off on every asset.",
       },
     ],
     gallery: 4,
@@ -131,10 +131,10 @@ export const projects: Project[] = [
   },
   {
     slug: "marketing-landing-page",
-    title: "Northwind — Marketing Site, Designed & Built",
+    title: "Northwind: Marketing Site, Designed & Built",
     summary:
-      "A conversion-focused marketing site for a team-analytics startup, designed in Figma and shipped to production in React by one person.",
-    blurb: "A SaaS marketing site, designed in Figma and built in code.",
+      "A marketing site for a team-analytics startup, built to convert. Designed in Figma and shipped to production in React by one person.",
+    blurb: "A SaaS marketing site, designed and then built.",
     tags: ["Web Design", "Front-End", "Branding"],
     role: "Designer & Front-End Developer",
     year: "2025",
@@ -146,23 +146,23 @@ export const projects: Project[] = [
       { label: "Design → live", value: "1 person" },
     ],
     overview:
-      "Northwind is a team-analytics tool whose homepage didn't look as sharp as the product, and didn't convert. It also couldn't afford to lose anything in a design-to-engineering handoff. I owned both sides: I designed the full page in Figma, then built it in React and Tailwind, so the live site matches the mockup pixel for pixel.",
+      "Northwind is a team-analytics tool with a homepage that made the product look worse than it was, and didn't convert. There was also no engineering time to spare for a handoff. So I did both sides. Designed the page in Figma, then built it in React and Tailwind. The live site matches the mockup because the same person made both.",
     blocks: [
       {
         heading: "The brief",
-        body: "Northwind had a strong product but a homepage that undersold it. The team wanted a fast, polished site that made the value obvious in one scroll and drove free-trial sign-ups, built on a stack they could maintain in-house afterward.",
+        body: "Good product, homepage that undersold it. They wanted something fast and polished that got the point across in one scroll and drove free-trial sign-ups, on a stack their own team could maintain after I left.",
       },
       {
         heading: "Design",
-        body: "I designed the full page in Figma around a single conversion goal: a confident hero with a product preview, three scannable value props, real numbers as social proof, and one repeated call to action. The layout was planned mobile-first, so the responsive version was a first-class design, not an afterthought.",
+        body: "I designed the page in Figma around one conversion goal: a hero with a real product preview, three value props you can skim, customer numbers as proof, and the same call to action repeated down the page. I laid out the mobile version first, so it's a design rather than a squeezed-down desktop.",
       },
       {
         heading: "Build",
-        body: "I built the site in React, TypeScript, and Tailwind CSS, with semantic markup, tuned images, and no layout shift. Designing and coding it myself meant the spacing, type, and motion survived intact from Figma to production instead of drifting during handoff.",
+        body: "React, TypeScript, and Tailwind, with semantic markup, properly sized images, and no layout shift. Because I built what I'd drawn, the spacing and type and motion made it to production intact, without the small compromises that pile up in a handoff.",
       },
       {
         heading: "Outcome",
-        body: "The targets: a 98 Lighthouse performance score and free-trial sign-ups up 22% in the first quarter. One person carried it from a blank Figma file to a live, on-brand site, which is the argument for closing the design-dev gap in the first place.",
+        body: "The targets were a 98 Lighthouse performance score and free-trial sign-ups up 22% in the first quarter. Blank Figma file to live site, one person, no handoff meeting.",
       },
     ],
     gallery: 3,
@@ -171,10 +171,10 @@ export const projects: Project[] = [
   },
   {
     slug: "learning-platform-ui",
-    title: "Lumin — Online Learning Platform UI",
+    title: "Lumin: Online Learning Platform UI",
     summary:
-      "A clean, focused interface for an online learning experience, designed to keep students moving through lessons without friction.",
-    blurb: "A focused UI for an online learning experience.",
+      "An interface for an online course, designed around one goal: keep students moving through lessons instead of quitting halfway.",
+    blurb: "A UI built to stop students dropping off.",
     tags: ["UX/UI Design", "Web App", "EdTech"],
     role: "UX/UI Designer",
     year: "2024",
@@ -186,23 +186,23 @@ export const projects: Project[] = [
       { label: "Usability score", value: "84 SUS" },
     ],
     overview:
-      "Online learning lives or dies on focus. This project reworked a course experience so students always knew where they were, what came next, and how far they had left to go, with the interface stepping back so the content could lead.",
+      "Students quit online courses when they lose the thread. This was a rework of a course experience so you always know where you are, what's next, and how much is left, and so the interface isn't competing with the lesson for your attention.",
     blocks: [
       {
         heading: "The problem",
-        body: "Students were dropping off mid-course. The old layout buried progress, mixed navigation into the content, and made it easy to lose your place. Individually small frictions, but together they cost students their momentum.",
+        body: "Students were dropping off mid-course. The old layout hid progress, tangled navigation into the content, and made it easy to lose your place after a break. No single one of those is a big deal. Together they're enough to make someone not come back tomorrow.",
       },
       {
         heading: "Design goals",
-        body: "Make the next action obvious on every screen, surface progress clearly, and reduce the visual noise around the lesson itself. Every decision was weighed against one question: does this help the student keep going?",
+        body: "Make the next action obvious on every screen, put progress somewhere you can't miss it, and quiet everything around the lesson. When I wasn't sure about a decision I asked whether it helped someone keep going, and cut it if it didn't.",
       },
       {
         heading: "The solution",
-        body: "A calm lesson view with a persistent progress rail, a simplified course map, and consistent patterns for video, reading, and assessment, plus clear feedback each time a student finished a step.",
+        body: "A quiet lesson view with a progress rail that's always there, a course map you can actually read, and the same patterns for video, reading, and assessment so nothing needs relearning. Plus a clear bit of feedback every time you finish a step, because finishing things is the whole motivation.",
       },
       {
         heading: "Outcome",
-        body: "The targets: lesson completion up 29%, and a noticeably shorter path through each course. The real measure of success was whether a student could sit down and keep going without the interface getting in the way.",
+        body: "The targets were lesson completion up 29% and a shorter path through each course. What I'd actually want to know is whether someone can sit down after a week away and pick up where they left off without hunting for it.",
       },
     ],
     gallery: 4,

@@ -137,6 +137,33 @@
   --background: #ffffff;
   --background-soft: #f8faf9;
   --foreground: #0b1220;
+
+  /* ── Case-study asset chrome ──────────────────────────────────────────
+     Consumed ONLY by the raw SVG scenes in PortfolioSystemAsset.tsx, via
+     fill="var(--asset-*)". Deliberately NOT in the @theme block: nothing
+     renders them as a Tailwind utility, and adding them there would both
+     emit ~8 dead classes and inflate the "35 color tokens" figure that the
+     `layers` scene asserts against globals.css.
+
+     Scope is the picture FRAME, never the picture. The scenes make
+     falsifiable claims about literal hex values (the two comparison panels
+     in `theme-split`, the swatch rows in `layers`, the ratio bars in
+     `contrast`), so those stay hardcoded in both themes. Only the canvas,
+     card fills, hairlines and surrounding label text follow the theme —
+     otherwise a light-on-white artboard floats on the dark page. */
+  --asset-canvas: #ffffff;      /* artboard background                    */
+  --asset-canvas-alt: #ecfdf5;  /* brand-50 tinted artboard (layers)      */
+  --asset-canvas-soft: #f8faf9; /* cloud tinted artboard (contrast)       */
+  --asset-card: #ffffff;        /* card / row fill on the artboard        */
+  --asset-line: #d1fae5;        /* brand-100 card hairline                */
+  --asset-line-soft: #e2e8f0;   /* neutral hairline (swatch outlines)     */
+  --asset-label: #0b1220;       /* scene titles / high-emphasis labels    */
+  --asset-text: #475569;        /* body + caption text on the artboard    */
+  --asset-text-faint: #64748b;  /* lowest-emphasis metadata               */
+  --asset-pill: #ecfdf5;        /* brand-50 pill fill                     */
+  --asset-pill-line: #6ee7b7;   /* brand-300 pill hairline                */
+  --asset-pill-text: #047857;   /* brand-700 pill text (5.5:1 on white)   */
+  --asset-danger: #dc2626;      /* red-600 — FAIL markers (4.8:1 on white) */
 }
 
 .dark {
@@ -158,6 +185,42 @@
   --color-surface-raised: rgba(255, 255, 255, 0.05); /* was bg-white/5    */
   --color-surface-solid: #1e293b; /* slate-800 — opaque overlay card      */
   --color-border-subtle: rgba(255, 255, 255, 0.1); /* was border-white/10 */
+
+  /* Asset chrome, dark. The artboard becomes ink so the scenes sit ON the
+     dark page instead of punching a white hole in it, and cards step up to
+     ink-soft — the same figure/ground relationship the light theme has,
+     inverted. Opaque values (not white/N%) because these land on SVG
+     <rect fill>, where a translucent card over a translucent canvas would
+     compound instead of reading as one step.
+
+     The canvas is background-soft #0f1729, NOT ink #0b1220. Ink is exactly
+     the dark page background, so an ink artboard dissolves into the page:
+     the only remaining boundary is the wrapper's inset-ring, which then has
+     to carry the whole card shape by itself and only reads where the corner
+     radius curves away. #0f1729 restores the same quiet figure/ground step
+     that white-on-near-white gives these scenes in light mode, and reuses a
+     value the theme already defines rather than inventing one — which is
+     the point the case study itself is making. The alt/soft variants shift
+     by the same amount so all four scenes read as one set.
+
+     Text mirrors the fg ramp: label→fg, text→fg-muted #94a3b8 (7.3:1 on
+     ink), faint→the same, since fg-faint collapses onto fg-muted in dark.
+     The emerald pill inverts up the ramp — brand-700 is a near-black on
+     ink, so text goes to brand-300 (9.4:1 on ink-soft) over a low-alpha
+     emerald wash rather than the solid brand-50 fill used in light. */
+  --asset-canvas: #0f1729;      /* = background-soft, lifted off the page  */
+  --asset-canvas-alt: #111b30;  /* emerald-leaning lift (layers)           */
+  --asset-canvas-soft: #101828; /* neutral lift (contrast)                 */
+  --asset-card: #1e293b;        /* = ink-soft, the raised card             */
+  --asset-line: rgba(110, 231, 183, 0.22); /* brand-300 @22% hairline      */
+  --asset-line-soft: rgba(255, 255, 255, 0.12);
+  --asset-label: #f1f5f9;       /* = fg (dark)                             */
+  --asset-text: #94a3b8;        /* = fg-muted (dark), 7.3:1 on ink         */
+  --asset-text-faint: #94a3b8;  /* = fg-faint (dark)                       */
+  --asset-pill: rgba(16, 185, 129, 0.14); /* emerald wash, not solid       */
+  --asset-pill-line: rgba(110, 231, 183, 0.45);
+  --asset-pill-text: #6ee7b7;   /* brand-300 — 9.4:1 on ink-soft           */
+  --asset-danger: #f87171;      /* red-400 — red-600 is only 4.0:1 on ink  */
 }
 
 @layer base {

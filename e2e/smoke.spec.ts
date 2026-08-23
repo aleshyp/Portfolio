@@ -4,13 +4,13 @@ test.describe("home page", () => {
   test("renders hero and core sections", async ({ page }) => {
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { level: 1, name: /human-centered/i }),
+      page.getByRole("heading", { level: 1, name: /brands & products/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /selected case studies/i }),
+      page.getByRole("heading", { name: /written up properly/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /have a project in mind/i }),
+      page.getByRole("heading", { name: /something you need built/i }),
     ).toBeVisible();
   });
 });
@@ -53,9 +53,9 @@ test.describe("contact form", () => {
   test("shows inline validation errors on empty submit", async ({ page }) => {
     await page.goto("/#contact");
     await page.getByRole("button", { name: /send message/i }).click();
-    await expect(page.getByText(/please enter your name/i)).toBeVisible();
-    await expect(page.getByText(/please enter your email/i)).toBeVisible();
-    await expect(page.getByText(/tell me a little about your project/i)).toBeVisible();
+    await expect(page.getByText(/what should i call you/i)).toBeVisible();
+    await expect(page.getByText(/i'll need an email to reply to/i)).toBeVisible();
+    await expect(page.getByText(/tell me what you're working on/i)).toBeVisible();
   });
 
   test("rejects an invalid email", async ({ page }) => {
@@ -64,7 +64,7 @@ test.describe("contact form", () => {
     await page.getByLabel("Email").fill("not-an-email");
     await page.getByLabel(/project details/i).fill("Hello there, this is a test.");
     await page.getByRole("button", { name: /send message/i }).click();
-    await expect(page.getByText(/enter a valid email address/i)).toBeVisible();
+    await expect(page.getByText(/that email doesn't look right/i)).toBeVisible();
   });
 
   test("shows loading state then confirmation on valid submit", async ({ page }) => {
@@ -87,7 +87,7 @@ test.describe("contact form", () => {
     await expect(submit).toHaveAttribute("aria-busy", "true");
 
     // Then the confirmation replaces the form.
-    await expect(page.getByText(/thanks for reaching out/i)).toBeVisible();
+    await expect(page.getByText(/got it\. thanks/i)).toBeVisible();
   });
 });
 
@@ -103,7 +103,7 @@ test.describe("case study routing", () => {
   test("unknown slug renders the custom 404", async ({ page }) => {
     const res = await page.goto("/work/does-not-exist");
     expect(res?.status()).toBe(404);
-    await expect(page.getByText(/wandered off/i)).toBeVisible();
+    await expect(page.getByText(/nothing here/i)).toBeVisible();
   });
 });
 

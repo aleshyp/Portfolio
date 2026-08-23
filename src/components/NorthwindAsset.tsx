@@ -120,54 +120,54 @@ export const northwindScenes: { scene: Scene; alt: string }[] = [
     // (the logo-reveal video) — so this alt describes the ANIMATION, not the
     // frame below it. The 16:9 landing view returns as scene 1.
     scene: "01-hero",
-    alt: "Northwind logo animation — the cyan rounded-square mark with its paired up and down triangles resolves beside the 'Northwind' wordmark on a deep navy grid.",
+    alt: "Northwind logo animation in which the cyan rounded-square mark with its paired up and down triangles resolves beside the 'Northwind' wordmark on a deep navy grid.",
   },
   {
     scene: "01-hero",
-    alt: "Northwind homepage hero — the 'See what your team actually ships.' headline over start-trial and book-a-demo buttons, beside a weekly-velocity bar chart, a 47-PRs card, a +12% velocity card, and a 12k+ teams stat.",
+    alt: "Northwind homepage hero with the 'See what your team actually ships.' headline over start-trial and book-a-demo buttons, beside a weekly-velocity bar chart, a 47-PRs card, a +12% velocity card, and a 12k+ teams stat.",
   },
   {
     scene: "02-value-props",
-    alt: "Value-props section — 'Clarity, not more charts.' beside three numbered cards: One digest every Monday, Connect in two clicks, and Every teammate same picture.",
+    alt: "Value-props section headed 'Clarity, not more charts.' beside three numbered cards: One digest every Monday, Connect in two clicks, and Every teammate same picture.",
   },
   {
     scene: "03-social-proof",
-    alt: "Social-proof section — +22% trial conversion, a 4.9/5 average rating, 12k+ teams, a testimonial from Priya Nair reading 'We replaced three dashboards with one Monday-morning email,' and a 'Ready to see what your team ships?' call-to-action band.",
+    alt: "Social-proof section showing +22% trial conversion, a 4.9/5 average rating, 12k+ teams, a testimonial from Priya Nair reading 'We replaced three dashboards with one Monday-morning email,' and a 'Ready to see what your team ships?' call-to-action band.",
   },
   {
     scene: "04-mobile",
-    alt: "Responsive view — the Northwind dashboard on a phone showing weekly velocity, PRs merged and average review time, beside the heading 'Designed mobile-first.' and its supporting bullets.",
+    alt: "Responsive view of the Northwind dashboard on a phone showing weekly velocity, PRs merged and average review time, beside the heading 'Designed mobile-first.' and its supporting bullets.",
   },
   {
     scene: "product",
-    alt: "Product page — 'The engineering hub for high-velocity teams.' above a PR-merge-velocity dashboard, a Weekly Velocity Digest panel, a real-time PR-tracking section, an integrations row, and a 'Stop babysitting dashboards' closing band.",
+    alt: "Product page headed 'The engineering hub for high-velocity teams.' above a PR-merge-velocity dashboard, a Weekly Velocity Digest panel, a real-time PR-tracking section, an integrations row, and a 'Stop babysitting dashboards' closing band.",
   },
   {
     scene: "pricing",
-    alt: "Pricing page — 'Transparent pricing for every team scale' above three tiers (Starter free, Team at $12 highlighted in cyan, Enterprise custom) with feature checklists, a six-row feature-comparison table, and a 'Stop babysitting dashboards' closing band.",
+    alt: "Pricing page headed 'Transparent pricing for every team scale' above three tiers (Starter free, Team at $12 highlighted in cyan, Enterprise custom) with feature checklists, a six-row feature-comparison table, and a 'Stop babysitting dashboards' closing band.",
   },
   {
     scene: "docs",
-    alt: "Documentation page — a 'Quick Start Guide' article with a docs sidebar (Getting Started, Integrations, API Reference, CLI), numbered install steps with copyable bash snippets, and a Slack integration settings panel of toggles.",
+    alt: "Documentation page showing a 'Quick Start Guide' article with a docs sidebar (Getting Started, Integrations, API Reference, CLI), numbered install steps with copyable bash snippets, and a Slack integration settings panel of toggles.",
   },
   {
     scene: "about",
-    alt: "About page — 'We make engineering work visible.' above the team grid, four core-value cards (Transparency, Speed, Signal over Noise, Builder-first), the investor row, and a 'Come build the future of visibility' hiring band.",
+    alt: "About page headed 'We make engineering work visible.' above the team grid, four core-value cards (Transparency, Speed, Signal over Noise, Builder-first), the investor row, and a 'Come build the future of visibility' hiring band.",
   },
   {
     scene: "community",
-    alt: "Community page — 'Built by engineers, for engineers.' above a Recent Discussions row, growth stats (4,200+ engineers, 890+ teams, 120+ countries), a 'Trending this week' thread grid, and a 'Ready to share what you have built?' band.",
+    alt: "Community page headed 'Built by engineers, for engineers.' above a Recent Discussions row, growth stats (4,200+ engineers, 890+ teams, 120+ countries), a 'Trending this week' thread grid, and a 'Ready to share what you have built?' band.",
   },
   {
     scene: "login",
-    alt: "Log-in screen — a 'Welcome back' card with a Continue-with-GitHub option, email and password fields, a Sign in button, and a trusted-by logo row.",
+    alt: "Log-in screen with a 'Welcome back' card offering a Continue-with-GitHub option, email and password fields, a Sign in button, and a trusted-by logo row.",
   },
   {
     scene: "signup",
-    alt: "Create-account screen — a 'Create your account' card with a Continue-with-GitHub option, full-name, work-email and password fields, a 'Get started for free' button, and a link back to sign in.",
+    alt: "Create-account screen with a 'Create your account' card offering a Continue-with-GitHub option, full-name, work-email and password fields, a 'Get started for free' button, and a link back to sign in.",
   },
   {
     scene: "forgot-password",
-    alt: "Password-reset screen — a 'Reset your password' card with an email field, a Send reset link button, and a back-to-sign-in link.",
+    alt: "Password-reset screen with a 'Reset your password' card containing an email field, a Send reset link button, and a back-to-sign-in link.",
   },
 ];

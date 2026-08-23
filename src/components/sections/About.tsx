@@ -1,15 +1,15 @@
+import Image from "next/image";
 import { Section } from "@/components/Section";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
 import { Pill } from "@/components/Pill";
 import { Prose } from "@/components/Prose";
-import { Placeholder } from "@/components/Placeholder";
 import { site } from "@/data/site";
 
 const stats = [
   { value: "13+", label: "Years designing" },
   { value: "6+", label: "Brands & orgs served" },
-  { value: "Design → code", label: "Own it end-to-end" },
+  { value: "Design → code", label: "Start to finish" },
 ];
 
 const focusAreas = [
@@ -28,11 +28,18 @@ export function About() {
         {/* Portrait */}
         <AnimatedReveal direction="right">
           <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:max-w-none">
-            <Placeholder
-              label="Your portrait"
-              seed={1}
-              className="aspect-[4/5] w-full rounded-4xl shadow-soft"
-            />
+            {/* Rounding lives on an overflow-hidden wrapper so the corners clip
+                the image without also clipping the shadow. */}
+            <div className="overflow-hidden rounded-4xl shadow-soft">
+              <Image
+                src="/personal-branding/portrait.jpg"
+                alt={`${site.name}, smiling in a parka on a boat with a snow-capped coastline behind`}
+                width={880}
+                height={1100}
+                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 24rem, 100vw"
+                className="aspect-[4/5] w-full object-cover"
+              />
+            </div>
             {/* Floating overlay card: needs an OPAQUE dark background (it sits
                 over the portrait), so it keeps an opaque bg-* rather than the
                 translucent bg-surface token. bg-surface-solid is the opaque
@@ -51,25 +58,24 @@ export function About() {
           <AnimatedReveal>
             <Eyebrow>About me</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-              Design that respects people&apos;s time and attention.
+              Thirteen years in, still fixing the small stuff.
             </h2>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
             <Prose className="mt-6 max-w-none">
               <p>
-                I&apos;m a {site.role.toLowerCase()} based in Kansas City. I
-                picked up graphic design at 10 and started freelancing at 13,
-                mostly social media work for esports orgs and influencers. I
-                never really stopped. Doing that as a teenager taught me to work
-                fast and make things look good on a real deadline.
+                I picked up graphic design at 10 and started freelancing at 13,
+                mostly social graphics for esports orgs and influencers. I never
+                really stopped. Getting paid for that as a teenager taught me to
+                work fast and hit a deadline, which turned out to be most of the
+                job.
               </p>
               <p>
-                In 2022 I turned design into a full-time career. At my current
-                company I&apos;ve grown a graphic-design role into web design
-                and front-end development: I design the pages, own the design
-                system, and build both in code. Details are where most of my
-                time goes, and I think it shows in the finished work.
+                In 2022 it became full-time. I was hired as a graphic designer
+                and talked my way into the web side; now I design the pages, own
+                the design system, and build them in React. Most of my time goes
+                into details nobody is supposed to notice.
               </p>
             </Prose>
           </AnimatedReveal>

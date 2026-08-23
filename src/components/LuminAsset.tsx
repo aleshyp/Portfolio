@@ -108,42 +108,42 @@ export function LuminAsset({ scene, className, alt, ratio }: LuminAssetProps) {
 export const luminScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "homepage",
-    alt: "Lumin marketing homepage — a 'Master the craft of digital design' hero above a video player, three lesson-format cards (Interactive Video, Real-world Tasks, Guided Paths), a popular-courses row, and student testimonials.",
+    alt: "Lumin marketing homepage with a 'Master the craft of digital design' hero above a video player, three lesson-format cards (Interactive Video, Real-world Tasks, Guided Paths), a popular-courses row, and student testimonials.",
   },
   {
     scene: "onboarding",
-    alt: "Onboarding step 1 of 3 — 'What do you want to learn?' with eight selectable interest tiles (UI/UX Design selected), a Continue button, and a 'Skip for now' escape hatch.",
+    alt: "Onboarding step 1 of 3, headed 'What do you want to learn?', with eight selectable interest tiles (UI/UX Design selected), a Continue button, and a 'Skip for now' escape hatch.",
   },
   {
     scene: "catalog",
-    alt: "Course catalog — a search field and category filter chips above a grid of course cards, each showing its category, title, instructor, star rating, length, and an Enroll button.",
+    alt: "Course catalog with a search field and category filter chips above a grid of course cards, each showing its category, title, instructor, star rating, length, and an Enroll button.",
   },
   {
     scene: "detail",
-    alt: "Course detail page for 'Design Systems for Scale' — a violet hero with instructor and last-updated date, a sticky $149 enrollment card, a three-module curriculum with completion checkmarks, and student reviews.",
+    alt: "Course detail page for 'Design Systems for Scale', showing a violet hero with instructor and last-updated date, a sticky $149 enrollment card, a three-module curriculum with completion checkmarks, and student reviews.",
   },
   {
     scene: "mentors",
-    alt: "Mentors directory — 'Learn from the best in the craft' above a filterable grid of mentor cards showing photo, expertise tags, role, rating and review count, each with a 'Book a Session' button.",
+    alt: "Mentors directory headed 'Learn from the best in the craft', above a filterable grid of mentor cards showing photo, expertise tags, role, rating and review count, each with a 'Book a Session' button.",
   },
   {
     scene: "pricing",
-    alt: "Pricing page — three tiers (Free, Pro at $29/mo highlighted in violet, Team at $99/mo) with feature checklists, above a 'Need help choosing?' discovery-call prompt.",
+    alt: "Pricing page with three tiers (Free, Pro at $29/mo highlighted in violet, Team at $99/mo) with feature checklists, above a 'Need help choosing?' discovery-call prompt.",
   },
   {
     scene: "resources",
-    alt: "Free resource library — filter chips above a grid of downloadable templates, guides, toolkits and checklists, each with a description and Download Free button, over a newsletter sign-up band.",
+    alt: "Free resource library with filter chips above a grid of downloadable templates, guides, toolkits and checklists, each with a description and Download Free button, over a newsletter sign-up band.",
   },
   {
     scene: "emptycatalog",
-    alt: "Catalog empty state — a search for 'Advanced Motion' returns 'No courses found' with a friendly illustration and a 'Browse all courses' recovery action.",
+    alt: "Catalog empty state where a search for 'Advanced Motion' returns 'No courses found' with a friendly illustration and a 'Browse all courses' recovery action.",
   },
   {
     scene: "signup",
-    alt: "Create-account screen — a split layout with 'Your next skill is waiting' and social-proof stats on the left, and a name/email/password form with Google and GitHub options on the right.",
+    alt: "Create-account screen in a split layout, with 'Your next skill is waiting' and social-proof stats on the left, and a name/email/password form with Google and GitHub options on the right.",
   },
   {
     scene: "website-login",
-    alt: "Log-in screen — 'Welcome back' with completion-rate and active-learner stats beside an email and password form, social log-in options, and a link to sign up.",
+    alt: "Log-in screen headed 'Welcome back', with completion-rate and active-learner stats beside an email and password form, social log-in options, and a link to sign up.",
   },
 ];

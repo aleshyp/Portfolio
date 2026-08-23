@@ -214,7 +214,7 @@ function Hero() {
         Northwind turns raw activity into clear,
       </text>
       <text x="112" y="586" fill={N.slate} fontFamily="Inter, sans-serif" fontSize="28">
-        weekly signals — no dashboards to babysit.
+        weekly signals, no dashboards to babysit.
       </text>
       <Button x={110} y={636} w={230} label="Start free trial" />
       <Button x={360} y={636} w={210} label="Book a demo" filled={false} />
@@ -355,7 +355,7 @@ function SocialProof() {
         We replaced three dashboards with one Monday-morning email.
       </text>
       <text x="260" y="500" fill={N.slate} fontFamily="Inter, sans-serif" fontSize="26">
-        Priya Nair — Head of Engineering, Lumen Labs
+        Priya Nair · Head of Engineering, Lumen Labs
       </text>
 
       {/* CTA band */}
@@ -465,18 +465,18 @@ export function MarketingAsset({ scene, className, alt }: MarketingAssetProps) {
 export const marketingScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "hero",
-    alt: "Northwind homepage hero — a nav bar, the headline 'See what your team actually ships,' start-trial and demo buttons, and a product preview card with a weekly bar chart and rising trend line.",
+    alt: "Northwind homepage hero with a nav bar, the headline 'See what your team actually ships,' start-trial and demo buttons, and a product preview card with a weekly bar chart and rising trend line.",
   },
   {
     scene: "value-props",
-    alt: "Value-props section — three feature cards (Weekly signals, Zero setup, Shared context) under the heading 'Clarity, not more charts.'",
+    alt: "Value-props section with three feature cards (Weekly signals, Zero setup, Shared context) under the heading 'Clarity, not more charts.'",
   },
   {
     scene: "social-proof",
-    alt: "Social-proof section — headline metrics (+22% trial conversion, 4.9/5 rating, 12k+ teams), a customer testimonial, and a cobalt call-to-action band.",
+    alt: "Social-proof section with headline metrics (+22% trial conversion, 4.9/5 rating, 12k+ teams), a customer testimonial, and a cobalt call-to-action band.",
   },
   {
     scene: "mobile",
-    alt: "Responsive view — the Northwind hero rendered on a phone screen beside the label 'Designed mobile-first,' showing the wordmark, headline, trial button, and a mini bar chart.",
+    alt: "Responsive view showing the Northwind hero on a phone screen beside the label 'Designed mobile-first,' with the wordmark, headline, trial button, and a mini bar chart.",
   },
 ];

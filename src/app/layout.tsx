@@ -19,10 +19,10 @@ const sora = Sora({
   display: "swap",
 });
 
-const titleDefault = `${site.name} — ${site.role}`;
+const titleDefault = `${site.name} · ${site.role}`;
 
 const ogDescription =
-  "Clean, human-centered design across graphic and UX/UI, from brand identity through to polished, accessible interfaces.";
+  "Graphic design, UX/UI, and the front-end code to ship it. Brand identity through to accessible, production-ready interfaces.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     default: titleDefault,
     template: `%s · ${site.name}`,
   },
-  description: `${site.name} is a ${site.role.toLowerCase()} working across graphic design and UX/UI, from brand identity through to polished, accessible interfaces.`,
+  description: `${site.name} is a ${site.role.toLowerCase()} in Kansas City working across graphic design, UX/UI, and front-end development.`,
   keywords: [
     "Graphic Designer",
     "UX/UI Designer",

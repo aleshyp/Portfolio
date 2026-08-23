@@ -167,9 +167,9 @@ export default async function CaseStudy({
               </dl>
               {project.concept && (
                 <p className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-fg-faint">
-                  Concept project — {project.client.split(" (")[0]} is an
-                  invented client, and these figures are the targets the design
-                  was measured against, not results from a live product.
+                  Concept project. {project.client.split(" (")[0]} isn&apos;t a
+                  real client, and these numbers are the targets I designed
+                  against, not results from a shipped product.
                 </p>
               )}
             </Card>

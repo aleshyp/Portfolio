@@ -17,8 +17,7 @@ export function Experience() {
               Where I&apos;ve worked.
             </h2>
             <p className="mt-4 text-fg-muted">
-              The short version of the last decade or so. The résumé has the
-              full detail if you need it.
+              The short version. Grab the résumé if you want dates and detail.
             </p>
           </div>
           <Button

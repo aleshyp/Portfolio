@@ -44,10 +44,10 @@ export function Contact() {
     const name = (data.get("name") as string)?.trim();
     const email = (data.get("email") as string)?.trim();
     const message = (data.get("message") as string)?.trim();
-    if (!name) next.name = "Please enter your name.";
-    if (!email) next.email = "Please enter your email.";
-    else if (!EMAIL_RE.test(email)) next.email = "Enter a valid email address.";
-    if (!message) next.message = "Tell me a little about your project.";
+    if (!name) next.name = "What should I call you?";
+    if (!email) next.email = "I'll need an email to reply to.";
+    else if (!EMAIL_RE.test(email)) next.email = "That email doesn't look right.";
+    if (!message) next.message = "Tell me what you're working on.";
     return next;
   }
 
@@ -96,10 +96,10 @@ export function Contact() {
       } else {
         // Generic, non-leaky error message (see security-guidelines: don't echo
         // internals). Detail, if any, stays in the network tab / provider logs.
-        setSubmitError("Something went wrong. Please email me directly instead.");
+        setSubmitError("That didn't send. Email me directly and it'll reach me.");
       }
     } catch {
-      setSubmitError("Couldn't reach the server. Please email me directly instead.");
+      setSubmitError("Couldn't reach the server. Email me directly instead.");
     } finally {
       setPending(false);
     }
@@ -133,12 +133,11 @@ export function Contact() {
                 Contact
               </Eyebrow>
               <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-                Have a project in mind? Let&apos;s talk.
+                Got something you need built?
               </h2>
               <p className="mt-4 max-w-md text-on-dark-muted">
-                I have room for a few new projects right now. Tell me what
-                you&apos;re building and I&apos;ll get back to you within a day
-                or two.
+                I have room for a couple more projects right now. Send me the
+                details and I&apos;ll usually reply within a day or two.
               </p>
 
               <div className="mt-8 space-y-4">
@@ -182,11 +181,11 @@ export function Contact() {
                       <Check size={26} />
                     </span>
                     <p className="mt-5 font-display text-xl font-semibold">
-                      Thanks for reaching out!
+                      Got it. Thanks.
                     </p>
                     <p className="mt-2 text-sm text-on-dark-muted">
                       {WEB3FORMS_KEY
-                        ? "I'll get back to you within a day or two."
+                        ? "I'll get back to you in a day or two."
                         : "This is a demo form. Add a Web3Forms key to receive real messages."}
                     </p>
                   </div>
@@ -231,7 +230,7 @@ export function Contact() {
                       label="Project details"
                       id="message"
                       multiline
-                      placeholder="What are you building, and when do you need it?"
+                      placeholder="What you need, and when you need it by."
                       error={errors.message}
                     />
                     <Button
@@ -265,7 +264,7 @@ export function Contact() {
                     )}
                     {!WEB3FORMS_KEY && (
                       <p className="text-center text-xs text-on-dark-muted">
-                        Demo form — no message is actually sent.
+                        Demo form. No message is actually sent.
                       </p>
                     )}
                   </form>

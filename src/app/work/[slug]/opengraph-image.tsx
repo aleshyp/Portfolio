@@ -70,7 +70,7 @@ export default async function CaseStudyOgImage({
                 background: "#34d399",
               }}
             />
-            {site.name} — Case Study
+            {site.name} · Case Study
           </div>
 
           {/* Framed "IR" mark (from brutalist-grid-white.svg), inline so Satori can render it. */}

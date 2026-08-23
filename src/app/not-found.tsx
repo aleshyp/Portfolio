@@ -10,10 +10,10 @@ export default function NotFound() {
           404
         </p>
         <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl">
-          This page wandered off.
+          Nothing here.
         </h1>
         <p className="mt-2 max-w-sm text-fg-muted">
-          The page you&apos;re looking for doesn&apos;t exist or has moved.
+          This page either moved or never existed. Either way, my fault.
         </p>
         <Button href="/" className="mt-8">
           <ArrowLeft size={16} />

@@ -26,6 +26,27 @@ import { cn } from "@/lib/utils";
  * tokens can't be referenced inside raw SVG fill attributes, and these swatches
  * must render the literal documented values (including both themes side by side)
  * regardless of the viewer's current theme.
+ *
+ * ── Two color layers in this file ──────────────────────────────────────────
+ * That rule applies to the SPECIMEN — the thing each scene is a picture of.
+ * It does NOT apply to the artboard around it, and conflating the two left
+ * three white-canvas scenes floating on the dark page.
+ *
+ *   SPECIMEN  → literal hex from `P` below. Fixed in both themes, because the
+ *               scene asserts these values: the light/dark comparison panels in
+ *               ThemeSplit, the swatch rows in Layers, the ratio bars and their
+ *               measured numbers in Contrast. Theming these would make the
+ *               claims false.
+ *   CHROME    → `C` below (var(--asset-*), re-pointed in the .dark block of
+ *               globals.css). The canvas, card fills, hairlines and the label
+ *               text sitting on them. Follows the theme, asserts nothing.
+ *
+ * The split is why this component can stay a server component: CSS variables
+ * resolve at paint time, so there's no useTheme(), no client boundary, and no
+ * flash of the wrong palette before hydration.
+ *
+ * When adding to a scene, ask whether the color is part of the CLAIM. If yes,
+ * use `P`. If it's just the frame around the claim, use `C`.
  */
 
 // The portfolio's real palette, mirrored from globals.css.
@@ -49,6 +70,27 @@ const P = {
   line: "#e2e8f0",
   amber: "#f59e0b", // accent
   red: "#dc2626",
+};
+
+/**
+ * Theme-aware artboard chrome. Defined in globals.css (`:root` + `.dark`) and
+ * resolved at paint time, so these work in a server-rendered SVG. See the
+ * specimen-vs-chrome note in the file header before reaching for one.
+ */
+const C = {
+  canvas: "var(--asset-canvas)",
+  canvasAlt: "var(--asset-canvas-alt)",
+  canvasSoft: "var(--asset-canvas-soft)",
+  card: "var(--asset-card)",
+  line: "var(--asset-line)",
+  lineSoft: "var(--asset-line-soft)",
+  label: "var(--asset-label)",
+  text: "var(--asset-text)",
+  textFaint: "var(--asset-text-faint)",
+  pill: "var(--asset-pill)",
+  pillLine: "var(--asset-pill-line)",
+  pillText: "var(--asset-pill-text)",
+  danger: "var(--asset-danger)",
 };
 
 type Scene = "layers" | "theme-split" | "contrast" | "gates";
@@ -76,7 +118,7 @@ function Mono({
   x,
   y,
   children,
-  fill = P.fgMuted,
+  fill = C.text,
   size = 20,
   anchor = "start",
 }: {
@@ -105,7 +147,7 @@ function Label({
   x,
   y,
   children,
-  fill = P.ink,
+  fill = C.label,
   size = 24,
   weight = 600,
   anchor = "start",
@@ -174,12 +216,12 @@ function Layers() {
 
   return (
     <Frame>
-      <rect width="1600" height="900" fill={P.brand50} />
+      <rect width="1600" height="900" fill={C.canvasAlt} />
       <Label x={90} y={116} size={40} weight={700}>
         Five token layers
       </Label>
       <Mono x={90} y={156} size={22}>
-        src/app/globals.css — 35 color tokens
+        src/app/globals.css · 35 color tokens
       </Mono>
 
       {/* Five rows in the same 900px artboard: pitch tightened from 150 to 136
@@ -195,23 +237,27 @@ function Layers() {
               width="1420"
               height="116"
               rx="20"
-              fill={P.paper}
-              stroke={P.brand100}
+              fill={C.card}
+              stroke={C.line}
               strokeWidth="2"
             />
-            <Mono x={130} y={y + 56} size={28} fill={P.ink}>
+            <Mono x={130} y={y + 56} size={28} fill={C.label}>
               {row.name}-*
             </Mono>
             <text
               x={130}
               y={y + 87}
-              fill={P.fgFaint}
+              fill={C.textFaint}
               fontFamily="Sora, sans-serif"
               fontSize="19"
             >
               {row.desc}
             </text>
 
+            {/* Swatch FILLS are specimen — the literal token values, fixed in
+                both themes. Only the outline is chrome: a neutral #e2e8f0 hairline
+                disappears against the dark card, and these swatches include near-
+                white values that need an edge to read as a chip rather than a hole. */}
             {row.swatches.map((s, j) => (
               <rect
                 key={j}
@@ -221,7 +267,7 @@ function Layers() {
                 height="56"
                 rx="12"
                 fill={s}
-                stroke={P.line}
+                stroke={C.lineSoft}
                 strokeWidth="1.5"
               />
             ))}
@@ -232,14 +278,14 @@ function Layers() {
               width={row.flips ? 200 : 232}
               height="40"
               rx="20"
-              fill={row.flips ? P.brand50 : P.cloud}
-              stroke={row.flips ? P.brand300 : P.line}
+              fill={row.flips ? C.pill : C.canvasSoft}
+              stroke={row.flips ? C.pillLine : C.lineSoft}
               strokeWidth="2"
             />
             <text
               x={row.flips ? 1000 : 1016}
               y={y + 64}
-              fill={row.flips ? P.brand700 : P.fgMuted}
+              fill={row.flips ? C.pillText : C.text}
               fontFamily="Sora, sans-serif"
               fontSize="19"
               fontWeight="600"
@@ -259,21 +305,25 @@ function Layers() {
 function ThemeSplit() {
   return (
     <Frame>
-      <rect width="1600" height="900" fill={P.paper} />
+      <rect width="1600" height="900" fill={C.canvas} />
       <Label x={90} y={110} size={40} weight={700}>
         One value, two jobs
       </Label>
       <text
         x={90}
         y={152}
-        fill={P.fgMuted}
+        fill={C.text}
         fontFamily="Sora, sans-serif"
         fontSize="22"
       >
         #0b1220 is light-mode text AND the dark-mode page background.
       </text>
 
-      {/* Light panel */}
+      {/* Light panel — SPECIMEN, stays literal in both themes. This panel and
+          the dark one beside it ARE the argument: the same UI, one set of
+          utilities, two grounds. Theming either half would collapse the
+          comparison into two identical panels. Only its outer hairline is
+          chrome, so the panel edge survives on the dark artboard. */}
       <g>
         <rect
           x="90"
@@ -282,7 +332,7 @@ function ThemeSplit() {
           height="470"
           rx="28"
           fill={P.paper}
-          stroke={P.brand100}
+          stroke={C.line}
           strokeWidth="3"
         />
         <Mono x={130} y={262} size={20} fill={P.fgFaint}>
@@ -323,7 +373,9 @@ function ThemeSplit() {
         </Mono>
       </g>
 
-      {/* Dark panel */}
+      {/* Dark panel — SPECIMEN, likewise literal. Its ink fill equals the dark
+          artboard exactly, so the chrome hairline is what separates panel from
+          canvas; the old ink-soft stroke only read against the white artboard. */}
       <g>
         <rect
           x="850"
@@ -332,7 +384,7 @@ function ThemeSplit() {
           height="470"
           rx="28"
           fill={P.ink}
-          stroke={P.inkSoft}
+          stroke={C.line}
           strokeWidth="3"
         />
         <Mono x={890} y={262} size={20} fill={P.darkFgMuted}>
@@ -380,29 +432,31 @@ function ThemeSplit() {
         width="1420"
         height="104"
         rx="24"
-        fill={P.brand50}
-        stroke={P.brand300}
+        fill={C.pill}
+        stroke={C.pillLine}
         strokeWidth="2"
       />
-      <Mono x={130} y={772} size={22} fill={P.brand700}>
+      <Mono x={130} y={772} size={22} fill={C.pillText}>
         ✓ text-fg-muted
       </Mono>
       <text
         x={130}
         y={806}
-        fill={P.fgMuted}
+        fill={C.text}
         fontFamily="Sora, sans-serif"
         fontSize="19"
       >
         one utility, correct in both themes
       </text>
-      <Mono x={820} y={772} size={22} fill={P.red}>
+      {/* red-600 #dc2626 is only 4.0:1 on ink — step to red-400 in dark, which
+          clears AA on both artboards. */}
+      <Mono x={820} y={772} size={22} fill={C.danger}>
         ✗ text-ink dark:text-slate-400
       </Mono>
       <text
         x={820}
         y={806}
-        fill={P.fgMuted}
+        fill={C.text}
         fontFamily="Sora, sans-serif"
         fontSize="19"
       >
@@ -429,9 +483,9 @@ function Contrast() {
 
   return (
     <Frame>
-      <rect width="1600" height="900" fill={P.cloud} />
+      <rect width="1600" height="900" fill={C.canvasSoft} />
       <Label x={90} y={112} size={40} weight={700}>
-        Contrast audit — WCAG 2.2 AA
+        Contrast audit · WCAG 2.2 AA
       </Label>
       <Mono x={90} y={152} size={22}>
         body text must clear 4.5:1
@@ -447,26 +501,28 @@ function Contrast() {
               width="1420"
               height="76"
               rx="18"
-              fill={P.paper}
-              stroke={r.pass ? P.brand100 : P.red}
+              fill={C.card}
+              stroke={r.pass ? C.line : C.danger}
               strokeWidth={r.pass ? 2 : 3}
             />
-            <Mono x={128} y={y + 48} size={22} fill={P.ink}>
+            <Mono x={128} y={y + 48} size={22} fill={C.label}>
               {r.token}
             </Mono>
+            {/* The BAR is specimen — brand-500 is the measured swatch, and its
+                width encodes the ratio printed beside it. Fixed in both themes. */}
             <rect
               x={700}
               y={y + 26}
               width={r.bar}
               height="24"
               rx="12"
-              fill={r.pass ? P.brand500 : P.red}
+              fill={r.pass ? P.brand500 : C.danger}
             />
             <Mono
               x={1180}
               y={y + 48}
               size={22}
-              fill={r.pass ? P.ink : P.red}
+              fill={r.pass ? C.label : C.danger}
               anchor="end"
             >
               {r.ratio}
@@ -477,14 +533,14 @@ function Contrast() {
               width="100"
               height="32"
               rx="16"
-              fill={r.pass ? P.brand50 : P.paper}
-              stroke={r.pass ? P.brand300 : P.red}
+              fill={r.pass ? C.pill : "none"}
+              stroke={r.pass ? C.pillLine : C.danger}
               strokeWidth="2"
             />
             <text
               x={1290}
               y={y + 44}
-              fill={r.pass ? P.brand700 : P.red}
+              fill={r.pass ? C.pillText : C.danger}
               fontFamily="Sora, sans-serif"
               fontSize="18"
               fontWeight="600"
@@ -496,7 +552,7 @@ function Contrast() {
               <text
                 x={1370}
                 y={y + 44}
-                fill={P.fgMuted}
+                fill={C.text}
                 fontFamily="Sora, sans-serif"
                 fontSize="17"
               >
@@ -510,7 +566,7 @@ function Contrast() {
       <text
         x={90}
         y={846}
-        fill={P.fgMuted}
+        fill={C.text}
         fontFamily="Sora, sans-serif"
         fontSize="20"
       >
@@ -541,24 +597,18 @@ function Gates() {
 
   return (
     <Frame>
-      {/* This scene is ink-on-ink with the dark page background, so it needs its
-          own inset border to keep a visible card edge in dark mode. */}
+      {/* This scene is ink-on-ink with the dark page background and needs a
+          visible card edge, but the border canNOT be drawn here: an `rx` in
+          viewBox units scales with the render width, so it never matches the
+          wrapper's fixed 32px `rounded-4xl` clip, and the mismatched curves cut
+          each other off at the corners. The wrapper draws the edge instead —
+          see `edge` in PortfolioSystemAsset below. */}
       <rect width="1600" height="900" fill={P.ink} />
-      <rect
-        x="3"
-        y="3"
-        width="1594"
-        height="894"
-        rx="24"
-        fill="none"
-        stroke={P.inkSoft}
-        strokeWidth="6"
-      />
       <Label x={90} y={112} size={40} weight={700} fill={P.darkFg}>
         The build gate
       </Label>
       <Mono x={90} y={152} size={22} fill={P.darkFgMuted}>
-        scripts/lh-gate.mjs — exits 1 on regression
+        scripts/lh-gate.mjs · exits 1 on regression
       </Mono>
 
       {budgets.map((b, i) => (
@@ -634,7 +684,7 @@ function Gates() {
         fill={P.inkSoft}
       />
       <Label x={130} y={664} size={26} fill={P.darkFg}>
-        axe-core — WCAG 2.2 AA scans
+        axe-core · WCAG 2.2 AA scans
       </Label>
       {[
         "home",
@@ -688,7 +738,18 @@ export function PortfolioSystemAsset({
   const Scene = scenes[scene];
   return (
     <div
-      className={cn("overflow-hidden shadow-soft", className)}
+      className={cn(
+        "overflow-hidden shadow-soft",
+        // The scenes are ink-on-ink with the dark page background, so they need
+        // a visible card edge. It's an inset `ring` rather than a `border` or an
+        // <rect> inside the SVG: a ring shares this element's border-radius
+        // exactly and sits inside the clip, so there's one curve instead of two
+        // that disagree. An SVG-drawn edge can't work here — its `rx` is in
+        // viewBox units and rescales with the render width, so it drifts away
+        // from the wrapper's fixed radius and the corners cut each other off.
+        "inset-ring-1 inset-ring-border-on-dark",
+        className,
+      )}
       role={alt ? "img" : undefined}
       aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
@@ -702,7 +763,7 @@ export function PortfolioSystemAsset({
 export const portfolioSystemScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "layers",
-    alt: "The five token layers of this site's design system — fg for text and surface for cards both flip in dark mode, while ink for backgrounds, the emerald brand ramp, and the on-dark set for always-dark panels never flip. Each row shows four sample swatches, drawn from the 35 color tokens in globals.css.",
+    alt: "The five token layers of this site's design system. Fg for text and surface for cards both flip in dark mode, while ink for backgrounds, the emerald brand ramp, and the on-dark set for always-dark panels never flip. Each row shows four sample swatches, drawn from the 35 color tokens in globals.css.",
   },
   {
     scene: "theme-split",
@@ -710,10 +771,10 @@ export const portfolioSystemScenes: { scene: Scene; alt: string }[] = [
   },
   {
     scene: "contrast",
-    alt: "A WCAG 2.2 AA contrast audit of the text tokens, each with its measured ratio against the 4.5:1 body-text threshold. Five pairs pass, from fg at 18.7:1 down to fg-faint at 4.8:1; brand-600 on white fails at 3.8:1 — the site's primary action color, fixed site-wide by stepping it to brand-700 at 5.5:1.",
+    alt: "A WCAG 2.2 AA contrast audit of the text tokens, each with its measured ratio against the 4.5:1 body-text threshold. Five pairs pass, from fg at 18.7:1 down to fg-faint at 4.8:1; brand-600 on white fails at 3.8:1. That was the site's primary action color, fixed site-wide by stepping it to brand-700 at 5.5:1.",
   },
   {
     scene: "gates",
-    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with CLS under 0.1, TBT under 200 milliseconds, and LCP held to a 3.2-second ratchet against Lighthouse's simulated figure rather than the 2.5-second target — real observed LCP lands under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
+    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with CLS under 0.1, TBT under 200 milliseconds, and LCP held to a 3.2-second ratchet against Lighthouse's simulated figure rather than the 2.5-second target, since real observed LCP lands under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
   },
 ];

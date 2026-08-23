@@ -28,13 +28,13 @@ const groups: SkillGroup[] = [
   {
     icon: Sparkles,
     title: "Branding",
-    description: "Marks and systems built to last.",
+    description: "Marks that still work at 16px.",
     items: ["Logo Design", "Brand Identity", "Style Guides", "Typography"],
   },
   {
     icon: Layout,
     title: "UX/UI Design",
-    description: "Interfaces you don't have to think about.",
+    description: "Screens that don't need a tutorial.",
     items: ["UI Design", "Prototyping", "Interaction", "Design Systems"],
   },
   {
@@ -68,7 +68,7 @@ export function Skills() {
           </h2>
           <p className="mt-4 text-fg-muted">
             Brand and graphics, product interfaces, and the code that ships
-            them. Roughly the path a project takes from idea to launch.
+            them, roughly in the order a project moves through them.
           </p>
         </div>
       </AnimatedReveal>

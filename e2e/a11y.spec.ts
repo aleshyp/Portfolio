@@ -121,7 +121,7 @@ test("no a11y violations: contact form with errors shown", async ({ page }) => {
   await page.goto("/#contact");
   await waitForHydration(page);
   await page.getByRole("button", { name: /send message/i }).click();
-  await expect(page.getByText(/please enter your name/i)).toBeVisible();
+  await expect(page.getByText(/what should i call you/i)).toBeVisible();
   await freezeAnimations(page);
   const { violations } = await new AxeBuilder({ page })
     .include("#contact")
