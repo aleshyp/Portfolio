@@ -20,6 +20,13 @@ type Errors = Partial<Record<"name" | "email" | "message", string>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Length caps. These mirror what a real person plausibly types and keep a bot
+// from posting a multi-megabyte body. Enforced on the inputs (maxLength, so the
+// browser stops the typing) AND here (so a scripted POST still gets rejected) —
+// client-side validation is UX, not a security boundary, but Web3Forms is the
+// one that actually revalidates.
+const LIMITS = { name: 100, email: 254, company: 100, message: 4000 } as const;
+
 // Web3Forms access key. This is a PUBLIC key by design — it maps to the target
 // mailbox on Web3Forms' server and cannot be used to read submissions, so the
 // NEXT_PUBLIC_ prefix (shipped to the browser) is correct here. Set it in
@@ -45,9 +52,17 @@ export function Contact() {
     const email = (data.get("email") as string)?.trim();
     const message = (data.get("message") as string)?.trim();
     if (!name) next.name = "What should I call you?";
+    else if (name.length > LIMITS.name)
+      next.name = `Keep this under ${LIMITS.name} characters.`;
+
     if (!email) next.email = "I'll need an email to reply to.";
-    else if (!EMAIL_RE.test(email)) next.email = "That email doesn't look right.";
+    else if (email.length > LIMITS.email || !EMAIL_RE.test(email))
+      next.email = "That email doesn't look right.";
+
     if (!message) next.message = "Tell me what you're working on.";
+    else if (message.length > LIMITS.message)
+      next.message = `Keep this under ${LIMITS.message.toLocaleString()} characters.`;
+
     return next;
   }
 
@@ -57,8 +72,19 @@ export function Contact() {
   // fill it are dropped by Web3Forms.
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (pending) return; // guard the Enter-key double-submit
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    // Honeypot tripped → a bot. Show the same confirmation a human sees rather
+    // than an error, so the bot gets no signal about why nothing arrived, and
+    // never send the request. Web3Forms drops these server-side too; bailing
+    // here just saves the round trip.
+    if ((data.get("botcheck") as string)?.trim()) {
+      setSubmitted(true);
+      return;
+    }
+
     const found = validate(data);
     setErrors(found);
     setSubmitError(null);
@@ -85,8 +111,13 @@ export function Contact() {
         method: "POST",
         headers: { Accept: "application/json" },
         body: (() => {
+          const name = (data.get("name") as string).trim();
           data.set("access_key", WEB3FORMS_KEY);
-          data.set("subject", "New message from your portfolio");
+          data.set("subject", `Portfolio enquiry from ${name}`);
+          // Makes "Reply" in the notification email go to the sender rather
+          // than to Web3Forms' relay address.
+          data.set("replyto", (data.get("email") as string).trim());
+          data.set("from_name", name);
           return data;
         })(),
       });
@@ -208,6 +239,8 @@ export function Contact() {
                         id="name"
                         placeholder="Jane Doe"
                         autoComplete="name"
+                        maxLength={LIMITS.name}
+                        disabled={pending}
                         error={errors.name}
                       />
                       <Field
@@ -216,6 +249,8 @@ export function Contact() {
                         type="email"
                         placeholder="jane@company.com"
                         autoComplete="email"
+                        maxLength={LIMITS.email}
+                        disabled={pending}
                         error={errors.email}
                       />
                     </div>
@@ -225,12 +260,16 @@ export function Contact() {
                       placeholder="Acme Inc."
                       required={false}
                       autoComplete="organization"
+                      maxLength={LIMITS.company}
+                      disabled={pending}
                     />
                     <Field
                       label="Project details"
                       id="message"
                       multiline
                       placeholder="What you need, and when you need it by."
+                      maxLength={LIMITS.message}
+                      disabled={pending}
                       error={errors.message}
                     />
                     <Button

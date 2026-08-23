@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 /** Shared input/textarea styling, including the error state. */
 export function controlClasses(error?: string, className?: string): string {
   return cn(
-    "w-full rounded-xl border bg-surface-on-dark-raised px-4 py-3 text-sm text-on-dark placeholder:text-on-dark-faint transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-950",
+    "w-full rounded-xl border bg-surface-on-dark-raised px-4 py-3 text-sm text-on-dark placeholder:text-on-dark-faint transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-950 disabled:cursor-not-allowed disabled:opacity-70",
     error
       ? "border-danger focus-visible:ring-danger"
       : "border-border-on-dark focus:border-brand-300 focus-visible:ring-brand-300",
@@ -66,6 +66,10 @@ type FieldProps = {
   /** Renders a multi-line control instead of a single-line input. */
   multiline?: boolean;
   rows?: number;
+  /** Caps typed input. The submit handler re-checks — this is just UX. */
+  maxLength?: number;
+  /** Locks the control while a submission is in flight. */
+  disabled?: boolean;
 };
 
 /** Label + control + error message, wired together for assistive tech. */
@@ -79,6 +83,8 @@ export function Field({
   error,
   multiline = false,
   rows = 4,
+  maxLength,
+  disabled = false,
 }: FieldProps) {
   const errorId = `${id}-error`;
   const shared = {
@@ -87,6 +93,8 @@ export function Field({
     required,
     placeholder,
     autoComplete,
+    maxLength,
+    disabled,
     "aria-invalid": error ? true : undefined,
     "aria-describedby": error ? errorId : undefined,
   };
