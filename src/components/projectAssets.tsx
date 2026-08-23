@@ -40,6 +40,31 @@ const aperturePng: Record<string, string> = {
   usage: "/work/aperture/05-usage@2x.png",
 };
 
+/**
+ * Card thumbnails for the projects whose hero IS a logo animation.
+ *
+ * These are the animations' own poster frames — the still the video rests on —
+ * so a card shows the same resting logo the case-study hero settles into, with
+ * no playback in a seven-card grid. Kept in sync with the POSTER constants in
+ * ApertureHero/LuminHero: same file, one per project.
+ *
+ * Only these two projects have an animation. Every other project's thumbnail
+ * stays its generated SVG scene, which is the only imagery it has.
+ */
+const heroStill: Record<string, { src: string; width: number; height: number }> =
+  {
+    "brand-identity-system": {
+      src: "/work/aperture/logo-anim-poster.jpg",
+      width: 1600,
+      height: 900,
+    },
+    "learning-platform-ui": {
+      src: "/work/lumin/lumin-anim-poster.webp",
+      width: 1600,
+      height: 900,
+    },
+  };
+
 type AssetKind =
   | "aperture"
   | "marketing"
@@ -119,13 +144,33 @@ export function renderProjectScene(
   // when alt is falsy, so nothing reaches the accessibility tree.
   const alt = decorative ? "" : item.alt;
 
+  // Hero slot, playback suppressed (the Work grid) — show the animation's still
+  // rather than a substitute. Aperture's SVG logomark is a DIFFERENT mark from
+  // the one the animation rests on, and Lumin's scene 0 is a product screenshot
+  // cropped to 16:9, so both cards previously showed something the case-study
+  // hero never settles into. The poster is that resting frame exactly.
+  const still = index === 0 && !allowVideoHero ? heroStill[slug] : undefined;
+  if (still) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={still.src}
+        alt={alt}
+        width={still.width}
+        height={still.height}
+        className={cn("block object-cover", className)}
+      />
+    );
+  }
+
   if (assetSet.kind === "aperture") {
     // Aperture ships real Figma deliverables: the hero (scene 0) is the brand
     // logo-reveal animation; scenes 1–4 are exported PNG frames.
     if (index === 0) {
       if (!allowVideoHero) {
-        // The logomark scene is the animation's end frame — the same image the
-        // video rests on, without the playback cost.
+        // Reached only if `heroStill` loses its Aperture entry — the still above
+        // is the real no-playback path. The SVG logomark is a related but
+        // distinct mark, so it's a fallback, not an equivalent.
         return (
           <ApertureAsset scene="logomark" alt={alt} className={className} />
         );
@@ -173,9 +218,10 @@ export function renderProjectScene(
         scene={item.scene as Parameters<typeof LuminAsset>[0]["scene"]}
         alt={alt}
         className={className}
-        // The Work-grid card (allowVideoHero: false) needs a uniform thumbnail,
-        // so pin it to the grid's 16:9 and crop from the top. The case study
-        // passes no ratio and shows each screen whole.
+        // Card-sized contexts (allowVideoHero: false) need a uniform thumbnail,
+        // so pin it to 16:9 and crop from the top. The case study passes no
+        // ratio and shows each screen whole. Scene 0 no longer arrives here in
+        // a card — the hero still handles it — but the later screens still do.
         ratio={allowVideoHero ? undefined : 16 / 9}
       />
     );
