@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 /**
  * "This Site" — case-study assets for the portfolio's own design system.
  *
- * Deliberately UNLIKE the other asset sets. Aperture, Northwind, Lumin, Fernweh,
- * Halyard and Cadence are fictional clients, so each carries its own invented
- * identity kept separate from the portfolio's brand. Here the portfolio IS the
+ * Deliberately UNLIKE the other asset sets. Aperture, Northwind and Lumin are
+ * fictional clients, so each carries its own invented identity kept separate
+ * from the portfolio's brand. Here the portfolio IS the
  * subject, so these scenes use the REAL emerald/ink palette and the REAL values
  * from the codebase — that's the whole point of the study.
  *

@@ -5,13 +5,6 @@ import { LuminAsset, luminScenes } from "@/components/LuminAsset";
 import { LuminHero } from "@/components/LuminHero";
 import { NorthwindHero } from "@/components/NorthwindHero";
 import {
-  OnboardingAsset,
-  onboardingScenes,
-} from "@/components/OnboardingAsset";
-import { SystemAsset, systemScenes } from "@/components/SystemAsset";
-import { MotionAsset } from "@/components/MotionAsset";
-import { motionScenes } from "@/components/motionScenes";
-import {
   PortfolioSystemAsset,
   portfolioSystemScenes,
 } from "@/components/PortfolioSystemAsset";
@@ -25,10 +18,9 @@ import { cn } from "@/lib/utils";
  * them in both places, from one definition.
  *
  * Server-only by design: the scene DATA must be importable by server components.
- * MotionAsset is a client component ("use client" for useReducedMotion), which is
- * why Cadence's scenes live in ./motionScenes rather than in the component file —
- * a plain const exported across the client boundary arrives EMPTY on the server
- * and silently drops the gallery back to the gradient Placeholder.
+ * If an asset component ever needs "use client", split its scene list into its own
+ * module — a plain const exported across the client boundary arrives EMPTY on the
+ * server and silently drops the gallery back to the gradient Placeholder.
  */
 
 // Aperture's non-hero scenes map to exported Figma PNG frames (@2x, 3200×1800)
@@ -75,10 +67,7 @@ type AssetKind =
   | "aperture"
   | "marketing"
   | "lumin"
-  | "onboarding"
-  | "system"
-  | "portfolio-system"
-  | "motion";
+  | "portfolio-system";
 
 type AssetSet = {
   scenes: { scene: string; alt: string }[];
@@ -111,9 +100,6 @@ const assetSets: Record<string, AssetSet> = {
     kind: "lumin",
     intrinsicRatio: true,
   },
-  "mobile-app-onboarding": { scenes: onboardingScenes, kind: "onboarding" },
-  "design-system": { scenes: systemScenes, kind: "system" },
-  "motion-brand-identity": { scenes: motionScenes, kind: "motion" },
 };
 
 export function getAssetSet(slug: string): AssetSet | null {
@@ -239,39 +225,12 @@ export function renderProjectScene(
       />
     );
   }
-  if (assetSet.kind === "onboarding") {
-    return (
-      <OnboardingAsset
-        scene={item.scene as Parameters<typeof OnboardingAsset>[0]["scene"]}
-        alt={alt}
-        className={className}
-      />
-    );
-  }
   if (assetSet.kind === "portfolio-system") {
     return (
       <PortfolioSystemAsset
         scene={
           item.scene as Parameters<typeof PortfolioSystemAsset>[0]["scene"]
         }
-        alt={alt}
-        className={className}
-      />
-    );
-  }
-  if (assetSet.kind === "system") {
-    return (
-      <SystemAsset
-        scene={item.scene as Parameters<typeof SystemAsset>[0]["scene"]}
-        alt={alt}
-        className={className}
-      />
-    );
-  }
-  if (assetSet.kind === "motion") {
-    return (
-      <MotionAsset
-        scene={item.scene as Parameters<typeof MotionAsset>[0]["scene"]}
         alt={alt}
         className={className}
       />
