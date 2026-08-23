@@ -25,7 +25,6 @@ export const site = {
   // Delivered by Cloudflare Email Routing (forwards to a personal inbox).
   email: "hello@ianriley.co",
   available: true,
-  // TODO: replace /resume.pdf in /public with your real résumé file
   resumeUrl: "/resume.pdf",
   socials: {
     dribbble: "https://dribbble.com/aleshyp",
@@ -43,7 +42,6 @@ export const site = {
 
 /**
  * Résumé / work history.
- * NOTE: add your current company name where marked TODO below.
  */
 export type ExperienceItem = {
   role: string;
