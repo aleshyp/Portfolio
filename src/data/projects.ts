@@ -59,8 +59,8 @@ export const projects: Project[] = [
     duration: "Ongoing",
     results: [
       { label: "Accessibility budget", value: "100" },
-      { label: "Design tokens", value: "33" },
-      { label: "Design → live", value: "1 person" },
+      { label: "Design tokens", value: "35" },
+      { label: "WCAG 2.2 AA scans", value: "6" },
     ],
     overview:
       "Most portfolios show the output of design work. This one is also the work itself. Every screen here is built from a documented token system, themed light and dark from a single source of truth, and held to WCAG 2.2 AA by tests that run before anything ships. If you want to know how I actually work, this is the clearest evidence I can offer: decisions written down, encoded as tokens, and checked by automation rather than by good intentions.",
@@ -71,7 +71,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Tokens as the contract",
-        body: "33 color tokens live in one CSS file, with light values in Tailwind v4's @theme block and dark re-points in a .dark block, across four layers: foreground text, fixed ink, theme-aware surfaces, and brand. Hardcoded hex and arbitrary values are banned; if a value doesn't exist yet, it becomes a token rather than a one-off. On top of that sit 20 primitives (Button, Badge, Container, Section, ProjectCard, the shared motion components), so building a new card means reaching for an existing recipe instead of writing fresh inline styles. The whole system is documented in a DESIGN.md that ships with the code and is versioned alongside it, so the rules can't quietly drift away from the implementation.",
+        body: "35 color tokens live in one CSS file, with light values in Tailwind v4's @theme block and dark re-points in a .dark block, across five layers: foreground text, fixed ink, theme-aware surfaces, brand, and a fixed on-dark set for panels that stay dark in both themes. Hardcoded hex and arbitrary values are banned; if a value doesn't exist yet, it becomes a token rather than a one-off. On top of that sit the shared primitives (Button, Badge, Container, Section, ProjectCard, the motion components), so building a new card means reaching for an existing recipe instead of writing fresh inline styles. The whole system is documented in a DESIGN.md that ships with the code and is versioned alongside it, so the rules can't quietly drift away from the implementation.",
       },
       {
         heading: "Accessibility as a build gate, not a review step",
@@ -79,7 +79,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Holding the line",
-        body: "A Lighthouse gate runs against a production build and exits non-zero if anything regresses past budget: accessibility and SEO must score 100, performance 90, best practices 95, with Core Web Vitals capped at LCP under 2.5s, CLS under 0.1, and TBT under 200ms. Playwright covers the user journeys, responsive behavior at three breakpoints, and SEO metadata. All motion honors prefers-reduced-motion through both a CSS media query and useReducedMotion() in JavaScript, because framer-motion animates via JS and ignores the CSS one.",
+        body: "A Lighthouse gate runs against a production build and exits non-zero if anything regresses past budget: accessibility and SEO must score 100, performance 90, best practices 95, with CLS under 0.1 and TBT under 200ms. LCP gets its own treatment. Lighthouse reports ~3.0s, which fails the 2.5s target — but its LCP-element audit comes back empty, the tell that the number is simulated from 4x CPU throttling rather than observed. Measured directly with a PerformanceObserver against the same build, real LCP lands under 200ms on the hero h1. So the gate holds LCP to a ratchet against the simulated figure, which still catches a genuine render-blocking regression, and the study doesn't claim a 2.5s pass it hasn't earned. The investigation did surface one real bug: the h1 animated from opacity 0, and LCP is only recorded once text reaches final opacity, so the entrance fade was deferring the metric. It now paints opaque and animates transform only. Playwright covers the user journeys, responsive behavior at three breakpoints, and SEO metadata. All motion honors prefers-reduced-motion through both a CSS media query and useReducedMotion() in JavaScript, because framer-motion animates via JS and ignores the CSS one.",
       },
       {
         heading: "Why this is the case study",

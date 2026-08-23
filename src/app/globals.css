@@ -101,6 +101,12 @@
   --shadow-glow: 0 0 0 1px rgba(16, 185, 129, 0.15), 0 12px 40px rgba(16, 185, 129, 0.18);
 
   --radius-4xl: 2rem;
+  /* Concentric inner radius for content clipped inside a rounded-4xl card that
+     has a 1px border. Never put `overflow-hidden` on the bordered element
+     itself: the border and the clip antialias the same curve in two separate
+     passes that disagree, and the corner reads as fuzzy/pixelated. Clip the
+     child with this instead. */
+  --radius-4xl-inner: calc(2rem - 1px);
 
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-float: float 6s ease-in-out infinite;

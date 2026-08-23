@@ -25,8 +25,8 @@ export function Hero() {
   // The <h1> is this page's LCP element, so it must NOT fade from opacity 0:
   // Largest Contentful Paint is only recorded once the text reaches its final
   // opacity, which meant the staggered fade above pushed LCP from ~156ms to
-  // ~1.05s locally (~3.1s under Lighthouse's CPU throttling — over the 2.5s
-  // budget in scripts/lh-gate.mjs). Painting it opaque immediately and animating
+  // ~1.05s locally (~3.1s under Lighthouse's CPU throttling — over the
+  // LCP_RATCHET in scripts/lh-gate.mjs). Painting it opaque immediately and animating
   // only the transform keeps the entrance while letting LCP land on first frame;
   // transforms don't affect LCP timing. Keep opacity out of this variant.
   const heading = {

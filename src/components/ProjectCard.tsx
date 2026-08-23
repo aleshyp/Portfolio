@@ -36,14 +36,22 @@ export function ProjectCard({
     >
       <Link
         href={`/work/${project.slug}`}
-        className="group flex h-full flex-col overflow-hidden rounded-4xl border border-border-subtle bg-surface shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:hover:border-brand-500/30"
+        className="group flex h-full flex-col rounded-4xl border border-border-subtle bg-surface shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:hover:border-brand-500/30"
       >
         {/* aria-hidden: the thumbnail is decorative HERE. Each scene carries a
             paragraph-length aria-label for the case study, where it IS the
             content — but inside this link that text would be absorbed into the
             link's accessible name, so the card would announce as a wall of
             description instead of the project title below. */}
-        <div className="overflow-hidden" aria-hidden="true">
+        {/* The rounding lives HERE, not as `overflow-hidden` on the card above:
+            a 1px border and a clip on the same element antialias the 32px curve
+            in two separate passes that disagree, which reads as a fuzzy edge.
+            The radius is inset by the border width so it nests concentrically
+            inside the card's outer curve. */}
+        <div
+          className="overflow-hidden rounded-t-4xl-inner"
+          aria-hidden="true"
+        >
           {/* 16:9 to match the scene artboards — the assets fit-inside rather
               than crop, so a taller well would letterbox them. */}
           <div className="aspect-video w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]">

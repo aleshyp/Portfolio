@@ -111,8 +111,13 @@ export function Contact() {
         {/* Permanently-dark panel: it stays dark in BOTH themes, so everything
             inside uses the fixed `on-dark` tokens rather than the theme-aware
             foreground and surface tokens, which would flip out from under it. */}
-        <div className="overflow-hidden rounded-4xl border border-brand-100 bg-linear-to-br from-brand-950 via-brand-900 to-emerald-950 text-on-dark shadow-lift">
-          <div className="relative grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
+        <div className="rounded-4xl border border-brand-100 bg-linear-to-br from-brand-950 via-brand-900 to-emerald-950 text-on-dark shadow-lift">
+          {/* The clip lives on this inner element rather than on the bordered
+              panel above: a 1px border and a clip sharing the 32px curve get
+              antialiased in two passes that disagree, which reads as a fuzzy
+              edge. Only the blur glow below needs containing, and its radius is
+              inset by the border width to nest inside the outer curve. */}
+          <div className="relative grid gap-10 overflow-hidden rounded-4xl-inner p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
             {/* soft glow */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
 

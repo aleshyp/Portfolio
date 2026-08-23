@@ -10,9 +10,13 @@ import { cn } from "@/lib/utils";
  * from the codebase — that's the whole point of the study.
  *
  * Every figure drawn here is verifiable against the repo:
- *   - token values / count  → src/app/globals.css (@theme + .dark)
- *   - contrast ratios       → the fg-* tables in DESIGN.md §1.2
- *   - budgets               → scripts/lh-gate.mjs (CATEGORY_BUDGET, CWV_BUDGET)
+ *   - token values / count  → src/app/globals.css (@theme + .dark); the count is
+ *                             UNIQUE --color-* names, so the .dark re-points of
+ *                             fg/surface tokens are not counted twice
+ *   - contrast ratios       → computed from the hex pairs in DESIGN.md §1.2
+ *   - budgets               → scripts/lh-gate.mjs (CATEGORY_BUDGET, CWV_BUDGET,
+ *                             LCP_RATCHET — LCP is gated by the ratchet, NOT the
+ *                             2.5s CWV target; don't redraw it as "< 2.5s")
  *   - scanned routes        → e2e/a11y.spec.ts
  * If any of those change, update these scenes — the study makes falsifiable
  * claims and a stale diagram would turn one into a false one.
@@ -130,7 +134,7 @@ function Label({
   );
 }
 
-/** Scene 1 — the four token layers, and which ones flip with the theme. */
+/** Scene 1 — the five token layers, and which ones flip with the theme. */
 function Layers() {
   const rows = [
     {
@@ -157,38 +161,50 @@ function Layers() {
       flips: false,
       swatches: [P.brand100, P.brand400, P.brand600, P.brand700],
     },
+    {
+      // Fixed like `ink`: these describe "text on a dark ground", not "text in
+      // dark theme", so there is nothing to re-point in .dark. Used by panels
+      // that stay dark in BOTH themes (the Contact band).
+      name: "on-dark",
+      desc: "always-dark panels",
+      flips: false,
+      swatches: [P.paper, P.brand100, P.inkSoft, P.ink],
+    },
   ];
 
   return (
     <Frame>
       <rect width="1600" height="900" fill={P.brand50} />
       <Label x={90} y={116} size={40} weight={700}>
-        Four token layers
+        Five token layers
       </Label>
       <Mono x={90} y={156} size={22}>
-        src/app/globals.css — 33 color tokens
+        src/app/globals.css — 35 color tokens
       </Mono>
 
+      {/* Five rows in the same 900px artboard: pitch tightened from 150 to 136
+          and row height from 120 to 116 when the on-dark layer was added. Last
+          row ends at 862, clear of the frame. */}
       {rows.map((row, i) => {
-        const y = 220 + i * 150;
+        const y = 206 + i * 136;
         return (
           <g key={row.name}>
             <rect
               x="90"
               y={y}
               width="1420"
-              height="120"
+              height="116"
               rx="20"
               fill={P.paper}
               stroke={P.brand100}
               strokeWidth="2"
             />
-            <Mono x={130} y={y + 58} size={28} fill={P.ink}>
+            <Mono x={130} y={y + 56} size={28} fill={P.ink}>
               {row.name}-*
             </Mono>
             <text
               x={130}
-              y={y + 90}
+              y={y + 87}
               fill={P.fgFaint}
               fontFamily="Sora, sans-serif"
               fontSize="19"
@@ -200,7 +216,7 @@ function Layers() {
               <rect
                 key={j}
                 x={470 + j * 86}
-                y={y + 32}
+                y={y + 30}
                 width="72"
                 height="56"
                 rx="12"
@@ -212,7 +228,7 @@ function Layers() {
 
             <rect
               x={900}
-              y={y + 40}
+              y={y + 38}
               width={row.flips ? 200 : 232}
               height="40"
               rx="20"
@@ -222,7 +238,7 @@ function Layers() {
             />
             <text
               x={row.flips ? 1000 : 1016}
-              y={y + 66}
+              y={y + 64}
               fill={row.flips ? P.brand700 : P.fgMuted}
               fontFamily="Sora, sans-serif"
               fontSize="19"
@@ -235,13 +251,6 @@ function Layers() {
         );
       })}
 
-      <rect
-        x="90"
-        y="828"
-        width="1420"
-        height="2"
-        fill={P.brand100}
-      />
     </Frame>
   );
 }
@@ -520,8 +529,12 @@ function Gates() {
     { label: "Best practices", value: "95", unit: "min" },
     { label: "Performance", value: "90", unit: "min" },
   ];
+  // LCP is gated by a RATCHET against Lighthouse's simulated figure, not the
+  // 2.5s CWV target — the simulated ~3.0s is a 4x-CPU-throttling artifact and
+  // real observed LCP is ~136ms. Drawing "< 2.5s" here would claim a gate the
+  // build doesn't enforce. Mirrors LCP_RATCHET in scripts/lh-gate.mjs.
   const cwv = [
-    { label: "LCP", value: "< 2.5s" },
+    { label: "LCP (simulated)", value: "< 3.2s ratchet" },
     { label: "CLS", value: "< 0.1" },
     { label: "TBT", value: "< 200ms" },
   ];
@@ -689,7 +702,7 @@ export function PortfolioSystemAsset({
 export const portfolioSystemScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "layers",
-    alt: "The four token layers of this site's design system — fg for text and surface for cards both flip in dark mode, while ink for backgrounds and the emerald brand ramp never flip. Each row shows four sample swatches, drawn from the 33 color tokens in globals.css.",
+    alt: "The five token layers of this site's design system — fg for text and surface for cards both flip in dark mode, while ink for backgrounds, the emerald brand ramp, and the on-dark set for always-dark panels never flip. Each row shows four sample swatches, drawn from the 35 color tokens in globals.css.",
   },
   {
     scene: "theme-split",
@@ -701,6 +714,6 @@ export const portfolioSystemScenes: { scene: Scene; alt: string }[] = [
   },
   {
     scene: "gates",
-    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with Core Web Vitals capped at LCP under 2.5 seconds, CLS under 0.1 and TBT under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
+    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with CLS under 0.1, TBT under 200 milliseconds, and LCP held to a 3.2-second ratchet against Lighthouse's simulated figure rather than the 2.5-second target — real observed LCP lands under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
   },
 ];
