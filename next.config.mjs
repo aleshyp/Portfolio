@@ -50,8 +50,11 @@ const securityHeaders = [
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
   },
   // HSTS: force HTTPS for two years. Only takes effect over HTTPS in production.
-  // NOTE: no `preload` — that's a hard-to-reverse commitment. Add it only once the
-  // real domain is live and permanently HTTPS-only (see security-guidelines skill).
+  // NOTE: deliberately no `preload`. Preloading bakes ianriley.co into a list
+  // compiled into browser binaries; removal takes months to reach users, and it
+  // binds every current and future subdomain to HTTPS-only. That's a bad trade for
+  // a portfolio — the two-year max-age below already protects real visitors after
+  // their first visit. See security-guidelines skill before reconsidering.
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains",

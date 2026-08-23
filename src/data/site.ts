@@ -2,10 +2,14 @@
  * The canonical origin for the site. All metadata (canonical URLs, OG/Twitter,
  * sitemap, robots) derives from this. Override per-environment with
  * NEXT_PUBLIC_SITE_URL; falls back to the production domain.
- * TODO: confirm this is the live domain before launch.
+ *
+ * Apex is canonical — www.ianriley.co 301-redirects here (configured in Vercel's
+ * domain settings). Keep this in sync with that redirect: if the canonical ever
+ * flips to www, both have to change together or canonical tags will point at a
+ * URL that redirects away.
  */
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ianriley.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ianriley.co";
 
 /**
  * Central place for personal details and social links.
@@ -16,10 +20,11 @@ export const site = {
   firstName: "Ian",
   role: "Multidisciplinary Designer",
   tagline:
-    "I design clean, human-centered work across brand, product, and the web.",
+    "I design brands, products, and websites, and build the front end too.",
   location: "Kansas City, United States",
-  email: "hello@ianriley.com",
-  // TODO: update once the domain & mailbox are live
+  // TODO: this address only works once Cloudflare Email Routing forwards
+  // hello@ianriley.co to a real mailbox. Until then the mailto: link bounces.
+  email: "hello@ianriley.co",
   available: true,
   // TODO: replace /resume.pdf in /public with your real résumé file
   resumeUrl: "/resume.pdf",
@@ -54,15 +59,15 @@ export const experience: ExperienceItem[] = [
   {
     role: "Web Designer & Front-End Developer",
     company: "International Academy of Science",
-    period: "2022 — Present",
+    period: "2022 – Present",
     location: "United States",
     summary:
-      "Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus, an online learning program, own and maintain the design system, then build those designs into shippable pages in code.",
+      "Hired as a graphic designer, ended up doing web design and front-end too. I design pages for Acellus, an online learning program, keep the design system in order, and build the designs out in code.",
     highlights: [
       "Design web pages for Acellus, an online learning platform.",
-      "Created and maintain the design system that keeps the product consistent.",
-      "Transform designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
-      "Use Claude Code to boost development efficiency and productivity.",
+      "Built the design system and still maintain it.",
+      "Build my own designs in React, TypeScript, Tailwind CSS, and TanStack.",
+      "Use Claude Code daily to move faster.",
     ],
   },
   {
@@ -71,10 +76,10 @@ export const experience: ExperienceItem[] = [
     period: "1 year",
     location: "Remote",
     summary:
-      "Led creative direction for an esports organization, setting the visual identity and producing social and brand designs across the org.",
+      "Ran creative for an esports org. Set the visual identity and made the social and brand work for the team and its players.",
     highlights: [
-      "Directed the visual identity and creative output for the organization.",
-      "Produced social media and brand designs for players and the org.",
+      "Set the visual identity and directed creative output.",
+      "Made social and brand designs for the org and its players.",
     ],
   },
   {
@@ -83,8 +88,8 @@ export const experience: ExperienceItem[] = [
     period: "6 months",
     location: "Remote",
     summary:
-      "Designed social media graphics and brand assets for an esports organization.",
-    highlights: ["Created social media designs and matchday graphics."],
+      "Social graphics and brand assets on a matchday schedule: announcements, results, and player content.",
+    highlights: ["Made matchday graphics, roster announcements, and results posts."],
   },
   {
     role: "Graphic Designer",
@@ -92,19 +97,19 @@ export const experience: ExperienceItem[] = [
     period: "6 months",
     location: "Remote",
     summary:
-      "Designed social media graphics and brand assets for an esports organization.",
-    highlights: ["Created social media designs and matchday graphics."],
+      "Social and brand design for the org, working to a weekly content calendar.",
+    highlights: ["Made social designs and matchday graphics on a weekly turnaround."],
   },
   {
     role: "Freelance Designer",
     company: "Self-employed",
-    period: "2014 — 2022",
+    period: "2014 – 2022",
     location: "Remote",
     summary:
-      "Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where the brand and design work began.",
+      "Started at 13, making social designs for esports orgs and influencers. Eight years of learning the job by doing it for people who were paying.",
     highlights: [
-      "Built a client base of esports orgs and influencers as a teenager.",
-      "Specialized in social media designs and brand assets across multiple organizations.",
+      "Built a client base of esports orgs and influencers while still in school.",
+      "Social designs and brand assets across a lot of different organizations.",
     ],
   },
 ];
@@ -120,7 +125,7 @@ export type EducationItem = {
 
 export const education: EducationItem[] = [
   {
-    credential: "Self-taught Designer — 13+ years",
+    credential: "Self-taught Designer, 13+ years",
     institution: "Graphic & UX/UI design",
     period: "Since 2012",
   },
