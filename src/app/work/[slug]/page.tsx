@@ -70,6 +70,15 @@ export default async function CaseStudy({
   // own dimensions instead — pinning 16:9 there would crop the page away.
   const galleryRatio = assetSet?.intrinsicRatio ? "" : "aspect-[16/9]";
 
+  // Scene 0 is the cover and each content block claims the next one, so a set
+  // with more scenes than `blocks.length + 1` has leftovers. They render in the
+  // "More screens" gallery below rather than being silently dropped.
+  const usedScenes = project.blocks.length + 1;
+  const extraScenes = Array.from(
+    { length: Math.max(0, (assetSet?.scenes.length ?? 0) - usedScenes) },
+    (_, i) => usedScenes + i,
+  );
+
   return (
     <article className="pt-28 sm:pt-36">
       {/* Header */}
@@ -204,6 +213,30 @@ export default async function CaseStudy({
           ))}
         </div>
       </Container>
+
+      {/* More screens
+          The blocks above consume one scene each (hero = 0, then 1 per block),
+          so a set with more scenes than blocks would silently strand the rest.
+          Anything left over shows here at its own ratio. */}
+      {extraScenes.length > 0 && (
+        <Container>
+          <div className="mt-24 border-t border-border-subtle pt-16">
+            <AnimatedReveal>
+              <Eyebrow>More screens</Eyebrow>
+            </AnimatedReveal>
+            <div className="mt-10 space-y-10">
+              {extraScenes.map((sceneIndex) => (
+                <AnimatedReveal key={sceneIndex}>
+                  {renderScene(
+                    sceneIndex,
+                    cn("w-full rounded-4xl", galleryRatio),
+                  )}
+                </AnimatedReveal>
+              ))}
+            </div>
+          </div>
+        </Container>
+      )}
 
       {/* Next project */}
       <Container>

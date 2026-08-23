@@ -1,8 +1,9 @@
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
 import { ApertureHero } from "@/components/ApertureHero";
-import { MarketingAsset, marketingScenes } from "@/components/MarketingAsset";
+import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
 import { LuminAsset, luminScenes } from "@/components/LuminAsset";
 import { LuminHero } from "@/components/LuminHero";
+import { NorthwindHero } from "@/components/NorthwindHero";
 import {
   OnboardingAsset,
   onboardingScenes,
@@ -48,7 +49,7 @@ const aperturePng: Record<string, string> = {
  * no playback in a seven-card grid. Kept in sync with the POSTER constants in
  * ApertureHero/LuminHero: same file, one per project.
  *
- * Only these two projects have an animation. Every other project's thumbnail
+ * Only these three projects have an animation. Every other project's thumbnail
  * stays its generated SVG scene, which is the only imagery it has.
  */
 const heroStill: Record<string, { src: string; width: number; height: number }> =
@@ -60,6 +61,11 @@ const heroStill: Record<string, { src: string; width: number; height: number }> 
     },
     "learning-platform-ui": {
       src: "/work/lumin/lumin-anim-poster.webp",
+      width: 1600,
+      height: 900,
+    },
+    "marketing-landing-page": {
+      src: "/work/northwind/northwind-anim-poster.jpg",
       width: 1600,
       height: 900,
     },
@@ -92,7 +98,14 @@ const assetSets: Record<string, AssetSet> = {
     kind: "portfolio-system",
   },
   "brand-identity-system": { scenes: apertureScenes, kind: "aperture" },
-  "marketing-landing-page": { scenes: marketingScenes, kind: "marketing" },
+  "marketing-landing-page": {
+    scenes: northwindScenes,
+    kind: "marketing",
+    // The four numbered frames are 16:9, but the full-page screens run up to
+    // ~1:2.6 — same situation as Lumin, so the study sizes each from its own
+    // intrinsic ratio rather than a shared box.
+    intrinsicRatio: true,
+  },
   "learning-platform-ui": {
     scenes: luminScenes,
     kind: "lumin",
@@ -264,11 +277,30 @@ export function renderProjectScene(
       />
     );
   }
+  // Northwind ("marketing"), like Aperture and Lumin, opens on a logo-reveal
+  // animation; every other scene is a real exported screen.
+  //
+  // This is the last branch because it's the last asset KIND — `marketing` was
+  // previously the implicit fallback, rendering MarketingAsset's hand-built SVG
+  // mockups. Those exports now cover every Northwind scene, so MarketingAsset is
+  // no longer rendered anywhere; it stays in the tree as the record of what the
+  // study looked like before the real screens landed. If a new kind is added,
+  // give it its own branch above rather than letting it fall through to here.
+  if (index === 0 && allowVideoHero) {
+    return (
+      <div className={cn("overflow-hidden bg-ink shadow-soft", className)}>
+        <NorthwindHero alt={alt} />
+      </div>
+    );
+  }
   return (
-    <MarketingAsset
-      scene={item.scene as Parameters<typeof MarketingAsset>[0]["scene"]}
+    <NorthwindAsset
+      scene={item.scene as Parameters<typeof NorthwindAsset>[0]["scene"]}
       alt={alt}
       className={className}
+      // Card-sized contexts need a uniform thumbnail, so pin the tall captures
+      // to 16:9 and crop from the top; the case study shows each screen whole.
+      ratio={allowVideoHero ? undefined : 16 / 9}
     />
   );
 }

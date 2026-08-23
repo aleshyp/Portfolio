@@ -65,10 +65,17 @@ async function waitForDocumentReady(page: import("@playwright/test").Page) {
 }
 
 // One representative case study per asset family — the studies share a layout,
-// so scanning every slug would mostly re-test the same markup. The two here
+// so scanning every slug would mostly re-test the same markup. The three here
 // differ in what they render: learning-platform-ui uses the standard scene set,
-// portfolio-design-system carries the hand-built SVG scenes with long alt text.
-const routes = ["/", "/work/learning-platform-ui", "/work/portfolio-design-system"];
+// portfolio-design-system carries the hand-built SVG scenes with long alt text,
+// and marketing-landing-page is the widest set (13 scenes) and the only one that
+// exercises the "More screens" gallery for scenes past the content blocks.
+const routes = [
+  "/",
+  "/work/learning-platform-ui",
+  "/work/portfolio-design-system",
+  "/work/marketing-landing-page",
+];
 
 // The interactive sections ("use client") only respond once React has hydrated.
 // Clicking before then races the handler attachment. The theme toggle's
