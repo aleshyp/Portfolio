@@ -104,6 +104,10 @@ type AssetSet = {
    * into the gallery's default 16:9 box. Lumin's screens are full-page captures
    * (up to ~1:3), so cropping them to 16:9 would hide most of the design; the
    * case study reads this and drops its fixed-ratio class for those sets.
+   *
+   * Ratio ONLY. This used to double as the horizontal-scroll switch by way of
+   * its inverse, which is what dragged Aperture's video and PNG scenes into a
+   * 720px scroller. Scrolling is now decided per scene by `sceneNeedsScroll`.
    */
   intrinsicRatio?: boolean;
 };
@@ -112,6 +116,10 @@ const assetSets: Record<string, AssetSet> = {
   "portfolio-design-system": {
     scenes: portfolioSystemScenes,
     kind: "portfolio-system",
+    // These scenes are responsive DOM, not fixed artboards: each one is as tall
+    // as its own content at the current width (taller on a phone, where rows
+    // stack). Pinning 16:9 would clip the stacked layout.
+    intrinsicRatio: true,
   },
   "brand-identity-system": { scenes: apertureScenes, kind: "aperture" },
   "marketing-landing-page": {
@@ -131,6 +139,33 @@ const assetSets: Record<string, AssetSet> = {
 
 export function getAssetSet(slug: string): AssetSet | null {
   return assetSets[slug] ?? null;
+}
+
+/**
+ * True when scene `index` of `slug` must scroll horizontally on a phone rather
+ * than be fitted to the column (see WideScene).
+ *
+ * Currently ALWAYS false, and deliberately kept as the single place that would
+ * answer otherwise. Two rounds of this got it wrong in opposite directions:
+ *
+ *   1. It was decided per asset SET, via `!intrinsicRatio` — which swept in all
+ *      of Aperture, including a logo-reveal video the reader then had to drag
+ *      sideways to see its own wordmark. Ratio and legibility are not the same
+ *      question.
+ *   2. The remaining real case was the design-system study, whose 1600x900 SVG
+ *      artboards rendered 17-22px labels at ~4.6px once fitted. Those are now
+ *      responsive DOM (see PortfolioSystemAsset) and reflow instead, so the
+ *      last reason to scroll anything went away.
+ *
+ * Keep this hook rather than deleting the concept: a future set of genuinely
+ * fixed-width deliverables (a real client artboard, a print piece) would need
+ * it, and it should be answered per SCENE here rather than re-derived from some
+ * adjacent flag at a call site.
+ */
+export function sceneNeedsScroll(slug: string, index: number): boolean {
+  const assetSet = getAssetSet(slug);
+  if (!assetSet?.scenes[index]) return false;
+  return false;
 }
 
 type RenderOptions = {

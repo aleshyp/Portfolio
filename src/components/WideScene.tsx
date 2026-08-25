@@ -3,10 +3,18 @@ import { cn } from "@/lib/utils";
 /**
  * Horizontal-scroll container for the wide case-study artboards on narrow screens.
  *
- * The scenes are 1600x900 SVG boards whose labels are sized for a desktop-width
- * render. Fitting one into a 390px phone viewport scales it to ~332px — 0.21x —
- * which drops 22px body labels to 4.6px and the smallest to 3.9px. That is not
- * "small", it is unreadable, so shrinking to fit is the wrong trade.
+ * ONLY for the hand-drawn artboards — the ones whose legibility actually depends
+ * on it. Callers decide via `sceneNeedsScroll`; do not wrap a scene in this
+ * because it happens to be wide. Exported screenshots and the logo-reveal videos
+ * carry their detail at a scale that survives being fitted, and forcing those
+ * into the scroller means the reader has to drag a video sideways to see half
+ * of it. That regression is what this note exists to prevent recurring.
+ *
+ * The artboards are 1600x900 SVG boards whose labels are sized for a
+ * desktop-width render. Fitting one into a 390px phone viewport scales it to
+ * ~332px — 0.21x — which drops 22px body labels to 4.6px and the smallest to
+ * 3.9px. That is not "small", it is unreadable, so shrinking to fit is the wrong
+ * trade *for these*.
  *
  * Instead the board keeps a legible MIN width (720px, ~0.45x, which puts those
  * same labels near 10px) and the container scrolls horizontally beneath it. From

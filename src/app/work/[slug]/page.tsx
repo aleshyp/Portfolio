@@ -7,7 +7,11 @@ import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
 import { WideScene } from "@/components/WideScene";
-import { getAssetSet, renderProjectScene } from "@/components/projectAssets";
+import {
+  getAssetSet,
+  renderProjectScene,
+  sceneNeedsScroll,
+} from "@/components/projectAssets";
 import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
 import { Card } from "@/components/Card";
@@ -72,16 +76,21 @@ export default async function CaseStudy({
   // own dimensions instead — pinning 16:9 there would crop the page away.
   const galleryRatio = assetSet?.intrinsicRatio ? "" : "aspect-[16/9]";
 
-  // The 16:9 boards are drawn at 1600x900 with desktop-sized labels, so fitting
-  // one to a phone viewport renders its body text at ~4.6px. Those sets scroll
-  // at a legible width on small screens instead (see WideScene). The
-  // intrinsicRatio sets are full-page captures that are already tall and legible
-  // when fitted, so they keep fitting.
-  const scrollWide = Boolean(assetSet) && !assetSet?.intrinsicRatio;
+  // Only the hand-drawn artboards need the horizontal scroller: they're 1600x900
+  // boards with desktop-sized labels, so fitting one to a phone renders its body
+  // text at ~4.6px. Photographic scenes — exported screens, and the logo-reveal
+  // videos — stay legible when fitted, so they just fit. `sceneNeedsScroll`
+  // answers this per SCENE; asking it per set is what previously forced Aperture's
+  // hero video out to 720px on a 390px phone.
+  //
   // Returns null unchanged so `?? <Placeholder>` fallbacks still fire — a
   // WideScene wrapped around null is a truthy element and would swallow them.
-  const wrapScene = (node: React.ReactNode) =>
-    node && scrollWide ? <WideScene>{node}</WideScene> : node;
+  const wrapScene = (node: React.ReactNode, index: number) =>
+    node && sceneNeedsScroll(project.slug, index) ? (
+      <WideScene>{node}</WideScene>
+    ) : (
+      node
+    );
 
   // Scene 0 is the cover and each content block claims the next one, so a set
   // with more scenes than `blocks.length + 1` has leftovers. They render in the
@@ -143,7 +152,15 @@ export default async function CaseStudy({
       {/* Cover */}
       <Container>
         <AnimatedReveal delay={0.05}>
-          {wrapScene(renderScene(0, "mt-10 aspect-[16/9] w-full rounded-4xl")) ?? (
+          {wrapScene(
+            // The cover uses the same ratio rule as the gallery: the video-hero
+            // sets are genuinely 16:9 and get pinned, while a set that sizes
+            // itself (the responsive design-system scenes, the full-page
+            // captures) is left to its own height. Hardcoding 16:9 here cropped
+            // the design-system cover to a 187px-tall letterbox on a phone.
+            renderScene(0, cn("mt-10 w-full rounded-4xl", galleryRatio)),
+            0,
+          ) ?? (
             <Placeholder
               label="Hero visual"
               seed={project.accent}
@@ -216,6 +233,7 @@ export default async function CaseStudy({
                       i + 1,
                       cn("mt-10 w-full rounded-4xl", galleryRatio),
                     ),
+                    i + 1,
                   )
                 : i < project.gallery && (
                     <Placeholder
@@ -247,6 +265,7 @@ export default async function CaseStudy({
                       sceneIndex,
                       cn("w-full rounded-4xl", galleryRatio),
                     ),
+                    sceneIndex,
                   )}
                 </AnimatedReveal>
               ))}
