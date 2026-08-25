@@ -38,32 +38,57 @@ const aperturePng: Record<string, string> = {
 /**
  * Card thumbnails for the projects whose hero IS a logo animation.
  *
- * These are the animations' own poster frames — the still the video rests on —
- * so a card shows the same resting logo the case-study hero settles into, with
- * no playback in a seven-card grid. Kept in sync with the POSTER constants in
- * ApertureHero/LuminHero: same file, one per project.
+ * NOT the animation poster frames, which is what these used to be. A poster is
+ * the still the video RESTS on — for all three projects that's the end-card: a
+ * small logo centered in a large empty field. Technically pristine (they're
+ * flat vector on flat background, and next/image serves them at full retina
+ * resolution), but as a thumbnail it's ~15% mark and ~85% background, so three
+ * of four cards in the Work grid read as blank next to the design-system card's
+ * dense token table. That contrast is what reads as "low quality" — it's a
+ * content problem, not a compression one.
  *
- * Only these three projects have an animation. Every other project's thumbnail
- * stays its generated SVG scene, which is the only imagery it has.
+ * So each card points at a representative SCENE from its own case study: real
+ * designed work, at the same size, showing craft rather than a logo. The
+ * case-study hero still plays its animation; only the grid thumbnail changed.
+ *
+ * Chosen for what survives at ~526px wide in a 2-up grid:
+ *   - Aperture     type specimen — dark, high-contrast, unmistakably brand work
+ *   - Northwind    the homepage hero it already uses as scene 1
+ *   - Lumin        course detail — the violet hero block gives it its own
+ *                  colour identity, distinct from Northwind's card grid
+ *
+ * `width`/`height` are the file's INTRINSIC size, so next/image reserves the
+ * right box and picks a sane candidate.
+ *
+ * `position` sets the object-position for the 16:9 crop. It matters for the
+ * full-page captures: object-cover centers by default, so Lumin's 1800x2649
+ * course page would show its MIDDLE — a washed-out curriculum checklist —
+ * instead of the violet hero at the top. Aperture's 4:3 specimen is close
+ * enough to 16:9 that centering is right; top-cropping it would cut off the
+ * wordmark it's meant to show.
  */
-const heroStill: Record<string, { src: string; width: number; height: number }> =
-  {
-    "brand-identity-system": {
-      src: "/work/aperture/logo-anim-poster.jpg",
-      width: 1600,
-      height: 900,
-    },
-    "learning-platform-ui": {
-      src: "/work/lumin/lumin-anim-poster.webp",
-      width: 1600,
-      height: 900,
-    },
-    "marketing-landing-page": {
-      src: "/work/northwind/northwind-anim-poster.jpg",
-      width: 1600,
-      height: 900,
-    },
-  };
+const cardScene: Record<
+  string,
+  { src: string; width: number; height: number; position?: string }
+> = {
+  "brand-identity-system": {
+    src: "/work/aperture/04-type-specimen@2x.png",
+    width: 3200,
+    height: 2400,
+  },
+  "learning-platform-ui": {
+    src: "/work/lumin/detail.webp",
+    width: 1800,
+    height: 2649,
+    // Full-page capture: pin to the top so the card shows the course hero.
+    position: "object-top",
+  },
+  "marketing-landing-page": {
+    src: "/work/northwind/01-hero.webp",
+    width: 1800,
+    height: 1013,
+  },
+};
 
 type AssetKind =
   | "aperture"
@@ -145,30 +170,29 @@ export function renderProjectScene(
   // when alt is falsy, so nothing reaches the accessibility tree.
   const alt = decorative ? "" : item.alt;
 
-  // Hero slot, playback suppressed (the Work grid) — show the animation's still
-  // rather than a substitute. Aperture's SVG logomark is a DIFFERENT mark from
-  // the one the animation rests on, and Lumin's scene 0 is a product screenshot
-  // cropped to 16:9, so both cards previously showed something the case-study
-  // hero never settles into. The poster is that resting frame exactly.
-  const still = index === 0 && !allowVideoHero ? heroStill[slug] : undefined;
+  // Hero slot, playback suppressed (the Work grid) — show a representative
+  // scene from the study rather than the animation's end-card. See cardScene.
+  const still = index === 0 && !allowVideoHero ? cardScene[slug] : undefined;
   if (still) {
     return (
-      /* next/image, not a raw <img>: these posters are straight animation-frame
-         exports whose file sizes are whatever the export tool produced —
-         Northwind's is 608KB at 1600x900, ~16x its identically-sized siblings.
-         A raw <img> ships that byte-for-byte at every viewport; the optimizer
-         re-encodes to WebP/AVIF and serves a width-appropriate candidate, which
-         is what the rest of the site already does. Keeps an unoptimized export
-         from becoming a homepage performance regression again. */
+      /* next/image, not a raw <img>: these are full-size case-study exports
+         (up to 3200px wide) being shown in a ~526px card. A raw <img> ships the
+         whole file at every viewport; the optimizer re-encodes to WebP/AVIF and
+         serves a width-appropriate candidate, which is what the rest of the site
+         already does. */
       <Image
         src={still.src}
         alt={alt}
         width={still.width}
         height={still.height}
         /* Cards sit in a 2-up grid (md:grid-cols-2) inside the max-w-6xl
-           container, so a card tops out near half of 1152px minus the gap. */
-        sizes="(min-width: 768px) 560px, 100vw"
-        className={cn("block object-cover", className)}
+           container, so a card tops out near half of 1152px minus the gap —
+           526px in practice. Declaring 526 (not the old rounded-up 560) lets a
+           DPR-2 browser land exactly on the 1052 candidate added to
+           `images.imageSizes`, so the image is never resampled a second time to
+           fit. See the note in next.config.mjs. */
+        sizes="(min-width: 768px) 526px, 100vw"
+        className={cn("block object-cover", still.position, className)}
       />
     );
   }
@@ -178,7 +202,7 @@ export function renderProjectScene(
     // logo-reveal animation; scenes 1–4 are exported PNG frames.
     if (index === 0) {
       if (!allowVideoHero) {
-        // Reached only if `heroStill` loses its Aperture entry — the still above
+        // Reached only if `cardScene` loses its Aperture entry — the scene above
         // is the real no-playback path. The SVG logomark is a related but
         // distinct mark, so it's a fallback, not an equivalent.
         return (
