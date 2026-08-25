@@ -61,6 +61,14 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    // Next 16 only serves qualities on this allow-list (default `[75]`) and
+    // 400s on anything else at REQUEST time — a build passes either way, so
+    // this must stay in sync with any `quality` prop. 90 is here for the About
+    // portrait: its source is a near-lossless export, and the default q75
+    // re-encode visibly softens facial detail at the size it renders.
+    qualities: [75, 90],
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

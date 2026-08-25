@@ -34,9 +34,17 @@ export function About() {
               <Image
                 src="/personal-branding/portrait.jpg"
                 alt={`${site.name}, smiling in a parka on a boat with a snow-capped coastline behind`}
-                width={880}
-                height={1100}
-                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 24rem, 100vw"
+                width={1760}
+                height={2200}
+                /* The portrait column tops out at ~512px (max-w-6xl container,
+                   minus px-8, halved, minus half the gap-16). Declaring that
+                   real cap instead of a loose 40vw stops the browser from
+                   picking an undersized srcset candidate on wide viewports. */
+                sizes="(min-width: 1024px) 512px, (min-width: 640px) 24rem, 100vw"
+                /* The source is a lightly-compressed (~q90) JPEG; the default
+                   q75 re-encode visibly softens skin and hair detail on a photo
+                   this size. 90 keeps it crisp — it's one hero image. */
+                quality={90}
                 className="aspect-[4/5] w-full object-cover"
               />
             </div>
