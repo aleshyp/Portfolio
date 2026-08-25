@@ -2,10 +2,9 @@
  * The canonical origin for the site. All metadata (canonical URLs, OG/Twitter,
  * sitemap, robots) derives from this. Override per-environment with
  * NEXT_PUBLIC_SITE_URL; falls back to the production domain.
- * TODO: confirm this is the live domain before launch.
  */
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ianriley.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ianriley.co";
 
 /**
  * Central place for personal details and social links.
@@ -18,8 +17,7 @@ export const site = {
   tagline:
     "I design clean, human-centered work across brand, product, and the web.",
   location: "Kansas City, United States",
-  email: "hello@ianriley.com",
-  // TODO: update once the domain & mailbox are live
+  email: "hello@ianriley.co",
   available: true,
   // TODO: replace /resume.pdf in /public with your real résumé file
   resumeUrl: "/resume.pdf",

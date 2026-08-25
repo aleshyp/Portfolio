@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
 import { ApertureHero } from "@/components/ApertureHero";
 import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
@@ -151,12 +153,21 @@ export function renderProjectScene(
   const still = index === 0 && !allowVideoHero ? heroStill[slug] : undefined;
   if (still) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      /* next/image, not a raw <img>: these posters are straight animation-frame
+         exports whose file sizes are whatever the export tool produced —
+         Northwind's is 608KB at 1600x900, ~16x its identically-sized siblings.
+         A raw <img> ships that byte-for-byte at every viewport; the optimizer
+         re-encodes to WebP/AVIF and serves a width-appropriate candidate, which
+         is what the rest of the site already does. Keeps an unoptimized export
+         from becoming a homepage performance regression again. */
+      <Image
         src={still.src}
         alt={alt}
         width={still.width}
         height={still.height}
+        /* Cards sit in a 2-up grid (md:grid-cols-2) inside the max-w-6xl
+           container, so a card tops out near half of 1152px minus the gap. */
+        sizes="(min-width: 768px) 560px, 100vw"
         className={cn("block object-cover", className)}
       />
     );

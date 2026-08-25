@@ -6,6 +6,7 @@ import { projects, getProject, getNextProject } from "@/data/projects";
 import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
 import { Placeholder } from "@/components/Placeholder";
+import { WideScene } from "@/components/WideScene";
 import { getAssetSet, renderProjectScene } from "@/components/projectAssets";
 import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
@@ -70,6 +71,17 @@ export default async function CaseStudy({
   // own dimensions instead — pinning 16:9 there would crop the page away.
   const galleryRatio = assetSet?.intrinsicRatio ? "" : "aspect-[16/9]";
 
+  // The 16:9 boards are drawn at 1600x900 with desktop-sized labels, so fitting
+  // one to a phone viewport renders its body text at ~4.6px. Those sets scroll
+  // at a legible width on small screens instead (see WideScene). The
+  // intrinsicRatio sets are full-page captures that are already tall and legible
+  // when fitted, so they keep fitting.
+  const scrollWide = Boolean(assetSet) && !assetSet?.intrinsicRatio;
+  // Returns null unchanged so `?? <Placeholder>` fallbacks still fire — a
+  // WideScene wrapped around null is a truthy element and would swallow them.
+  const wrapScene = (node: React.ReactNode) =>
+    node && scrollWide ? <WideScene>{node}</WideScene> : node;
+
   // Scene 0 is the cover and each content block claims the next one, so a set
   // with more scenes than `blocks.length + 1` has leftovers. They render in the
   // "More screens" gallery below rather than being silently dropped.
@@ -130,7 +142,7 @@ export default async function CaseStudy({
       {/* Cover */}
       <Container>
         <AnimatedReveal delay={0.05}>
-          {renderScene(0, "mt-10 aspect-[16/9] w-full rounded-4xl") ?? (
+          {wrapScene(renderScene(0, "mt-10 aspect-[16/9] w-full rounded-4xl")) ?? (
             <Placeholder
               label="Hero visual"
               seed={project.accent}
@@ -198,9 +210,11 @@ export default async function CaseStudy({
 
               {/* Insert a gallery image between blocks */}
               {assetSet
-                ? renderScene(
-                    i + 1,
-                    cn("mt-10 w-full rounded-4xl", galleryRatio),
+                ? wrapScene(
+                    renderScene(
+                      i + 1,
+                      cn("mt-10 w-full rounded-4xl", galleryRatio),
+                    ),
                   )
                 : i < project.gallery && (
                     <Placeholder
@@ -227,9 +241,11 @@ export default async function CaseStudy({
             <div className="mt-10 space-y-10">
               {extraScenes.map((sceneIndex) => (
                 <AnimatedReveal key={sceneIndex}>
-                  {renderScene(
-                    sceneIndex,
-                    cn("w-full rounded-4xl", galleryRatio),
+                  {wrapScene(
+                    renderScene(
+                      sceneIndex,
+                      cn("w-full rounded-4xl", galleryRatio),
+                    ),
                   )}
                 </AnimatedReveal>
               ))}

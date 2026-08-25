@@ -44,7 +44,15 @@ export function Pill(props: PillAsSpan | PillAsLink) {
   const interactive = "href" in props && Boolean(props.href);
 
   const classes = cn(
-    "inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium",
+    // Horizontal padding steps down below `sm`. The Contact panel's three
+    // social pills have to share one line: at 360px the row gets 252px of
+    // content width, and three px-4 pills need ~290px, so the last one wrapped.
+    // px-2.5 there (with the row's tighter gap) brings the three to ~250px,
+    // which holds one line at 360px and up. At 320px the row only offers 212px,
+    // so it wraps by design — closing that gap would mean shrinking the text
+    // below 14px. Only the gutter shrinks — py-2 and text-sm still set the
+    // height, so the touch target is unchanged.
+    "inline-flex items-center rounded-full border px-2.5 py-2 text-sm font-medium sm:px-4",
     tones[tone],
     interactive && interactiveTones[tone],
     className,

@@ -48,11 +48,19 @@ export function Footer() {
 
           <div className="flex flex-col items-start justify-between gap-4 border-t border-border-subtle pt-8 text-sm text-fg-faint sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
+              {/* loading="eager" on both: next/image lazy-loads by default, but
+                  these are a 32px theme-swapped pair where exactly one is
+                  display:none at any time. A hidden lazy image never enters the
+                  viewport, so it can still be unloaded (naturalWidth 0) after
+                  networkidle — which made the "no broken images" check depend on
+                  the page's exact height. They're ~1KB inline SVGs; there is
+                  nothing to defer. */}
               <Image
                 src="/personal-branding/brutalist-grid-emerald.svg"
                 alt=""
                 width={32}
                 height={32}
+                loading="eager"
                 className="h-8 w-8 dark:hidden"
               />
               <Image
@@ -60,6 +68,7 @@ export function Footer() {
                 alt=""
                 width={32}
                 height={32}
+                loading="eager"
                 className="hidden h-8 w-8 dark:block"
               />
               <p>

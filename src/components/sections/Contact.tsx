@@ -148,9 +148,21 @@ export function Contact() {
               antialiased in two passes that disagree, which reads as a fuzzy
               edge. Only the blur glow below needs containing, and its radius is
               inset by the border width to nest inside the outer curve. */}
-          <div className="relative grid gap-10 overflow-hidden rounded-4xl-inner p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
-            {/* soft glow */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
+          <div className="relative grid gap-10 overflow-hidden rounded-4xl-inner p-6 sm:p-12 lg:grid-cols-2 lg:gap-16">
+            {/* Soft glow.
+                Wrapped in its own clipping layer rather than sitting directly
+                under the panel's overflow-hidden: a blur() filter promotes the
+                element to its own compositing layer, and that layer is NOT
+                subject to an ancestor's rounded clip — so the glow's square
+                layer bounds punched out past the top-right corner radius. The
+                wrapper is an unfiltered, un-promoted box carrying the same
+                inner radius, which clips the blurred child correctly. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-4xl-inner"
+            >
+              <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
+            </div>
 
             {/* Left: invitation.
                 min-w-0: grid items default to min-width:auto, so the long
@@ -189,7 +201,9 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-2">
+              {/* gap-1.5 below `sm`: the three socials need every pixel to stay on
+                  one line at 360px — see the padding note in Pill. */}
+              <div className="mt-8 flex flex-wrap gap-1.5 sm:gap-2">
                 {socials.map((s) => (
                   <Pill key={s.label} href={s.href} external tone="onDark">
                     {s.label}
