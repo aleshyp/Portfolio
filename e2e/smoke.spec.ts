@@ -107,6 +107,59 @@ test.describe("case study routing", () => {
   });
 });
 
+// The case-study hero (ApertureHero/LuminHero/NorthwindHero) autoplays its logo
+// reveal once, then exposes the native controls so the reveal can be replayed.
+// Controls staying hidden during the first play is the point — see
+// `usePlayOnceInView`.
+test.describe("case study hero video", () => {
+  test("reveals controls once the reveal has played through", async ({
+    page,
+  }) => {
+    await page.goto("/work/marketing-landing-page");
+    const video = page.locator("video").first();
+
+    // Scroll it into view and let the settle timer start playback.
+    await video.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => video.evaluate((v: HTMLVideoElement) => v.paused), {
+        timeout: 10_000,
+      })
+      .toBe(false);
+
+    // Mid-play the hero stays uncluttered.
+    expect(
+      await video.evaluate((v: HTMLVideoElement) => v.controls),
+    ).toBe(false);
+
+    // Once it ends, controls appear so the user can rewind and rewatch.
+    await expect
+      .poll(() => video.evaluate((v: HTMLVideoElement) => v.controls), {
+        timeout: 15_000,
+      })
+      .toBe(true);
+    expect(await video.evaluate((v: HTMLVideoElement) => v.ended)).toBe(true);
+  });
+
+  test("keeps the controls visible through a replay", async ({ page }) => {
+    await page.goto("/work/marketing-landing-page");
+    const video = page.locator("video").first();
+    await video.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => video.evaluate((v: HTMLVideoElement) => v.controls), {
+        timeout: 20_000,
+      })
+      .toBe(true);
+
+    await video.evaluate(async (v: HTMLVideoElement) => {
+      v.currentTime = 0;
+      await v.play();
+    });
+    expect(await video.evaluate((v: HTMLVideoElement) => v.controls)).toBe(
+      true,
+    );
+  });
+});
+
 // Mobile-only: the hamburger menu is hidden on desktop (lg:hidden).
 test.describe("mobile navigation", () => {
   test("opens and closes the hamburger menu", async ({ page }, testInfo) => {

@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
  * Northwind case-study hero animation.
  *
  * Same contract as ApertureHero/LuminHero: plays the brand logo-reveal (a 16:9
- * WebM) ONCE when the user settles on it, then rests on the final cyan lockup.
+ * WebM) ONCE when the user settles on it, then rests on the final cyan lockup with
+ * the native controls revealed for a replay.
  * prefers-reduced-motion users get the static poster — which IS the animation's
  * end frame — with no playback, matching the rest of the site's motion language.
  *
@@ -29,7 +30,9 @@ export function NorthwindHero({ className, alt }: NorthwindHeroProps) {
   const shouldReduceMotion = useStableReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  usePlayOnceInView(videoRef, { enabled: !shouldReduceMotion });
+  const { hasEnded, onEnded } = usePlayOnceInView(videoRef, {
+    enabled: !shouldReduceMotion,
+  });
 
   if (shouldReduceMotion) {
     return (
@@ -58,7 +61,11 @@ export function NorthwindHero({ className, alt }: NorthwindHeroProps) {
       // bandwidth and measurably delays the cover's paint.
       preload="none"
       aria-label={alt}
-      // No `loop`, no `controls`: plays through once and rests on the final frame.
+      // No `loop`: plays through once and rests on the final frame. `controls`
+      // appears only after it has ended, so the reveal is uncluttered on first
+      // watch but rewindable afterwards.
+      controls={hasEnded}
+      onEnded={onEnded}
     >
       <source src={SRC} type="video/webm" />
     </video>
