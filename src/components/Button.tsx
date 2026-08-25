@@ -39,6 +39,13 @@ type CommonProps = {
 type ButtonAsLink = CommonProps & {
   href: string;
   external?: boolean;
+  /**
+   * Renders a plain <a download> for same-origin files (the résumé PDF), so the
+   * browser saves the file instead of navigating to it. `external` opens a new
+   * tab and would leave the visitor in a PDF viewer they have to back out of —
+   * wrong for a button that says "Download". Ignored when `external` is set.
+   */
+  download?: boolean;
 };
 
 type ButtonAsButton = CommonProps &
@@ -83,6 +90,14 @@ export function Button(props: ButtonAsLink | ButtonAsButton) {
   const classes = buttonClasses({ variant, size, fullWidth, className });
 
   if ("href" in props && props.href) {
+    // download wins over Link: next/link would client-navigate to the asset.
+    if (props.download && !props.external) {
+      return (
+        <a href={props.href} download className={classes}>
+          {children}
+        </a>
+      );
+    }
     if (props.external) {
       return (
         <a

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { site } from "@/data/site";
@@ -10,11 +11,25 @@ import { Container } from "./Container";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button, buttonClasses } from "./Button";
 import { IconButton } from "./IconButton";
+import { useActiveSection } from "@/lib/useActiveSection";
 import { cn } from "@/lib/utils";
+
+// "/#work" -> "work". The nav hrefs are absolute so they work from a case
+// study, but the observer needs the bare element ids.
+const SECTION_IDS = site.nav.map((item) => item.href.replace("/#", ""));
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  // The tracked sections only exist on the home page. Passing an empty list
+  // elsewhere keeps the hook from observing ids that will never resolve, and
+  // leaves every nav link unhighlighted on a case study — which is correct:
+  // none of them is where the reader currently is.
+  const onHome = pathname === "/";
+  const trackedIds = useMemo(() => (onHome ? SECTION_IDS : []), [onHome]);
+  const activeSection = useActiveSection(trackedIds);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -30,6 +45,19 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  // Close the menu when the viewport crosses into the desktop nav (md, 768px).
+  // Without this, resizing or rotating while it's open hides the toggle button
+  // but leaves `open` true — which keeps body scroll locked with no way to
+  // undo it. Matches the md: breakpoint the markup below uses.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   return (
     <header
@@ -69,17 +97,38 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <ul className="hidden items-center gap-1 lg:flex">
-            {site.nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="relative rounded-full px-4 py-2 text-sm font-medium text-fg-muted transition-colors duration-200 hover:text-brand-700 dark:text-fg-faint dark:hover:text-brand-300"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="hidden items-center gap-1 md:flex">
+            {site.nav.map((item) => {
+              const isActive =
+                activeSection === item.href.replace("/#", "");
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    // aria-current tells assistive tech which section the reader
+                    // is in — the same information the color change carries
+                    // visually, which on its own would not be conveyed at all.
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200",
+                      isActive
+                        ? "text-brand-700 dark:text-brand-300"
+                        : "text-fg-muted hover:text-brand-700 dark:text-fg-faint dark:hover:text-brand-300",
+                    )}
+                  >
+                    {item.label}
+                    {/* Underline dot. Color alone can't be the only signal
+                        (WCAG 1.4.1), so the active link also carries a mark. */}
+                    {isActive && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-brand-600 dark:bg-brand-400"
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="ml-1">
               <ThemeToggle />
             </li>
@@ -91,7 +140,7 @@ export function Navbar() {
           </ul>
 
           {/* Mobile controls */}
-          <div className="flex items-center gap-1 lg:hidden">
+          <div className="flex items-center gap-1 md:hidden">
             <ThemeToggle />
             <IconButton
               label={open ? "Close menu" : "Open menu"}
@@ -112,21 +161,31 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="border-b border-border-subtle bg-white shadow-soft backdrop-blur-xl lg:hidden dark:bg-ink"
+            className="border-b border-border-subtle bg-white shadow-soft backdrop-blur-xl md:hidden dark:bg-ink"
           >
             <Container>
               <ul className="flex flex-col gap-1 py-4">
-                {site.nav.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="block rounded-xl px-4 py-3 text-base font-medium text-fg-soft transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-fg-faint dark:hover:bg-white/5 dark:hover:text-brand-300"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+                {site.nav.map((item) => {
+                  const isActive =
+                    activeSection === item.href.replace("/#", "");
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        aria-current={isActive ? "true" : undefined}
+                        className={cn(
+                          "block rounded-xl px-4 py-3 text-base font-medium transition-colors",
+                          isActive
+                            ? "bg-brand-50 text-brand-700 dark:bg-white/5 dark:text-brand-300"
+                            : "text-fg-soft hover:bg-brand-50 hover:text-brand-700 dark:text-fg-faint dark:hover:bg-white/5 dark:hover:text-brand-300",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
                 <li className="pt-2">
                   <Link
                     href="/#contact"

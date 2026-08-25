@@ -11,6 +11,7 @@ import { getAssetSet, renderProjectScene } from "@/components/projectAssets";
 import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
 import { Card } from "@/components/Card";
+import { CaseStudyCta } from "@/components/CaseStudyCta";
 import { buttonClasses } from "@/components/Button";
 import { cn } from "@/lib/utils";
 
@@ -253,6 +254,10 @@ export default async function CaseStudy({
           </div>
         </Container>
       )}
+
+      {/* Contact CTA — the reader who got this far is the most engaged one on
+          the site, so they get a way to act before the next-project loop. */}
+      <CaseStudyCta />
 
       {/* Next project */}
       <Container>

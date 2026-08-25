@@ -19,7 +19,6 @@ export const site = {
   location: "Kansas City, United States",
   email: "hello@ianriley.co",
   available: true,
-  // TODO: replace /resume.pdf in /public with your real résumé file
   resumeUrl: "/resume.pdf",
   socials: {
     dribbble: "https://dribbble.com/aleshyp",
@@ -77,14 +76,25 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "Graphic Designer",
-    company: "Buzzkill & Animosity Esports",
-    period: "1 year",
+    company: "Buzzkill Esports",
+    period: "6 months",
     location: "Remote",
     summary:
-      "Two competitive rosters, roughly six months each. I ran the day-to-day graphics for both: matchday announcements, player signings, and results, on the turnaround a live season demands.",
+      "Social graphics and brand assets on a matchday schedule: announcements, results, and player content, on the turnaround a live season demands.",
     highlights: [
-      "Produced matchday, signing, and results graphics on a weekly cadence.",
-      "Kept each org's look consistent while working within its existing brand.",
+      "Made matchday graphics, roster announcements, and results posts.",
+      "Kept the org's look consistent while working within its existing brand.",
+    ],
+  },
+  {
+    role: "Graphic Designer",
+    company: "Animosity Esports",
+    period: "6 months",
+    location: "Remote",
+    summary:
+      "Social and brand design for the org, working to a weekly content calendar.",
+    highlights: [
+      "Made social designs and matchday graphics on a weekly turnaround.",
     ],
   },
   {

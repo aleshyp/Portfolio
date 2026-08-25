@@ -22,7 +22,7 @@ export function Experience() {
           </div>
           <Button
             href={site.resumeUrl}
-            external
+            download
             variant="outline"
             size="md"
             className="shrink-0 whitespace-nowrap"
