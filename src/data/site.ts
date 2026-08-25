@@ -36,7 +36,6 @@ export const site = {
 
 /**
  * Résumé / work history.
- * NOTE: add your current company name where marked TODO below.
  */
 export type ExperienceItem = {
   role: string;
