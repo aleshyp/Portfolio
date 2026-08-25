@@ -69,20 +69,20 @@ export function Hero() {
 
           <motion.h1
             variants={heading}
-            className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-fg sm:text-6xl"
+            className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-balance text-fg sm:text-6xl"
           >
             Hi, I&apos;m {site.firstName}. I design{" "}
-            <span className="text-gradient">brands &amp; products</span>{" "}
-            and build them too.
+            <span className="text-gradient">brands &amp; products</span>, and
+            ship the code.
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
-            Designer in {site.location}. I do graphic design and UX/UI, and I
-            write the front-end code, so the thing you approve is the thing that
-            ships.
+            Designer and front-end developer in {site.location.split(",")[0]}. One person
+            from Figma to production, so the thing you approve is the thing
+            that ships.
           </motion.p>
 
           <motion.div

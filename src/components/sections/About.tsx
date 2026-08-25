@@ -8,8 +8,8 @@ import { site } from "@/data/site";
 
 const stats = [
   { value: "13+", label: "Years designing" },
-  { value: "6+", label: "Brands & orgs served" },
-  { value: "Design → code", label: "Start to finish" },
+  { value: "1", label: "Design system, owned end to end" },
+  { value: "2022", label: "Designing and shipping in code" },
 ];
 
 const focusAreas = [

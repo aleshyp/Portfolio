@@ -13,9 +13,9 @@ export const siteUrl =
 export const site = {
   name: "Ian Riley",
   firstName: "Ian",
-  role: "Multidisciplinary Designer",
+  role: "Designer & Front-End Developer",
   tagline:
-    "I design clean, human-centered work across brand, product, and the web.",
+    "I design brands and products, then write the front-end code that ships them.",
   location: "Kansas City, United States",
   email: "hello@ianriley.co",
   available: true,
@@ -52,7 +52,7 @@ export const experience: ExperienceItem[] = [
   {
     role: "Web Designer & Front-End Developer",
     company: "International Academy of Science",
-    period: "2022 — Present",
+    period: "2022 – Present",
     location: "United States",
     summary:
       "Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus, an online learning program, own and maintain the design system, then build those designs into shippable pages in code.",
@@ -77,26 +77,20 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "Graphic Designer",
-    company: "Buzzkill Esports",
-    period: "6 months",
+    company: "Buzzkill & Animosity Esports",
+    period: "1 year",
     location: "Remote",
     summary:
-      "Designed social media graphics and brand assets for an esports organization.",
-    highlights: ["Created social media designs and matchday graphics."],
-  },
-  {
-    role: "Graphic Designer",
-    company: "Animosity Esports",
-    period: "6 months",
-    location: "Remote",
-    summary:
-      "Designed social media graphics and brand assets for an esports organization.",
-    highlights: ["Created social media designs and matchday graphics."],
+      "Two competitive rosters, roughly six months each. I ran the day-to-day graphics for both: matchday announcements, player signings, and results, on the turnaround a live season demands.",
+    highlights: [
+      "Produced matchday, signing, and results graphics on a weekly cadence.",
+      "Kept each org's look consistent while working within its existing brand.",
+    ],
   },
   {
     role: "Freelance Designer",
     company: "Self-employed",
-    period: "2014 — 2022",
+    period: "2014 – 2022",
     location: "Remote",
     summary:
       "Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where the brand and design work began.",
@@ -118,7 +112,7 @@ export type EducationItem = {
 
 export const education: EducationItem[] = [
   {
-    credential: "Self-taught Designer — 13+ years",
+    credential: "Self-taught Designer – 13+ years",
     institution: "Graphic & UX/UI design",
     period: "Since 2012",
   },

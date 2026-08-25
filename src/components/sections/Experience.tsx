@@ -83,6 +83,11 @@ export function Experience() {
               Education &amp; certifications
             </h3>
           </div>
+          <p className="mt-4 max-w-2xl text-sm text-fg-muted">
+            Self-taught on the design side. The security track is deliberate:
+            I write the front-end, so knowing how forms, headers, and
+            dependencies actually get attacked is part of the job.
+          </p>
           <dl className="mt-6 grid gap-6 sm:grid-cols-2">
             {education.map((e) => (
               <div key={`${e.credential}-${e.period}`}>
