@@ -68,6 +68,26 @@ test.describe("contact form", () => {
   });
 
   test("shows loading state then confirmation on valid submit", async ({ page }) => {
+    // Stub the form backend — see the matching note in e2e/a11y.spec.ts. With
+    // NEXT_PUBLIC_WEB3FORMS_KEY set (as it is in .env.local) this form POSTs to
+    // api.web3forms.com for real and only confirms on { success: true }, so
+    // unstubbed this test rides a third-party request that routinely hangs —
+    // and delivers a live submission on every run.
+    //
+    // The delay is deliberate. This test asserts the loading state, and an
+    // instant stub resolves before the assertion can poll: the form unmounts
+    // and aria-busy is never observed ("element(s) not found"). 300ms is long
+    // enough to observe, far below the 5s assertion timeout, and still an
+    // honest stand-in for a real round trip.
+    await page.route("https://api.web3forms.com/submit", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ success: true }),
+      });
+    });
+
     await page.goto("/#contact");
     await page.getByLabel("Name").fill("Jane Doe");
     await page.getByLabel("Email").fill("jane@company.com");
@@ -80,8 +100,8 @@ test.describe("contact form", () => {
     await submit.click();
 
     // Loading state, asserted via aria-busy rather than the "Sending…" text.
-    // Both flip together, but without a configured Web3Forms key the demo path
-    // holds the state for only 900ms, so a loaded worker can miss a text match.
+    // Both flip together, but the state is brief — with the route stubbed the
+    // response is near-immediate — so a loaded worker can miss a text match.
     // aria-busy is also what assistive tech announces, making it the more
     // meaningful assertion.
     await expect(submit).toHaveAttribute("aria-busy", "true");
