@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
  */
 
 const SRC = "/work/northwind/northwind-animation.webm";
-const POSTER = "/work/northwind/northwind-anim-poster.jpg";
+const POSTER = "/work/northwind/northwind-anim-poster.webp";
 
 type NorthwindHeroProps = {
   className?: string;
