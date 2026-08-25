@@ -133,12 +133,37 @@ test("no a11y violations: contact form with errors shown", async ({ page }) => {
 test("keyboard: submit moves focus to the confirmation status", async ({
   page,
 }) => {
+  // Stub the form backend. When NEXT_PUBLIC_WEB3FORMS_KEY is set (it is, in
+  // .env.local), Contact.tsx POSTs to api.web3forms.com for real and only sets
+  // `submitted` once that responds with { success: true }. Left unstubbed this
+  // test depends on a third party over the network: the request routinely
+  // hangs with no response, role="status" never mounts, and the assertion
+  // below fails — the flake this test was known for. It also means every suite
+  // run delivered a live form submission.
+  //
+  // Fulfilling the route keeps the assertion on what this test is actually
+  // about (focus moves to the confirmation) and makes it hermetic.
+  await page.route("https://api.web3forms.com/submit", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ success: true }),
+    }),
+  );
+
   await page.goto("/#contact");
   await waitForHydration(page);
   await page.getByLabel("Name").fill("Jane Doe");
   await page.getByLabel("Email").fill("jane@company.com");
   await page.getByLabel(/project details/i).fill("Testing keyboard flow.");
-  await page.getByRole("button", { name: /send message/i }).press("Enter");
+
+  // Locate the submit by its stable attribute, NOT by accessible name: the
+  // label flips from "Send message" to "Sending…" on submit, and Playwright
+  // re-resolves a locator on every assertion, so a name-based handle stops
+  // matching the moment the state it is meant to observe begins. Same reason
+  // the equivalent smoke test uses this selector.
+  await page.locator('form button[type="submit"]').press("Enter");
+
   const confirmation = page.getByRole("status");
   await expect(confirmation).toBeVisible();
   await expect(confirmation).toBeFocused();
