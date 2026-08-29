@@ -13,6 +13,7 @@ npm run dev      # start the dev server at http://localhost:3000
 npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # eslint
+npm run test:unit # Node test runner — pure logic (src/lib/ledger), no browser
 npm run test:e2e # Playwright suite (e2e/) — boots a dev server if none is up
 npm run test:lh  # Lighthouse budget gate (needs a production build served first)
 ```
@@ -87,6 +88,7 @@ src/
     layout.tsx            # fonts, metadata, Navbar + Footer shell
     page.tsx              # home page (assembles sections)
     work/[slug]/page.tsx  # case-study detail template
+    ledger-demo/page.tsx  # interactive demo for the Ledger case study
     not-found.tsx         # 404 page
     opengraph-image.tsx   # generated OG image (also per-study)
     robots.ts             # robots.txt
@@ -101,6 +103,7 @@ src/
     ProjectCard.tsx, CaseStudyCta.tsx, WideScene.tsx
     *Asset.tsx, *Hero.tsx  # per-study hand-built SVG scenes
     projectAssets.tsx     # maps a study slug to its scene set
+    ledger/               # the Ledger demo UI (client components)
     sections/             # Hero, About, Projects, Experience, Skills, Contact
   data/
     site.ts               # personal details, siteUrl, experience, skills
@@ -110,6 +113,7 @@ src/
     useActiveSection.ts   # nav scroll-spy
     usePlayOnceInView.ts  # one-shot scene playback
     useStableReducedMotion.ts
+    ledger/               # split engine + settlement algorithm, with *.test.ts
 e2e/                      # Playwright specs (smoke, a11y, seo, responsive x2)
 scripts/                  # lh-gate.mjs + issue/pr/land git helpers
 ```
