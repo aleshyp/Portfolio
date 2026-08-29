@@ -83,13 +83,13 @@ export default function LedgerDemoPage() {
                 then both roll back when the request fails.
               </li>
               <li>
-                <span className="font-medium text-fg">Empty the group.</span> The
-                zero state is a designed screen, not a blank list.
+                <span className="font-medium text-fg">Empty the group.</span> Even
+                with nothing in it there&apos;s a screen there, not a blank list.
               </li>
               <li>
                 <span className="font-medium text-fg">Mark a payment paid.</span>{" "}
-                A transfer is recorded as an expense, so balances need no special
-                case for settling up.
+                A transfer is recorded as an expense, so settling up needs no
+                special case in the balance logic.
               </li>
             </ul>
           </div>

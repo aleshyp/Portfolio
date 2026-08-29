@@ -1,9 +1,7 @@
 export type ContentBlock = {
   heading: string;
   body: string;
-};
-
-export type Project = {
+}; export type Project = {
   slug: string;
   title: string;
   summary: string;
@@ -47,9 +45,7 @@ export type Project = {
    * which, not disclaim both.
    */
   resultsNote?: string;
-};
-
-/**
+}; /**
  * Case studies — the single source of truth for the Work grid and detail pages.
  *
  * The first study ("This Site") is REAL: it documents this codebase, and every
@@ -62,14 +58,14 @@ export type Project = {
  * which renders a visible badge — that label is the honest signal a reader needs,
  * so don't remove it without replacing the invented numbers with real ones.
  *
- * "Ledger" is a THIRD case and the reason `demoHref` exists. Its client is
+ * "Ledger" is a third case, and the reason `demoHref` exists. Its client is
  * invented (so it keeps `concept: true`), but the engineering is real and
  * running: the split engine, the settlement algorithm and their 65 unit tests
- * are in `src/lib/ledger/`, and the demo at /ledger-demo executes that exact
- * code. So its figures are split by kind — the countable ones (tests, payments,
- * states) are verifiable from the repo, while anything about adoption or users
- * would not be, and is therefore simply not claimed. Keep that line where it is:
- * the study's whole value is that a reader can check the parts it asserts.
+ * live in `src/lib/ledger/`, and the demo at /ledger-demo executes that same
+ * code. Its figures are therefore split by kind. The countable ones (tests,
+ * payments, states) are verifiable from the repo; anything about adoption or
+ * users wouldn't be, so it isn't claimed. Keep that line where it is — the
+ * study's value is that a reader can check the parts it asserts.
  *
  * The range is deliberate — brand, web, product UI, design systems, and motion.
  */
@@ -121,7 +117,7 @@ export const projects: Project[] = [
     slug: "expense-tracker-app",
     title: "Ledger: Splitting Money Without Losing Cents",
     summary:
-      "A group expense splitter built around the two problems that make it harder than it looks: money doesn't divide evenly, and a weekend away generates far more debts than anyone should have to settle. The split engine and the settlement algorithm are real, tested, and running in the browser.",
+      "A group expense splitter built around the two problems that make it harder than it looks: money doesn't divide evenly, and a weekend away generates far more debts than anyone wants to settle one by one. The split engine and the settlement algorithm are real, tested, and running in the browser.",
     blurb: "A shared expense tracker, with the money maths done properly.",
     tags: ["Product Design", "Full-Stack", "Data & State"],
     role: "Designer & Full-Stack Developer",
@@ -134,27 +130,27 @@ export const projects: Project[] = [
       { label: "Unit tests on the money logic", value: "65" },
     ],
     overview:
-      "Every expense-splitting app looks trivial until you divide £100 three ways. The naive version loses a penny, and the naive data model asks five people to make sixteen separate transfers to settle a weekend away. Ledger is a concept product, but the engine underneath it isn't: the arithmetic and the settlement algorithm are real code with real tests, and the demo runs that exact code in your browser. The client is invented; the maths you can check.",
+      "Every expense-splitting app looks trivial until you divide £100 three ways. The naive version loses a penny, and the naive data model asks five people to make sixteen separate transfers to settle a weekend away. Ledger is a concept product, but the engine underneath it isn't. The arithmetic and the settlement algorithm are real code with real tests, and the demo runs that exact code in your browser. The client is invented; the maths you can check.",
     blocks: [
       {
         heading: "£100 ÷ 3 is a design problem",
-        body: "It's £33.33 each, which is £99.99. A penny is missing and it has to go somewhere. Almost every version of this bug starts with storing money as a floating-point number, where 0.1 + 0.2 isn't 0.3 and the error compounds silently until a balance is off by a few pence with no explanation. So Ledger stores pence as integers everywhere and converts to pounds only at the point of display. The type system enforces it: amounts are a branded Pence type, so passing a raw 12.5 into an expense is a compile error rather than a rounding surprise three screens later. The split function then distributes the remainder explicitly — £100 across three becomes 3334, 3333, 3333 — and the invariant that shares sum back to the total exactly is asserted across ten thousand generated combinations. The UI surfaces this rather than hiding it: the form tells you before you submit that it doesn't divide evenly and who picks up the extra penny. That's the honest version. An app that quietly rounds is one someone eventually stops trusting.",
+        body: "It's £33.33 each, which is £99.99. A penny is missing and it has to go somewhere. Almost every version of this bug starts with storing money as a floating-point number, where 0.1 + 0.2 isn't 0.3 and the error compounds quietly until a balance is off by a few pence with no explanation. So Ledger stores pence as integers everywhere and converts to pounds only when it displays them. The type system enforces it: amounts are a branded Pence type, so passing a raw 12.5 into an expense is a compile error rather than a rounding surprise three screens later. The split function distributes the remainder explicitly, turning £100 across three into 3334, 3333, 3333, and a test asserts that shares sum back to the total across ten thousand generated combinations. The form shows all of this before you submit: it doesn't divide evenly, and here's who picks up the extra penny. An app that rounds quietly is one people eventually stop trusting.",
       },
       {
         heading: "Model the debt, not the transactions",
-        body: "The obvious data model records who owes whom per expense. Dinner gives you three arrows, the taxi gives you two more pointing partly backwards, and by Sunday five people have sixteen little debts between them, several of which cancel out. Handing someone that list is how a group chat dies. The fix is to throw the per-expense edges away. Only net position matters — once you know Ana is up £7.33 and Ben is down £155, it's irrelevant which meals caused it, because any set of transfers that zeroes everyone settles the group. Ledger nets every expense into one balance per person, then greedily matches the largest debtor against the largest creditor. Sixteen payments become four. Finding the true minimum is NP-hard, since you'd have to find every zero-summing subset of people, so the greedy pass isn't always optimal — and rather than claim otherwise, the app checks whether it hit the provable n−1 bound and says 'close to minimal, not provably it' when it can't. Claiming an optimum you haven't verified is a worse bug than being one transaction off.",
+        body: "The obvious data model records who owes whom per expense. Dinner gives you three arrows, the taxi adds two more pointing partly backwards, and by Sunday five people have sixteen small debts between them, several of which cancel out. Nobody is going to work through that list. The fix is to throw the per-expense edges away and keep only net position. Once you know Ana is up £7.33 and Ben is down £155, it doesn't matter which meals caused it: any set of transfers that zeroes everyone out settles the group. Ledger nets every expense into one balance per person, then matches the largest debtor against the largest creditor until nobody is owed anything. Sixteen payments become four. That greedy pass isn't always optimal. Finding the true minimum means finding every zero-summing subset of people, which is NP-hard, so the app checks whether it managed to hit the provable n−1 floor and says 'close to minimal, not provably it' when it can't. Claiming an optimum you haven't verified seemed worse than being one transaction off.",
       },
       {
         heading: "Every state is a designed state",
-        body: "The happy path is maybe a quarter of the work. An expense add in Ledger is optimistic: the row appears the moment you submit and the balances move with it, because waiting on a spinner for something that will almost certainly succeed makes an app feel slower than it is. But 'almost certainly' is the whole problem, so the failure path is designed too. The demo has a 'fail the next save' toggle precisely because a demo that only ever succeeds never shows the interesting half. Trip it and the row stays on screen, marked, with retry and discard — while the balances snap back to truth, because a failed expense is excluded from the derivation rather than deleted from the list. That falls out of one decision: balances are never stored. They're derived from the expense list on every render, so an optimistic row is reflected for free and a rollback un-reflects it with no second code path to keep in sync. The version of this app that caches balances and decrements them on delete is the version that slowly drifts away from its own data. Empty group, first expense, in-flight, failed, offline, settled — six states that aren't the happy path, and each one is a screen someone will actually see.",
+        body: "The happy path is maybe a quarter of the work. Adding an expense in Ledger is optimistic: the row appears the moment you submit and the balances move with it, because waiting on a spinner for something that will almost certainly succeed makes an app feel slower than it is. But 'almost certainly' is the whole problem, so the failure path got designed too. The demo has a 'fail the next save' toggle because a demo that only ever succeeds never shows the interesting half. Trip it and the row stays on screen, marked, with retry and discard, while the balances snap back to truth. All of that falls out of one decision: balances are never stored. They're derived from the expense list on every render, so an optimistic row is reflected for free and a rollback un-reflects it without a second code path to keep in sync. Cache the balances instead and you spend the rest of the project reconciling them. Empty group, first expense, in-flight, failed, offline, settled: six states that aren't the happy path, and each one is a screen someone will actually see.",
       },
       {
         heading: "Who can see what",
-        body: "This is the part I designed and deliberately did not ship, and it's worth being straight about why. Ledger's demo runs entirely in the browser, on a statically-rendered portfolio, so there's no server to authorize against and no database to protect — adding one would have meant a login wall in front of a case study and a live database in the deploy path of a site whose whole point is that it builds to files. What the code does carry is the shape of it: validation lives next to the model rather than in the form, so the same rules would run server-side unchanged. The design assumed row-level security in the database, not checks in the client — a policy that a member may read expenses only for groups they belong to, enforced where the data lives, because anything running in the browser is under the user's control. Client-side validation is UX; it tells you your amount is malformed before you wait on a round-trip. It is never the thing standing between one group's spending and another's.",
+        body: "This is the part I designed and deliberately didn't ship, so it's worth being straight about why. The demo runs entirely in the browser on a statically-rendered portfolio, so there's no server to authorize against and no database to protect. Adding one would have meant putting a login wall in front of a case study and a live database in the deploy path of a site whose whole point is that it builds to files. What the code does carry is the shape of it. Validation lives next to the model rather than in the form, so the same rules would run server-side unchanged. The design assumed row-level security in the database rather than checks in the client: a member may read expenses only for groups they belong to, enforced where the data lives, because anything running in the browser is under the user's control. Client-side validation is UX. It tells you your amount is malformed before you wait on a round-trip, and that's all it's for.",
       },
       {
         heading: "What I'd do differently",
-        body: "I designed multi-currency in early and it was the wrong call. It meant every amount carried a currency code, every sum had to check that two amounts matched before adding them, and the settlement algorithm — which is the actual interesting problem — got harder to reason about for a feature no one in the target case needs. A weekend away is one currency. I cut it, and the engine got smaller and more obviously correct. The version I'd build next handles it at the boundary instead: convert on entry at the day's rate, store one currency, and note the original on the expense for the person who wants to see it. The other thing I'd change is the remainder rule. Right now the spare penny always goes to the first person in the list, which is deterministic and easy to explain but means the same person absorbs it every time if the order is stable. Rotating it per expense is a two-line change and a fairer default; I left it deterministic because a demo that shuffles is harder to trust than one that's predictably slightly unfair, and being able to explain the rule mattered more here than optimising it.",
+        body: "I designed multi-currency in early and it was the wrong call. Every amount had to carry a currency code, every sum had to check that two amounts matched before adding them, and the settlement algorithm, which is the actually interesting problem, got harder to reason about for a feature nobody on a weekend away needs. I cut it and the engine got smaller and more obviously correct. If I picked it up again I'd handle it at the boundary: convert on entry at the day's rate, store one currency, and keep the original on the expense for anyone who wants to see it. The other thing I'd change is the remainder rule. Right now the spare penny always goes to the first person in the list, which is easy to explain but means the same person absorbs it every time if the order doesn't change. Rotating it per expense is a two-line change and a fairer default. I left it as it is because a demo that shuffles is harder to trust than one that's predictably a penny unfair, though I think that trade goes the other way in a real app.",
       },
     ],
     gallery: 3,
@@ -162,7 +158,7 @@ export const projects: Project[] = [
     concept: true,
     demoHref: "/ledger-demo",
     resultsNote:
-      "Concept project — Ledger isn't a real client and it has no users. These three numbers aren't about adoption, though: they're properties of the code, and all three are checkable. The tests are in src/lib/ledger, and the demo runs the same engine.",
+      "Concept project: Ledger isn't a real client and it has no users. These three numbers aren't about adoption, though. They're properties of the code, and all three are checkable — the tests are in src/lib/ledger, and the demo runs the same engine.",
   },
   {
     slug: "brand-identity-system",
@@ -284,13 +280,9 @@ export const projects: Project[] = [
     accent: 2,
     concept: true,
   },
-];
-
-export function getProject(slug: string): Project | undefined {
+]; export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
-}
-
-/** Returns the next project in the list (wraps around) for case-study footers. */
+} /** Returns the next project in the list (wraps around) for case-study footers. */
 export function getNextProject(slug: string): Project {
   const index = projects.findIndex((p) => p.slug === slug);
   return projects[(index + 1) % projects.length];
