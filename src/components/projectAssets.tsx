@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
 import { ApertureHero } from "@/components/ApertureHero";
 import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
+import { LedgerAsset, ledgerScenes } from "@/components/LedgerAsset";
 import { LuminAsset, luminScenes } from "@/components/LuminAsset";
 import { LuminHero } from "@/components/LuminHero";
 import { NorthwindHero } from "@/components/NorthwindHero";
@@ -88,10 +89,28 @@ const cardScene: Record<
     width: 1800,
     height: 1013,
   },
+  // A dedicated crop, not the case-study cover.
+  //
+  // The full-app capture makes a poor thumbnail: at 526x296 it's two competing
+  // panels with no single focal point, and the card's 16:9 box clips the
+  // balances column off the left edge. This is the settle-up panel alone —
+  // 656x318 native, so it barely crops — which carries the study's headline
+  // claim ("4 payments … down from 16") in text that stays readable at card
+  // size. Produced by scripts/capture-ledger.mjs alongside the scenes.
+  //
+  // Light only: next/image can't switch on prefers-color-scheme the way the
+  // case study's <picture> does. At card size a light panel reads as a design
+  // choice; a full-width dark screenshot on a light page would not.
+  "expense-tracker-app": {
+    src: "/work/ledger/card-light.webp",
+    width: 1131,
+    height: 636,
+  },
 };
 
 type AssetKind =
   | "aperture"
+  | "ledger"
   | "marketing"
   | "lumin"
   | "portfolio-system";
@@ -133,6 +152,14 @@ const assetSets: Record<string, AssetSet> = {
   "learning-platform-ui": {
     scenes: luminScenes,
     kind: "lumin",
+    intrinsicRatio: true,
+  },
+  "expense-tracker-app": {
+    scenes: ledgerScenes,
+    kind: "ledger",
+    // Mixed set: the diagram scenes are responsive DOM that sizes itself from
+    // its own content, and the screenshots are captures with their own ratios
+    // (the mobile one is nearly 1:4.3). Pinning 16:9 would crop both.
     intrinsicRatio: true,
   },
 };
@@ -292,6 +319,18 @@ export function renderProjectScene(
         // ratio and shows each screen whole. Scene 0 no longer arrives here in
         // a card — the hero still handles it — but the later screens still do.
         ratio={allowVideoHero ? undefined : 16 / 9}
+      />
+    );
+  }
+  if (assetSet.kind === "ledger") {
+    // Mixed set: LedgerAsset routes by scene name — the three diagrams render as
+    // live DOM derived from the split engine, the rest are themed <picture>
+    // captures of the running demo.
+    return (
+      <LedgerAsset
+        scene={item.scene as Parameters<typeof LedgerAsset>[0]["scene"]}
+        alt={alt}
+        className={className}
       />
     );
   }

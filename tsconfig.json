@@ -10,6 +10,11 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // Lets `src/lib/ledger/*` import each other as "./money.ts". Node's built-in
+    // test runner (npm run test:unit) resolves ESM strictly and needs the real
+    // extension; Turbopack accepts it either way. Safe here because noEmit is on
+    // — nothing is rewriting these paths on the way out.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

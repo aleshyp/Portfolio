@@ -16,7 +16,7 @@ import { Badge, Eyebrow } from "@/components/Badge";
 import { ConceptBadge } from "@/components/ConceptBadge";
 import { Card } from "@/components/Card";
 import { CaseStudyCta } from "@/components/CaseStudyCta";
-import { buttonClasses } from "@/components/Button";
+import { Button, buttonClasses } from "@/components/Button";
 import { cn } from "@/lib/utils";
 
 type Params = { slug: string };
@@ -127,6 +127,18 @@ export default async function CaseStudy({
           <p className="mt-5 max-w-2xl text-lg text-fg-muted">
             {project.summary}
           </p>
+
+          {/* Studies whose claims can be exercised rather than read get a link
+              to the running thing, high enough that a reader who only skims the
+              header still finds it. */}
+          {project.demoHref && (
+            <div className="mt-7">
+              <Button href={project.demoHref} size="md">
+                Try the live demo
+                <ArrowRight size={16} aria-hidden="true" />
+              </Button>
+            </div>
+          )}
         </AnimatedReveal>
 
         {/* Meta */}
@@ -197,9 +209,18 @@ export default async function CaseStudy({
               </dl>
               {project.concept && (
                 <p className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-fg-faint">
-                  Concept project. {project.client.split(" (")[0]} isn&apos;t a
-                  real client, and these numbers are the targets I designed
-                  against, not results from a shipped product.
+                  {/* Default: invented client AND invented figures. A study whose
+                      numbers ARE checkable overrides this — saying "these are
+                      targets, not results" about a verifiable test count would
+                      undersell it in the name of honesty, which is its own kind
+                      of inaccuracy. */}
+                  {project.resultsNote ?? (
+                    <>
+                      Concept project. {project.client.split(" (")[0]} isn&apos;t
+                      a real client, and these numbers are the targets I designed
+                      against, not results from a shipped product.
+                    </>
+                  )}
                 </p>
               )}
             </Card>
