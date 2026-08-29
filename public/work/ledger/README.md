@@ -16,6 +16,7 @@ the app itself (not the page chrome around it), and encodes WebP at quality 82.
 | `add-expense-{light,dark}.webp` | Form open, £100 split 3 ways | Block 5 |
 | `failed-save-{light,dark}.webp` | Rollback with Retry/Discard | Block 4 |
 | `mobile-{light,dark}.webp` | 390px viewport | "More screens" |
+| `card-{light,dark}.webp` | Settle-up panel alone | Work-grid thumbnail (light only) |
 
 ## Things that will bite you
 
@@ -32,6 +33,13 @@ the app itself (not the page chrome around it), and encodes WebP at quality 82.
 - **The script hides `header`/`footer` before shooting.** An element screenshot
   captures the element's box, not its stacking context, so the fixed navbar
   otherwise paints across the top of the frame.
+- **`.next/cache/images` survives a restart.** Replacing a source file here keeps
+  serving the *old* optimized output until you `rm -rf .next/cache/images`. It
+  looks exactly like your change not applying — the `<img src>` still points at
+  the right file, and the file on disk is correct.
+- **The `card` shot uses `padTo`** to come out at 16:9. Without it the panel is
+  2.06:1 and the card's `object-cover` crops the sides, cutting off the very text
+  the crop exists to show.
 - **Re-run this whenever the demo's UI changes.** These are the one part of the
   study that *can* drift from the running app — the three diagram scenes derive
   their figures from the engine at render time and can't.
