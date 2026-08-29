@@ -29,6 +29,34 @@ async function overflowingElements(page: Page): Promise<Offender[]> {
   return page.evaluate(() => {
     const vw = document.documentElement.clientWidth;
     const out: { cls: string; text: string; over: number }[] = [];
+
+    /**
+     * True when an ancestor clips this element horizontally, so its layout box
+     * extending past the viewport paints nothing there.
+     *
+     * Without this the scan reports decorative children that are deliberately
+     * positioned outside a clipping parent — Placeholder's corner blur sits at
+     * `-right-10` inside an `overflow-hidden` card, so its RECT reaches past
+     * the viewport while its PIXELS stop at the card edge. That's a false
+     * positive: `documentElement.scrollWidth` stays under the viewport width,
+     * which is the ground truth for "is anything actually cut off".
+     *
+     * The `pointer-events: none` skip above was the existing attempt at this
+     * exemption, but it only covers decorations that happen to declare it.
+     * Clipping is the property that actually decides whether overflow is real.
+     */
+    const isClipped = (el: Element): boolean => {
+      for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+        const o = getComputedStyle(p).overflowX;
+        if (o === "hidden" || o === "clip" || o === "auto" || o === "scroll") {
+          // Only counts if the ancestor itself stays within the viewport —
+          // a clipping parent that is ITSELF too wide is a genuine bug.
+          if (p.getBoundingClientRect().right <= vw + 1) return true;
+        }
+      }
+      return false;
+    };
+
     for (const el of document.querySelectorAll("body *")) {
       const cs = getComputedStyle(el);
       if (
@@ -40,6 +68,7 @@ async function overflowingElements(page: Page): Promise<Offender[]> {
       }
       const r = el.getBoundingClientRect();
       if (r.width === 0) continue;
+      if (isClipped(el)) continue;
       // 1px tolerance for sub-pixel rounding.
       if (r.right > vw + 1) {
         out.push({
