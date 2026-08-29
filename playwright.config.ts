@@ -26,7 +26,15 @@ export default defineConfig({
    * that looks like a flaky assertion but is really resource exhaustion.
    */
   workers: process.env.CI ? 2 : 4,
-  reporter: process.env.CI ? "github" : "list",
+  /**
+   * On CI, "github" alone writes no files — it only emits inline annotations,
+   * so there is nothing for the workflow to upload when a run fails. Pair it
+   * with the HTML reporter (never auto-opening, which would hang a CI job) so
+   * a failed run leaves behind a report and the on-first-retry traces.
+   */
+  reporter: process.env.CI
+    ? [["github"], ["html", { open: "never" }]]
+    : "list",
   use: {
     baseURL,
     trace: "on-first-retry",

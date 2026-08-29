@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -43,7 +43,7 @@ jobs:
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: pw-cache
         with:
           path: ~/.cache/ms-playwright
@@ -61,22 +61,28 @@ jobs:
       # Covers smoke, responsive, seo and a11y (axe-core) across both projects.
       - run: npm run test:e2e
 
+      # Only on failure: a green run's report is noise, and this is the one
+      # moment the traces (trace: on-first-retry) are worth keeping.
+      # `test-results/` holds those traces; `playwright-report/` is the viewer.
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        if: ${{ failure() }}
         with:
           name: playwright-report
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 7
+          if-no-files-found: warn
 
   lighthouse:
     name: Lighthouse budget
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -105,9 +111,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
