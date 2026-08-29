@@ -80,6 +80,10 @@ const routes = [
   // (toggle buttons, a live region, a form) that axe has the most to say about.
   // Its non-default states are scanned separately below.
   "/ledger-demo",
+  // The Ledger study is the only one mixing live DOM figures with screenshots,
+  // and the only one whose scenes carry role="img" with a long aria-label. The
+  // three studies above cover the other scene families.
+  "/work/expense-tracker-app",
 ];
 
 // The interactive sections ("use client") only respond once React has hydrated.

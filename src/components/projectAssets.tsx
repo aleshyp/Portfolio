@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ApertureAsset, apertureScenes } from "@/components/ApertureAsset";
 import { ApertureHero } from "@/components/ApertureHero";
 import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
+import { LedgerAsset, ledgerScenes } from "@/components/LedgerAsset";
 import { LuminAsset, luminScenes } from "@/components/LuminAsset";
 import { LuminHero } from "@/components/LuminHero";
 import { NorthwindHero } from "@/components/NorthwindHero";
@@ -88,10 +89,21 @@ const cardScene: Record<
     width: 1800,
     height: 1013,
   },
+  // Ledger's scene 0 is already a still (no video hero), so this entry exists
+  // only to pick the LIGHT capture for the grid. next/image can't switch on
+  // prefers-color-scheme the way the case study's <picture> does, and a card
+  // is small enough that the mismatch reads as a design choice rather than a
+  // bug — whereas a full-width dark screenshot on a light page does not.
+  "expense-tracker-app": {
+    src: "/work/ledger/overview-light.webp",
+    width: 2176,
+    height: 1556,
+  },
 };
 
 type AssetKind =
   | "aperture"
+  | "ledger"
   | "marketing"
   | "lumin"
   | "portfolio-system";
@@ -133,6 +145,14 @@ const assetSets: Record<string, AssetSet> = {
   "learning-platform-ui": {
     scenes: luminScenes,
     kind: "lumin",
+    intrinsicRatio: true,
+  },
+  "expense-tracker-app": {
+    scenes: ledgerScenes,
+    kind: "ledger",
+    // Mixed set: the diagram scenes are responsive DOM that sizes itself from
+    // its own content, and the screenshots are captures with their own ratios
+    // (the mobile one is nearly 1:4.3). Pinning 16:9 would crop both.
     intrinsicRatio: true,
   },
 };
@@ -292,6 +312,18 @@ export function renderProjectScene(
         // ratio and shows each screen whole. Scene 0 no longer arrives here in
         // a card — the hero still handles it — but the later screens still do.
         ratio={allowVideoHero ? undefined : 16 / 9}
+      />
+    );
+  }
+  if (assetSet.kind === "ledger") {
+    // Mixed set: LedgerAsset routes by scene name — the three diagrams render as
+    // live DOM derived from the split engine, the rest are themed <picture>
+    // captures of the running demo.
+    return (
+      <LedgerAsset
+        scene={item.scene as Parameters<typeof LedgerAsset>[0]["scene"]}
+        alt={alt}
+        className={className}
       />
     );
   }

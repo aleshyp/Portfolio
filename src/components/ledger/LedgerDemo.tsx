@@ -238,7 +238,10 @@ export function LedgerDemo() {
   const isEmpty = view.group.expenses.length === 0 && pending.length === 0;
 
   return (
-    <div className="space-y-6">
+    // data-capture is the handle scripts/capture-ledger.mjs shoots against, so
+    // the case-study screenshots frame the APP rather than the page's marketing
+    // chrome. Keep it if the wrapper is refactored.
+    <div className="space-y-6" data-capture="demo">
       {/* Live region. Always present in the DOM — a region added at the moment
           it gets content is inconsistently announced across screen readers. */}
       <p aria-live="polite" className="sr-only">
