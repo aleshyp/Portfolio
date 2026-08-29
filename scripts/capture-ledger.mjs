@@ -74,6 +74,28 @@ const SHOTS = [
     width: 390,
     prepare: async () => {},
   },
+  {
+    // Work-grid thumbnail ONLY — not a case-study scene.
+    //
+    // The full-app capture makes a poor card: at 526x296 it's two competing
+    // panels with no focal point, and the 16:9 crop clips the balances column.
+    // This shoots the settle-up panel alone, which carries the study's headline
+    // claim ("4 payments … down from 16") in text that stays readable at card
+    // size.
+    //
+    // Viewport width is chosen so the panel comes out at ~16:9 — the card's
+    // aspect-video box. Shot at 720 the panel is 656x318 (2.06:1), and
+    // object-cover then crops the SIDES, cutting off "SETTLE UP" and the "Mark
+    // paid" buttons: the exact content the crop existed to show. Padding the
+    // frame to the target ratio here means the card scales rather than crops.
+    name: "card",
+    selector: "[data-capture='settle']",
+    width: 560,
+    // Pads the capture to 16:9 around the panel rather than letting the card
+    // crop it. The fill matches the demo's page background in each theme.
+    padTo: 16 / 9,
+    prepare: async () => {},
+  },
 ];
 
 async function capture(theme) {
@@ -112,7 +134,14 @@ async function capture(theme) {
     // Experience" floating across the demo's own control bar. These scenes are
     // pictures of the app, not of the page it happens to sit on.
     await page.addStyleTag({
-      content: "header, nav[aria-label], footer { visibility: hidden !important; }",
+      content: `header, nav[aria-label], footer { visibility: hidden !important; }
+        /* Next's dev error/indicator overlay renders in a shadow host outside
+           the app tree and floats over the bottom-left. It baked a red "1 issue"
+           badge into a capture. Hidden here so a dev-server run produces the
+           same image a production run would. */
+        nextjs-portal, #__next-build-watcher, [data-nextjs-toast] {
+          display: none !important;
+        }`,
     });
 
     const target = page.locator(shot.selector);
@@ -124,7 +153,26 @@ async function capture(theme) {
     // that has to hold a Lighthouse budget. Quality 82 is the same setting the
     // Lumin exports use and the difference is not visible at render size.
     const file = fileURLToPath(new URL(`${shot.name}-${theme}.webp`, outDir));
-    const { info } = await sharp(png)
+
+    let pipeline = sharp(png);
+    if (shot.padTo) {
+      // Extend the capture to the target aspect ratio so the consuming card
+      // scales it instead of cropping it. Background matches the demo's page
+      // background per theme, so the padding is invisible against the card.
+      const meta = await pipeline.metadata();
+      const targetW = Math.max(meta.width, Math.round(meta.height * shot.padTo));
+      const targetH = Math.max(meta.height, Math.round(meta.width / shot.padTo));
+      pipeline = pipeline.extend({
+        top: Math.floor((targetH - meta.height) / 2),
+        bottom: Math.ceil((targetH - meta.height) / 2),
+        left: Math.floor((targetW - meta.width) / 2),
+        right: Math.ceil((targetW - meta.width) / 2),
+        // --background in globals.css (line 137/143): white light, ink dark.
+        background: theme === "dark" ? "#0b1220" : "#ffffff",
+      });
+    }
+
+    const { info } = await pipeline
       .webp({ quality: 82 })
       .toFile(file)
       .then(async (i) => ({ info: i }));

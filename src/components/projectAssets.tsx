@@ -89,15 +89,22 @@ const cardScene: Record<
     width: 1800,
     height: 1013,
   },
-  // Ledger's scene 0 is already a still (no video hero), so this entry exists
-  // only to pick the LIGHT capture for the grid. next/image can't switch on
-  // prefers-color-scheme the way the case study's <picture> does, and a card
-  // is small enough that the mismatch reads as a design choice rather than a
-  // bug — whereas a full-width dark screenshot on a light page does not.
+  // A dedicated crop, not the case-study cover.
+  //
+  // The full-app capture makes a poor thumbnail: at 526x296 it's two competing
+  // panels with no single focal point, and the card's 16:9 box clips the
+  // balances column off the left edge. This is the settle-up panel alone —
+  // 656x318 native, so it barely crops — which carries the study's headline
+  // claim ("4 payments … down from 16") in text that stays readable at card
+  // size. Produced by scripts/capture-ledger.mjs alongside the scenes.
+  //
+  // Light only: next/image can't switch on prefers-color-scheme the way the
+  // case study's <picture> does. At card size a light panel reads as a design
+  // choice; a full-width dark screenshot on a light page would not.
   "expense-tracker-app": {
-    src: "/work/ledger/overview-light.webp",
-    width: 2176,
-    height: 1556,
+    src: "/work/ledger/card-light.webp",
+    width: 1131,
+    height: 636,
   },
 };
 

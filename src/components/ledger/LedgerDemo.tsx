@@ -439,98 +439,105 @@ function SettlementPanel({
 }) {
   if (payments.length === 0) {
     return (
-      <Card variant="soft" className="p-5">
-        <PanelHeading>Settle up</PanelHeading>
-        <div className="mt-4 flex items-center gap-2.5 text-sm text-fg-muted">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">
-            <Check size={15} aria-hidden="true" />
-          </span>
-          Everyone&apos;s square.
-        </div>
-      </Card>
+      <div data-capture="settle">
+        <Card variant="soft" className="p-5">
+          <PanelHeading>Settle up</PanelHeading>
+          <div className="mt-4 flex items-center gap-2.5 text-sm text-fg-muted">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">
+              <Check size={15} aria-hidden="true" />
+            </span>
+            Everyone&apos;s square.
+          </div>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <Card variant="soft" className="p-5">
-      <PanelHeading>Settle up</PanelHeading>
+    // The wrapper carries data-capture rather than the Card: Card takes a fixed
+    // prop set and doesn't spread extras, and widening its API for one
+    // screenshot hook isn't a trade worth making. See scripts/capture-ledger.mjs.
+    <div data-capture="settle">
+      <Card variant="soft" className="p-5">
+        <PanelHeading>Settle up</PanelHeading>
 
-      <p className="mt-3 text-xs leading-relaxed text-fg-muted">
-        <span className="font-medium text-fg">
-          {payments.length} payment{payments.length === 1 ? "" : "s"}
-        </span>{" "}
-        {isMinimal ? "clears" : "clear"} the group, down from {naiveCount} if
-        every expense settled on its own.
-        {!isMinimal && (
-          // Stated rather than hidden: greedy can't always prove it hit the
-          // floor, and claiming "minimal" when it isn't would be a lie the
-          // reader can't check. See settlementIsMinimal.
-          <span className="text-fg-faint"> Close to minimal, not provably it.</span>
-        )}
-      </p>
+        <p className="mt-3 text-xs leading-relaxed text-fg-muted">
+          <span className="font-medium text-fg">
+            {payments.length} payment{payments.length === 1 ? "" : "s"}
+          </span>{" "}
+          {isMinimal ? "clears" : "clear"} the group, down from {naiveCount} if
+          every expense settled on its own.
+          {!isMinimal && (
+            // Stated rather than hidden: greedy can't always prove it hit the
+            // floor, and claiming "minimal" when it isn't would be a lie the
+            // reader can't check. See settlementIsMinimal.
+            <span className="text-fg-faint"> Close to minimal, not provably it.</span>
+          )}
+        </p>
 
-      <ul className="mt-4 space-y-2">
-        {payments.map((payment) => {
-          const key = `${payment.from}-${payment.to}`;
-          const from = personById(group, payment.from);
-          const to = personById(group, payment.to);
-          const settled = justSettled === key;
+        <ul className="mt-4 space-y-2">
+          {payments.map((payment) => {
+            const key = `${payment.from}-${payment.to}`;
+            const from = personById(group, payment.from);
+            const to = personById(group, payment.to);
+            const settled = justSettled === key;
 
-          return (
-            <li
-              key={key}
-              className="flex items-center justify-between gap-3 rounded-xl bg-surface px-3 py-2.5"
-            >
-              <span className="flex min-w-0 items-center gap-2 text-sm">
-                <Avatar person={from} size="sm" />
-                <span className="truncate font-medium text-fg">{from.name}</span>
-                <ArrowRight
-                  size={13}
-                  className="shrink-0 text-fg-faint"
-                  aria-hidden="true"
-                />
-                <Avatar person={to} size="sm" />
-                <span className="truncate font-medium text-fg">{to.name}</span>
-              </span>
-
-              <span className="flex shrink-0 items-center gap-2">
-                <span className="font-display text-sm font-semibold tabular-nums text-fg">
-                  {format(payment.amount)}
+            return (
+              <li
+                key={key}
+                className="flex items-center justify-between gap-3 rounded-xl bg-surface px-3 py-2.5"
+              >
+                <span className="flex min-w-0 items-center gap-2 text-sm">
+                  <Avatar person={from} size="sm" />
+                  <span className="truncate font-medium text-fg">{from.name}</span>
+                  <ArrowRight
+                    size={13}
+                    className="shrink-0 text-fg-faint"
+                    aria-hidden="true"
+                  />
+                  <Avatar person={to} size="sm" />
+                  <span className="truncate font-medium text-fg">{to.name}</span>
                 </span>
-                <button
-                  type="button"
-                  onClick={() => onSettle(payment)}
-                  disabled={settled}
-                  // Bordered rather than bare text: at this size an unbordered
-                  // label beside an amount reads as metadata, and the one
-                  // action in the panel shouldn't need a hover to be findable.
-                  className={cn(
-                    "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
-                    settled
-                      ? "border-transparent text-brand-700 dark:text-brand-400"
-                      : "border-border-subtle text-fg-soft hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:hover:border-brand-500/50 dark:hover:bg-white/5 dark:hover:text-brand-300",
-                  )}
-                >
-                  {settled ? (
-                    <span className="inline-flex items-center gap-1">
-                      <Check size={12} aria-hidden="true" />
-                      Done
-                    </span>
-                  ) : (
-                    <>
-                      Mark paid
-                      <span className="sr-only">
-                        : {from.name} pays {to.name} {format(payment.amount)}
+
+                <span className="flex shrink-0 items-center gap-2">
+                  <span className="font-display text-sm font-semibold tabular-nums text-fg">
+                    {format(payment.amount)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onSettle(payment)}
+                    disabled={settled}
+                    // Bordered rather than bare text: at this size an unbordered
+                    // label beside an amount reads as metadata, and the one
+                    // action in the panel shouldn't need a hover to be findable.
+                    className={cn(
+                      "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
+                      settled
+                        ? "border-transparent text-brand-700 dark:text-brand-400"
+                        : "border-border-subtle text-fg-soft hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:hover:border-brand-500/50 dark:hover:bg-white/5 dark:hover:text-brand-300",
+                    )}
+                  >
+                    {settled ? (
+                      <span className="inline-flex items-center gap-1">
+                        <Check size={12} aria-hidden="true" />
+                        Done
                       </span>
-                    </>
-                  )}
-                </button>
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </Card>
+                    ) : (
+                      <>
+                        Mark paid
+                        <span className="sr-only">
+                          : {from.name} pays {to.name} {format(payment.amount)}
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+    </div>
   );
 }
 
