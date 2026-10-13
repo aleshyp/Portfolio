@@ -21,7 +21,6 @@ export const site = {
   available: true,
   resumeUrl: "/resume.pdf",
   socials: {
-    dribbble: "https://dribbble.com/aleshyp",
     linkedin: "https://www.linkedin.com/in/ian-riley-242a4a300/",
     behance: "https://www.behance.net/aleshyp",
   },
@@ -106,7 +105,7 @@ export const experience: ExperienceItem[] = [
       "Design web pages for Acellus, an online learning platform.",
       "Created and maintain the design system that keeps the product consistent.",
       "Transform designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
-      "Work in sprints alongside the engineering team, planning and shipping work through GitLab.",
+      "Work in sprints alongside the programming team, planning and shipping work through GitLab.",
       "Use Claude Code to boost development efficiency and productivity.",
     ],
   },

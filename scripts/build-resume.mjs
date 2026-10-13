@@ -55,7 +55,6 @@ const contact = [
   link(`mailto:${site.email}`, site.email),
   link(`${siteUrl}/`, host),
   link(site.socials.linkedin, "linkedin.com/in/ian-riley"),
-  link(site.socials.dribbble, site.socials.dribbble.replace(/^https?:\/\//, "")),
   link(
     site.socials.behance,
     site.socials.behance.replace(/^https?:\/\/(www\.)?/, ""),

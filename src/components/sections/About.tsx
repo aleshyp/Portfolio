@@ -83,7 +83,7 @@ export function About() {
                 In 2022 it became full-time. I was hired as a graphic designer
                 and talked my way into the web side; now I design the pages, own
                 the design system, and build them in React, working in sprints
-                alongside our engineers. Most of my time goes into details
+                alongside our programmers. Most of my time goes into details
                 nobody is supposed to notice.
               </p>
             </Prose>

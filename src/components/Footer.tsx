@@ -9,7 +9,6 @@ import { IconButton } from "./IconButton";
 import { Pill } from "./Pill";
 
 const socialLinks = [
-  { label: "Dribbble", href: site.socials.dribbble },
   { label: "LinkedIn", href: site.socials.linkedin },
   { label: "Behance", href: site.socials.behance },
 ];

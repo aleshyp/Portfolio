@@ -11,7 +11,6 @@ import { Pill } from "@/components/Pill";
 import { site } from "@/data/site";
 
 const socials = [
-  { label: "Dribbble", href: site.socials.dribbble },
   { label: "LinkedIn", href: site.socials.linkedin },
   { label: "Behance", href: site.socials.behance },
 ];

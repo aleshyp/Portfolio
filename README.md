@@ -89,7 +89,6 @@ src/
     layout.tsx            # fonts, metadata, Navbar + Footer shell
     page.tsx              # home page (assembles sections)
     work/[slug]/page.tsx  # case-study detail template
-    ledger-demo/page.tsx  # interactive demo for the Ledger case study
     not-found.tsx         # 404 page
     opengraph-image.tsx   # generated OG image (also per-study)
     robots.ts             # robots.txt
@@ -104,7 +103,7 @@ src/
     ProjectCard.tsx, CaseStudyCta.tsx, WideScene.tsx
     *Asset.tsx, *Hero.tsx  # per-study hand-built SVG scenes
     projectAssets.tsx     # maps a study slug to its scene set
-    ledger/               # the Ledger demo UI (client components)
+    ledger/               # Ledger demo UI (unrouted; study removed from Work)
     sections/             # Hero, About, Projects, Experience, Skills, Contact
   data/
     site.ts               # personal details, siteUrl, experience, skills
