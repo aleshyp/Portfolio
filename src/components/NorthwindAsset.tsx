@@ -1,5 +1,6 @@
 import sizes from "@/data/work-image-sizes.json";
 import { cn } from "@/lib/utils";
+import { CARD_SIZES, CASE_STUDY_SIZES, workSrcSet } from "@/lib/workImages";
 
 /**
  * Northwind — case-study assets for the marketing-landing-page study.
@@ -46,19 +47,6 @@ type Scene =
  */
 const DIMENSIONS: Record<Scene, { w: number; h: number }> = sizes.northwind;
 
-/** Width of the small srcset candidate (see build-work-images.mjs). */
-const SMALL_WIDTH = 1200;
-
-/**
- * Rendered width of a case-study scene: the Container is max-w-6xl (1152px)
- * with px-8 from sm (px-6 below), so the column tops out at 1088px. Telling the
- * browser this lets a DPR-1 screen take the 1200px file and a DPR-2 screen the
- * 2400px one, instead of guessing from the viewport.
- */
-const CASE_STUDY_SIZES =
-  "(min-width: 1152px) 1088px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 3rem)";
-/** A Work-grid card: 526px in the 2-up grid from md, full-bleed below. */
-const CARD_SIZES = "(min-width: 768px) 526px, 100vw";
 
 type NorthwindAssetProps = {
   scene: Scene;
@@ -83,13 +71,11 @@ export function NorthwindAsset({
   const base = `/work/northwind/${scene}`;
 
   return (
-    // A raw <img> with a hand-built srcset rather than next/image: these WebPs
-    // are already encoded for UI screenshots (sharp-YUV, see the build script),
-    // and the optimizer would re-encode them a second time with neither.
+    // Raw <img> + generated srcset, not next/image — see src/lib/workImages.ts.
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`${base}.webp`}
-      srcSet={`${base}-1200.webp ${Math.min(SMALL_WIDTH, w)}w, ${base}.webp ${w}w`}
+      srcSet={workSrcSet(base, w)}
       sizes={ratio ? CARD_SIZES : CASE_STUDY_SIZES}
       alt={alt}
       width={w}

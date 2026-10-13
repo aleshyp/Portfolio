@@ -79,8 +79,8 @@ const cardScene: Record<
   },
   "learning-platform-ui": {
     src: "/work/lumin/detail.webp",
-    width: 1800,
-    height: 2649,
+    width: 2400,
+    height: 3532,
     // Full-page capture: pin to the top so the card shows the course hero.
     position: "object-top",
   },
