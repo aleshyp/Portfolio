@@ -14,7 +14,8 @@
     "issue": "node scripts/new-issue.mjs",
     "pr": "node scripts/open-pr.mjs",
     "land": "node scripts/land.mjs",
-    "resume": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-resume.mjs"
+    "resume": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-resume.mjs",
+    "images": "node scripts/build-work-images.mjs"
   },
   "engines": {
     "node": ">=22.0.0"
