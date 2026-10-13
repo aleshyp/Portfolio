@@ -3,7 +3,7 @@
 Why certain packages are deliberately held back. Re-check when the blocking
 upstream work lands; until then, `npm outdated` showing these is expected.
 
-Last verified: 2026-08-14.
+Last verified: 2026-10-13.
 
 ## Held back
 
@@ -76,6 +76,26 @@ the client's first pass, and the failed hydration showed up as an a11y scan
 reporting a missing `lang` attribute. Fixed with `useStableReducedMotion()` in
 `src/lib/` — see that hook's docstring for which components need it and, just
 as importantly, which must NOT use it.
+
+### next / eslint-config-next 16.3.1 → 16.4.0, sharp 0.35.5 — done 2026-10-13 (security)
+
+Taken via `npm audit fix` (non-breaking) after the CI audit job had been
+failing on `main` for weeks. 16.3.x carried a critical RCE in
+`next/og`'s ImageResponse, which this site uses for its OG images, plus
+cache-poisoning, image-optimizer SSRF and metadata-route disclosure advisories.
+Floors raised to `^16.4.0` so a fresh install can't resolve back. No source
+changes; verified with typecheck, lint, unit tests, production build, the
+Lighthouse gate and two full e2e runs.
+
+## Known, accepted
+
+### braces (dev-only) — no fix exists
+
+`npm audit` (without `--omit=dev`) still reports a high-severity
+stack-exhaustion DoS in `braces`, affecting every published version, reached
+through `@next/eslint-plugin-next` → `fast-glob`. It runs only at lint time on
+this repo's own files and never ships, and CI gates on `--omit=dev`. Re-check
+when `npm audit` reports a fix.
 
 ## Re-checking
 
