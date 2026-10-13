@@ -38,11 +38,14 @@ All twelve case-study screens. The script's `MASTERS` table maps each file here
 to its output name (e.g. `v5-01-hero.jpg` → `01-hero.webp`,
 `pages/page-product-final.jpg` → `product.webp`).
 
-## Not here yet
+## work/lumin
 
-- **Lumin.** Its masters were never kept, so its screens in `public/work/lumin/`
-  are 1800px WebPs with nothing sharper to rebuild them from. Re-export the
-  frames from Figma at 2x into `work/lumin/`, add them to `MASTERS`, and run the
-  script.
-- **Aperture.** Its case-study frames are served straight from 3200px PNGs in
-  `public/work/aperture/`, so they're already sharp.
+All ten case-study screens, 2880px (2x) Figma exports from 2026-10-13. The
+onboarding, sign-up and log-in frames came out of Figma centered on a larger
+blank canvas, so the script trims those three (`trim: true` in `MASTERS`).
+Don't trim the full-page frames: the threshold also eats their light footer.
+
+## Not here
+
+**Aperture.** Its case-study frames are served straight from 3200px PNGs in
+`public/work/aperture/`, so they're already sharp.

@@ -36,10 +36,11 @@ const root = new URL("../", import.meta.url);
  * master path (under assets-src/work/<project>/) → output name. Output names are
  * the scene keys the asset components already use, so no URL changes shape.
  *
- * Lumin has no entry because its masters were never kept: its screens are
- * 1800px WebPs with nothing larger to rebuild them from. Re-export the frames
- * from Figma at 2x into assets-src/work/lumin/, add them here, and they'll get
- * the same treatment.
+ * An object entry with `trim: true` crops away the blank canvas around the
+ * frame first. Figma exported Lumin's onboarding, sign-up and log-in frames
+ * centered on a much larger canvas; without the trim they'd float in a wide
+ * band of whitespace. Don't trim the rest: on a full-page frame the threshold
+ * also eats ~30px of the page's own light footer.
  */
 const MASTERS = {
   northwind: {
@@ -55,6 +56,19 @@ const MASTERS = {
     "pages/login-page.jpg": "login",
     "pages/signup-page.jpg": "signup",
     "pages/forgot-password-page.jpg": "forgot-password",
+  },
+  // 2880px (2x of a 1440 frame) Figma exports, re-exported 2026-10-13.
+  lumin: {
+    "homepage.jpg": "homepage",
+    "catalog.jpg": "catalog",
+    "detail.jpg": "detail",
+    "mentors.jpg": "mentors",
+    "pricing.jpg": "pricing",
+    "resources.jpg": "resources",
+    "emptycatalog.jpg": "emptycatalog",
+    "onboarding.jpg": { name: "onboarding", trim: true },
+    "signup.jpg": { name: "signup", trim: true },
+    "website-login.jpg": { name: "website-login", trim: true },
   },
 };
 
@@ -75,10 +89,17 @@ for (const [project, files] of Object.entries(MASTERS)) {
   await mkdir(outDir, { recursive: true });
   manifest[project] = {};
 
-  for (const [master, name] of Object.entries(files)) {
+  for (const [master, entry] of Object.entries(files)) {
+    const { name, trim = false } =
+      typeof entry === "string" ? { name: entry } : entry;
     const src = new URL(`assets-src/work/${project}/${master}`, root);
+    // Trim to a buffer first: sharp applies trim before resize either way, but
+    // doing it once keeps both sizes cropped identically.
+    const input = trim
+      ? await sharp(fileURLToPath(src)).trim({ threshold: 12 }).toBuffer()
+      : fileURLToPath(src);
     const encode = ({ width, quality }) =>
-      sharp(fileURLToPath(src))
+      sharp(input)
         .resize({ width, withoutEnlargement: true })
         .webp({ quality, effort: 6, smartSubsample: true })
         .toBuffer({ resolveWithObject: true });
