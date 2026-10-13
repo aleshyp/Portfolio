@@ -86,8 +86,8 @@ const cardScene: Record<
   },
   "marketing-landing-page": {
     src: "/work/northwind/01-hero.webp",
-    width: 1800,
-    height: 1013,
+    width: 2400,
+    height: 1350,
   },
   // A dedicated crop, not the case-study cover.
   //
@@ -254,6 +254,11 @@ export function renderProjectScene(
            `images.imageSizes`, so the image is never resampled a second time to
            fit. See the note in next.config.mjs. */
         sizes="(min-width: 768px) 526px, 100vw"
+        /* q90, not the default q75. These are UI screenshots with small text,
+           which is where a lossy re-encode shows first, and the optimizer is
+           re-encoding a WebP that's already lossy. 90 is on the allow-list in
+           next.config.mjs (images.qualities). */
+        quality={90}
         className={cn("block object-cover", still.position, className)}
       />
     );
