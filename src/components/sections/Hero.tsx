@@ -62,7 +62,7 @@ export function Hero() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" />
                 </span>
-                Available for new projects
+                Open to product design roles
               </span>
             </motion.div>
           )}
@@ -72,17 +72,18 @@ export function Hero() {
             className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-balance text-fg sm:text-6xl"
           >
             Hi, I&apos;m {site.firstName}. I design{" "}
-            <span className="text-gradient">brands &amp; products</span>, and
-            ship the code.
+            <span className="text-gradient">products &amp; design systems</span>,
+            and ship the code.
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
-            Designer and front-end developer in {site.location.split(",")[0]}. One person
-            from Figma to production, so the thing you approve is the thing
-            that ships.
+            Product designer and front-end developer in{" "}
+            {site.location.split(",")[0]}. I own a Tailwind design system in
+            production, design in Figma, and build in React, so the thing you
+            approve is the thing that ships.
           </motion.p>
 
           <motion.div
@@ -103,7 +104,7 @@ export function Hero() {
             className="mt-16 flex items-center justify-center gap-2 text-sm text-fg-faint"
           >
             <Sparkles size={15} className="text-brand-400" />
-            <span>Designing for esports orgs, influencers &amp; brands since 2014</span>
+            <span>Designing since 2014 · shipping in code since 2022</span>
           </motion.div>
         </motion.div>
       </Container>

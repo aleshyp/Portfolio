@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { projects, getProject, getNextProject } from "@/data/projects";
 import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
@@ -149,15 +149,41 @@ export default async function CaseStudy({
               { label: "Role", value: project.role },
               { label: "Year", value: project.year },
               { label: "Duration", value: project.duration },
-            ].map((m) => (
-              <div key={m.label}>
-                <dt className="text-xs font-medium uppercase tracking-wider text-fg-faint">
-                  {m.label}
-                </dt>
-                <dd className="mt-1.5 font-medium text-fg">{m.value}</dd>
-              </div>
-            ))}
+            ]
+              // Duration is optional: omitted where the real figure isn't known.
+              .filter((m) => m.value)
+              .map((m) => (
+                <div key={m.label}>
+                  <dt className="text-xs font-medium uppercase tracking-wider text-fg-faint">
+                    {m.label}
+                  </dt>
+                  <dd className="mt-1.5 font-medium text-fg">{m.value}</dd>
+                </div>
+              ))}
           </dl>
+        </AnimatedReveal>
+
+        {/* What I did — the reader's first question about any project is "what
+            was YOUR part", so it's answered as a list right under the meta row
+            rather than left to be inferred from the prose below. */}
+        <AnimatedReveal delay={0.1}>
+          <div className="border-b border-border-subtle py-8">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-fg-faint">
+              What I did
+            </h2>
+            <ul className="mt-4 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+              {project.contributions.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-fg-soft">
+                  <Check
+                    size={18}
+                    aria-hidden="true"
+                    className="mt-0.5 shrink-0 text-brand-700 dark:text-brand-400"
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </AnimatedReveal>
       </Container>
 

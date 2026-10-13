@@ -13,15 +13,14 @@ export const siteUrl =
 export const site = {
   name: "Ian Riley",
   firstName: "Ian",
-  role: "Designer & Front-End Developer",
+  role: "Product Designer & Front-End Developer",
   tagline:
-    "I design brands and products, then write the front-end code that ships them.",
+    "I design products and the design systems behind them, then write the front-end code that ships them.",
   location: "Kansas City, United States",
   email: "hello@ianriley.co",
   available: true,
   resumeUrl: "/resume.pdf",
   socials: {
-    dribbble: "https://dribbble.com/aleshyp",
     linkedin: "https://www.linkedin.com/in/ian-riley-242a4a300/",
     behance: "https://www.behance.net/aleshyp",
   },
@@ -33,6 +32,54 @@ export const site = {
     { label: "Contact", href: "/#contact" },
   ],
 } as const;
+
+/**
+ * Skills, grouped roughly in the order a project moves through them. Shared by
+ * the Skills section and the generated résumé (scripts/build-resume.mjs), so
+ * the two can't list different things. Icons are a UI concern and live in
+ * Skills.tsx, keyed by group title.
+ */
+export const skillGroups = [
+  {
+    title: "UX/UI Design",
+    description: "Screens that don't need a tutorial.",
+    items: [
+      "UI Design",
+      "User Flows",
+      "Interaction Design",
+      "Prototyping",
+      "Accessibility (WCAG 2.2)",
+    ],
+  },
+  {
+    title: "Design Systems",
+    description: "One source of truth, in Figma and in code.",
+    items: ["Design Tokens", "Component Libraries", "Theming", "Documentation"],
+  },
+  {
+    title: "Front-End",
+    description: "Shipping design in code.",
+    items: ["React", "TypeScript", "Tailwind CSS", "TanStack"],
+  },
+  {
+    title: "Brand & Graphic Design",
+    description: "Where it all started.",
+    items: ["Brand Identity", "Logo Design", "Typography", "Layout"],
+  },
+] as const;
+
+export const tools = [
+  "Figma",
+  "Tailwind CSS",
+  "React",
+  "TypeScript",
+  "TanStack",
+  "GitLab",
+  "Claude Code",
+  "Photoshop",
+  "Illustrator",
+  "Affinity",
+] as const;
 
 /**
  * Résumé / work history.
@@ -58,6 +105,7 @@ export const experience: ExperienceItem[] = [
       "Design web pages for Acellus, an online learning platform.",
       "Created and maintain the design system that keeps the product consistent.",
       "Transform designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
+      "Work in sprints alongside the programming team, planning and shipping work through GitLab.",
       "Use Claude Code to boost development efficiency and productivity.",
     ],
   },

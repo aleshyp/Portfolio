@@ -9,9 +9,19 @@ export type ContentBlock = {
   blurb: string;
   tags: string[];
   role: string;
+  /**
+   * What I personally did, as a plain list — rendered as "What I did" on the
+   * case study. A reader shouldn't have to infer my part from the prose.
+   *
+   * Every item has to be literally true, including how a tool was used: if a
+   * layout started as an AI-generated draft, say so here rather than letting
+   * "visual design" imply otherwise. An interviewer will ask.
+   */
+  contributions: string[];
   year: string;
   client: string;
-  duration: string;
+  /** Omitted where the real figure isn't known — better blank than invented. */
+  duration?: string;
   /** Three quick outcome stats shown on the case study. */
   results: { label: string; value: string }[];
   overview: string;
@@ -47,25 +57,28 @@ export type ContentBlock = {
   resultsNote?: string;
 }; /**
  * Case studies — the single source of truth for the Work grid and detail pages.
+ * Array order is the Work grid order, sequenced for product-design roles: the
+ * design system first, product UI next, brand work last.
  *
- * The first study ("This Site") is REAL: it documents this codebase, and every
- * figure in it is verifiable from the repo (token count in globals.css, budgets
- * in scripts/lh-gate.mjs, scans in e2e/a11y.spec.ts). It carries no `concept`
+ * "This Site" is REAL: it documents this codebase, and every figure in it is
+ * verifiable from the repo (token count in globals.css, budgets in
+ * scripts/lh-gate.mjs, scans in e2e/a11y.spec.ts). It carries no `concept`
  * flag. If you change the system, update the study — it makes falsifiable claims.
  *
- * Every OTHER study is CONCEPT work: the clients are invented and the metrics are
- * illustrative targets, not measured outcomes. Each carries `concept: true`,
- * which renders a visible badge — that label is the honest signal a reader needs,
- * so don't remove it without replacing the invented numbers with real ones.
+ * Every OTHER study has an invented client and carries `concept: true`, which
+ * renders a visible badge. Invented clients are fine; invented OUTCOMES are not.
+ * So no concept study quotes adoption, conversion or usability figures — those
+ * would need users these projects never had. Their `results` are properties of
+ * the design itself (screens, steps, palette size), each one visible in the
+ * study's own images, and each sets a `resultsNote` saying exactly that. Process
+ * claims follow the same rule: if there are no sketches to show, the study
+ * doesn't mention sketching.
  *
- * "Ledger" is a third case, and the reason `demoHref` exists. Its client is
- * invented (so it keeps `concept: true`), but the engineering is real and
- * running: the split engine, the settlement algorithm and their 65 unit tests
- * live in `src/lib/ledger/`, and the demo at /ledger-demo executes that same
- * code. Its figures are therefore split by kind. The countable ones (tests,
- * payments, states) are verifiable from the repo; anything about adoption or
- * users wouldn't be, so it isn't claimed. Keep that line where it is — the
- * study's value is that a reader can check the parts it asserts.
+ * Ledger (an expense splitter with a live demo) was removed from the Work grid
+ * on 2026-10-13. Its engine and tests are still in src/lib/ledger, its UI in
+ * src/components/ledger, and its assets under public/work/ledger; restoring it
+ * means reverting that commit, which also brings back the /ledger-demo route.
+ * `demoHref` stays on the type for any future study with a working demo.
  *
  * The range is deliberate — brand, web, product UI, design systems, and motion.
  */
@@ -76,10 +89,17 @@ export const projects: Project[] = [
     summary:
       "The site you're reading. A token-driven Tailwind design system with light and dark theming, WCAG 2.2 AA checked by an axe-core suite, and a Lighthouse budget that fails the build when a score slips. Designed and built end to end.",
     blurb: "The design system behind this site, built and tested in public.",
-    tags: ["Design System", "Front-End", "Accessibility"],
+    tags: ["Design System", "Tailwind CSS", "Accessibility"],
     role: "Designer & Front-End Developer",
+    contributions: [
+      "Design system: 35 color tokens, light/dark theming, shared primitives",
+      "Visual, layout and interaction design for every page",
+      "Front-end build in Next.js, Tailwind CSS v4 and TypeScript",
+      "Accessibility, end-to-end and Lighthouse test gates",
+      "Built with Claude Code as a coding assistant",
+    ],
     year: "2026",
-    client: "Personal project",
+    client: "Personal project, live",
     duration: "Ongoing",
     results: [
       { label: "Accessibility budget", value: "100" },
@@ -114,171 +134,159 @@ export const projects: Project[] = [
     accent: 4,
   },
   {
-    slug: "expense-tracker-app",
-    title: "Ledger: Splitting Money Without Losing Cents",
-    summary:
-      "A group expense splitter built around the two problems that make it harder than it looks: money doesn't divide evenly, and a weekend away generates far more debts than anyone wants to settle one by one. The split engine and the settlement algorithm are real, tested, and running in the browser.",
-    blurb: "A shared expense tracker, with the money maths done properly.",
-    tags: ["Product Design", "Full-Stack", "Data & State"],
-    role: "Designer & Full-Stack Developer",
-    year: "2026",
-    client: "Ledger (concept product)",
-    duration: "5 weeks",
-    results: [
-      { label: "Rounding error across 10k splits", value: "£0.00" },
-      { label: "Payments to settle, from 16", value: "4" },
-      { label: "Unit tests on the money logic", value: "65" },
-    ],
-    overview:
-      "Every expense-splitting app looks trivial until you divide £100 three ways. The naive version loses a penny, and the naive data model asks five people to make sixteen separate transfers to settle a weekend away. Ledger is a concept product, but the engine underneath it isn't. The arithmetic and the settlement algorithm are real code with real tests, and the demo runs that exact code in your browser. The client is invented; the maths you can check.",
-    blocks: [
-      {
-        heading: "£100 ÷ 3 is a design problem",
-        body: "It's £33.33 each, which is £99.99. A penny is missing and it has to go somewhere. Almost every version of this bug starts with storing money as a floating-point number, where 0.1 + 0.2 isn't 0.3 and the error compounds quietly until a balance is off by a few pence with no explanation. So Ledger stores pence as integers everywhere and converts to pounds only when it displays them. The type system enforces it: amounts are a branded Pence type, so passing a raw 12.5 into an expense is a compile error rather than a rounding surprise three screens later. The split function distributes the remainder explicitly, turning £100 across three into 3334, 3333, 3333, and a test asserts that shares sum back to the total across ten thousand generated combinations. The form shows all of this before you submit: it doesn't divide evenly, and here's who picks up the extra penny. An app that rounds quietly is one people eventually stop trusting.",
-      },
-      {
-        heading: "Model the debt, not the transactions",
-        body: "The obvious data model records who owes whom per expense. Dinner gives you three arrows, the taxi adds two more pointing partly backwards, and by Sunday five people have sixteen small debts between them, several of which cancel out. Nobody is going to work through that list. The fix is to throw the per-expense edges away and keep only net position. Once you know Ana is up £7.33 and Ben is down £155, it doesn't matter which meals caused it: any set of transfers that zeroes everyone out settles the group. Ledger nets every expense into one balance per person, then matches the largest debtor against the largest creditor until nobody is owed anything. Sixteen payments become four. That greedy pass isn't always optimal. Finding the true minimum means finding every zero-summing subset of people, which is NP-hard, so the app checks whether it managed to hit the provable n−1 floor and says 'close to minimal, not provably it' when it can't. Claiming an optimum you haven't verified seemed worse than being one transaction off.",
-      },
-      {
-        heading: "Every state is a designed state",
-        body: "The happy path is maybe a quarter of the work. Adding an expense in Ledger is optimistic: the row appears the moment you submit and the balances move with it, because waiting on a spinner for something that will almost certainly succeed makes an app feel slower than it is. But 'almost certainly' is the whole problem, so the failure path got designed too. The demo has a 'fail the next save' toggle because a demo that only ever succeeds never shows the interesting half. Trip it and the row stays on screen, marked, with retry and discard, while the balances snap back to truth. All of that falls out of one decision: balances are never stored. They're derived from the expense list on every render, so an optimistic row is reflected for free and a rollback un-reflects it without a second code path to keep in sync. Cache the balances instead and you spend the rest of the project reconciling them. Empty group, first expense, in-flight, failed, offline, settled: six states that aren't the happy path, and each one is a screen someone will actually see.",
-      },
-      {
-        heading: "Who can see what",
-        body: "This is the part I designed and deliberately didn't ship, so it's worth being straight about why. The demo runs entirely in the browser on a statically-rendered portfolio, so there's no server to authorize against and no database to protect. Adding one would have meant putting a login wall in front of a case study and a live database in the deploy path of a site whose whole point is that it builds to files. What the code does carry is the shape of it. Validation lives next to the model rather than in the form, so the same rules would run server-side unchanged. The design assumed row-level security in the database rather than checks in the client: a member may read expenses only for groups they belong to, enforced where the data lives, because anything running in the browser is under the user's control. Client-side validation is UX. It tells you your amount is malformed before you wait on a round-trip, and that's all it's for.",
-      },
-      {
-        heading: "What I'd do differently",
-        body: "I designed multi-currency in early and it was the wrong call. Every amount had to carry a currency code, every sum had to check that two amounts matched before adding them, and the settlement algorithm, which is the actually interesting problem, got harder to reason about for a feature nobody on a weekend away needs. I cut it and the engine got smaller and more obviously correct. If I picked it up again I'd handle it at the boundary: convert on entry at the day's rate, store one currency, and keep the original on the expense for anyone who wants to see it. The other thing I'd change is the remainder rule. Right now the spare penny always goes to the first person in the list, which is easy to explain but means the same person absorbs it every time if the order doesn't change. Rotating it per expense is a two-line change and a fairer default. I left it as it is because a demo that shuffles is harder to trust than one that's predictably a penny unfair, though I think that trade goes the other way in a real app.",
-      },
-    ],
-    gallery: 3,
-    accent: 3,
-    concept: true,
-    demoHref: "/ledger-demo",
-    resultsNote:
-      "Concept project: Ledger isn't a real client and it has no users. These three numbers aren't about adoption, though. They're properties of the code, and all three are checkable — the tests are in src/lib/ledger, and the demo runs the same engine.",
-  },
-  {
-    slug: "brand-identity-system",
-    title: "Aperture: A Brand Identity From Scratch",
-    summary:
-      "A full visual identity (logo, type, color, and usage rules) built to hold up everywhere from a favicon to a marketing site.",
-    blurb: "A full visual identity, logo through guidelines.",
-    tags: ["Brand Identity", "Logo Design", "Graphic Design"],
-    role: "Lead Designer",
-    year: "2025",
-    client: "Aperture",
-    duration: "6 weeks",
-    results: [
-      { label: "Brand assets delivered", value: "40+" },
-      { label: "Logo concepts explored", value: "12" },
-      { label: "Guideline pages", value: "28" },
-    ],
-    overview:
-      "A startup with a name, an idea, and nothing to look at. I built the identity from nothing: a flexible logo, a type system, a color palette, and a guidelines doc the whole team could design against without asking me first.",
-    blocks: [
-      {
-        heading: "The brief",
-        body: "They wanted something modern and trustworthy that didn't look like every other startup. It also had to survive a 16px favicon, a billboard, a dark-mode app, and a printed deck, so how far it stretched mattered as much as how it looked.",
-      },
-      {
-        heading: "Exploration",
-        body: "Mood boards, then dozens of sketches, down to three directions, then one. I tested every mark small and in monochrome early, because that's where a logo usually falls apart and it's cheaper to find out in week one.",
-      },
-      {
-        heading: "The system",
-        body: "Past the logo: a type scale, a primary and extended palette with contrast that passes, iconography rules, and layout principles. All of it packaged into a guidelines document written to be used by people who aren't designers.",
-      },
-      {
-        heading: "Outcome",
-        body: "The identity runs across the product, the marketing site, and social. The part I care about: with the system written down, the team ships on-brand work without a designer signing off on every asset.",
-      },
-    ],
-    gallery: 4,
-    accent: 0,
-    concept: true,
-  },
-  {
-    slug: "marketing-landing-page",
-    title: "Northwind: Marketing Site, Designed & Built",
-    summary:
-      "A marketing site for a team-analytics startup, built to convert. Designed in Figma and shipped to production in React by one person.",
-    blurb: "A SaaS marketing site, designed and then built.",
-    tags: ["Web Design", "Front-End", "Branding"],
-    role: "Designer & Front-End Developer",
-    year: "2025",
-    client: "Northwind (analytics SaaS)",
-    duration: "5 weeks",
-    results: [
-      { label: "Lighthouse performance", value: "98" },
-      { label: "Sign-up conversion", value: "+22%" },
-      { label: "Design → live", value: "1 person" },
-    ],
-    overview:
-      "Northwind is a team-analytics tool with a homepage that made the product look worse than it was, and didn't convert. There was also no engineering time to spare for a handoff. So I did both sides. Designed the page in Figma, then built it in React and Tailwind. The live site matches the mockup because the same person made both.",
-    blocks: [
-      {
-        heading: "The brief",
-        body: "Good product, homepage that undersold it. They wanted something fast and polished that got the point across in one scroll and drove free-trial sign-ups, on a stack their own team could maintain after I left.",
-      },
-      {
-        heading: "Design",
-        body: "I designed the page in Figma around one conversion goal: a hero with a real product preview, three value props you can skim, customer numbers as proof, and the same call to action repeated down the page. I laid out the mobile version first, so it's a design rather than a squeezed-down desktop.",
-      },
-      {
-        heading: "Build",
-        body: "React, TypeScript, and Tailwind, with semantic markup, properly sized images, and no layout shift. Because I built what I'd drawn, the spacing and type and motion made it to production intact, without the small compromises that pile up in a handoff.",
-      },
-      {
-        heading: "Outcome",
-        body: "The targets were a 98 Lighthouse performance score and free-trial sign-ups up 22% in the first quarter. Blank Figma file to live site, one person, no handoff meeting.",
-      },
-    ],
-    gallery: 3,
-    accent: 1,
-    concept: true,
-  },
-  {
     slug: "learning-platform-ui",
-    title: "Lumin: Online Learning Platform UI",
+    title: "Lumin: Online Learning, From Curious to Enrolled",
     summary:
-      "An interface for an online course, designed around one goal: keep students moving through lessons instead of quitting halfway.",
-    blurb: "A UI built to stop students dropping off.",
-    tags: ["UX/UI Design", "Web App", "EdTech"],
-    role: "UX/UI Designer",
-    year: "2024",
-    client: "Lumin (online learning)",
-    duration: "4 months",
+      "The part of an online-learning product that decides whether anyone ever reaches a lesson: finding a course, judging it, and signing up. Ten screens held to one rule: nobody needs an account until they've decided to enroll.",
+    blurb: "Course discovery and sign-up, designed with no dead ends.",
+    tags: ["UX/UI Design", "User Flows", "EdTech"],
+    role: "Product Designer",
+    contributions: [
+      "Wrote the design brief: audience, palette, type, screen list",
+      "Mapped the route from visitor to enrolled student (the flow below)",
+      "Ten screens in Figma, including the empty search state",
+      "Reviewed my own screens against the brief (block 05)",
+      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
+    ],
+    year: "2026",
+    client: "Lumin (concept product)",
     results: [
-      { label: "Lesson completion", value: "+29%" },
-      { label: "Navigation steps", value: "−40%" },
-      { label: "Usability score", value: "84 SUS" },
+      { label: "Screens designed", value: "10" },
+      { label: "Accounts needed to browse courses", value: "0" },
+      { label: "Onboarding steps, with a skip", value: "3" },
     ],
     overview:
-      "Students quit online courses when they lose the thread. This was a rework of a course experience so you always know where you are, what's next, and how much is left, and so the interface isn't competing with the lesson for your attention.",
+      "Most learning-platform case studies start at the lesson player. Lumin starts earlier, at the stretch where people actually leave: a visitor who's curious, scrolling a catalog, deciding whether a course is worth their time and money. The client is invented and the screens haven't been tested with users yet, so there are no outcome numbers here. What there is: a route mapped end to end, the decisions that shape it, and an honest list of what I'd fix.",
     blocks: [
       {
-        heading: "The problem",
-        body: "Students were dropping off mid-course. The old layout hid progress, tangled navigation into the content, and made it easy to lose your place after a break. No single one of those is a big deal. Together they're enough to make someone not come back tomorrow.",
+        heading: "From curious to enrolled",
+        body: "The route runs homepage, catalog, course page, sign-up, onboarding, and the rule I held every screen to is that browsing never asks for anything. The catalog and course pages are logged-out views with Log in and Get started in the header; the account arrives at the moment someone decides to enroll, not before it. Every branch off the main path leads back onto it: a search with no results, a returning user, someone not ready to pay. The last step is drawn dashed because it isn't in this set of screens. Checkout and the lesson player would be the next things to design, and I'd rather show where the work stops than imply it doesn't.",
       },
       {
-        heading: "Design goals",
-        body: "Make the next action obvious on every screen, put progress somewhere you can't miss it, and quiet everything around the lesson. When I wasn't sure about a decision I asked whether it helped someone keep going, and cut it if it didn't.",
+        heading: "Ask, but don't gate",
+        body: "Onboarding asks one question per step: what do you want to learn? Eight interest tiles, one gold Continue, and 'Skip for now' directly underneath it. Personalising the catalog is useful to the product and optional to the student, and a questionnaire wedged between sign-up and the course they came for is exactly where someone who already knows what they want gives up. The three-segment bar at the top states the cost up front: this is step one of three, not one of an unknown number.",
       },
       {
-        heading: "The solution",
-        body: "A quiet lesson view with a progress rail that's always there, a course map you can actually read, and the same patterns for video, reading, and assessment so nothing needs relearning. Plus a clear bit of feedback every time you finish a step, because finishing things is the whole motivation.",
+        heading: "No dead ends",
+        body: "Search takes a topic, a tool or a skill, and category chips narrow it without typing. The interesting screen is the one where that fails. The empty state keeps the query in the box so the student can see what they searched, says plainly that nothing matched, and offers a single way back: 'Browse all courses', in the same gold as the primary action elsewhere. The worst version of this screen is a blank grid with the filters still showing, which is a dead end that looks like a loading bug.",
       },
       {
-        heading: "Outcome",
-        body: "The targets were lesson completion up 29% and a shorter path through each course. What I'd actually want to know is whether someone can sit down after a week away and pick up where they left off without hunting for it.",
+        heading: "Two ways in",
+        body: "The course page is built around one decision, so the price card stays pinned beside the content as you scroll. It carries two actions on purpose: 'Enroll now' for someone who's convinced, and 'Try a sample lesson' for someone who isn't yet. $149 is a real decision, and an outline button that lowers the stakes keeps that student on the page instead of sending them off to compare tabs. Below the card, the 'what you get' list answers the questions people otherwise go hunting for: how many lessons, whether there are project files, whether there's a certificate.",
+      },
+      {
+        heading: "What I'd change",
+        body: "Reviewing the set against my own brief turned up three problems. First, the brief reserves gold for the primary action, and onboarding, the empty state and the course page all follow it, but the catalog's Enroll buttons are violet. That's six loud buttons competing on one screen, and I'd make the whole card the link and drop the button. Second, the course page shows curriculum items ticked as complete next to 'Enroll now', which is progress belonging to someone who hasn't started. Logged out, those should be plain outlines, with progress appearing after enrollment. Third, one catalog card puts its rating and length together where the other five split them, a small sign the card drifted rather than being built as one component, which is the first thing I'd fix in the Figma file. And none of it has met a real student. The next step is a five-person test of this route, starting at the empty search.",
       },
     ],
     gallery: 4,
     accent: 2,
     concept: true,
+    resultsNote:
+      "Concept project: Lumin isn't a real client and hasn't been tested with users, so there are no outcome figures here. These numbers describe the design itself, and each one is visible in the screens on this page.",
+  },
+  {
+    slug: "marketing-landing-page",
+    title: "Northwind: A SaaS Marketing Site",
+    summary:
+      "A marketing site and account screens for a team-analytics startup, designed in Figma around a single ask: start a free trial.",
+    blurb: "A SaaS marketing site, from brand mark to sign-in.",
+    tags: ["Web Design", "Branding", "Marketing Site"],
+    role: "Web & Brand Designer",
+    contributions: [
+      "Wrote the design brief: positioning, palette, type, page list",
+      "Logo mark and its animated reveal",
+      "Six marketing pages and three account screens in Figma",
+      "Phone layout of the product dashboard",
+      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
+    ],
+    year: "2026",
+    client: "Northwind (concept product)",
+    results: [
+      { label: "Marketing pages designed", value: "6" },
+      { label: "Account screens", value: "3" },
+    ],
+    overview:
+      "Northwind is an invented team-analytics tool for engineering teams, and this is its marketing site: homepage, product, pricing, docs, about and community pages, plus sign-in, sign-up and password reset. It's a design study. I specified it for a React and Tailwind build, the same stack this site runs on, but Northwind itself was never built, so there's no performance or conversion number to quote.",
+    blocks: [
+      {
+        heading: "The brief",
+        body: "A product that's easy to describe badly. Every analytics tool promises dashboards, so the homepage had to say what's different in one scroll and turn that into a free-trial sign-up. The audience is engineering leads, who are allergic to marketing copy, so the hero shows the product rather than describing it: a real-looking weekly-velocity chart beside the headline, with 'Start free trial' as the primary action and 'Book a demo' as the quieter second one.",
+      },
+      {
+        heading: "One scroll, one ask",
+        body: "The value props are three numbered cards you can take in at a glance: one digest every Monday, connect in two clicks, everyone sees the same picture. Each answers an objection a lead would raise before trying the product: more noise, painful setup, another tool only managers look at. The homepage asks for one thing, and the trial call to action comes back after the proof, so whoever is ready by then doesn't have to scroll back up to act.",
+      },
+      {
+        heading: "Proof, then the ask again",
+        body: "Social proof sits directly before the closing call to action, because that's where a skeptical reader needs it: a rating, a team count, and one testimonial whose line, 'We replaced three dashboards with one Monday-morning email', restates the value prop in a customer's words. Since Northwind is invented, so is every figure in that section. They're the content a real version of the page would need, not a claim about a real product.",
+      },
+      {
+        heading: "The product on a phone",
+        body: "Engineering leads check numbers between meetings, so I laid out the product dashboard at phone width as well: velocity, PRs merged and review time stacked as cards instead of squeezed into a table. The marketing pages are desktop comps. Their mobile versions would be the next set to design, and this frame is the pattern they'd follow.",
+      },
+      {
+        heading: "What I'd change",
+        body: "The page argues with itself. The hero says 'No dashboards to babysit' beside what is plainly a dashboard, and the value-prop headline below it is 'Clarity, not more charts'. I'd lead with the Monday digest, the one thing the page says is different, and let the dashboard come second. The one action also goes by three names in the first screen alone (Start free, Start free trial, Get started), which is three decisions for a reader when there should be one. I'd also design the first-run state before any more marketing pages. A team that has just connected GitHub sees an empty dashboard, and that screen decides whether the free trial the whole site is selling actually converts. It isn't in this set, and it's the most important screen Northwind doesn't have.",
+      },
+    ],
+    gallery: 3,
+    accent: 1,
+    concept: true,
+    resultsNote:
+      "Concept project: Northwind isn't a real client and was never built or launched, so there are no performance or conversion figures. These numbers describe the design itself, and each one is visible on this page.",
+  },
+  {
+    slug: "brand-identity-system",
+    title: "Aperture: A Brand Identity From Scratch",
+    summary:
+      "A visual identity built from nothing: a lens mark constructed on a grid, a six-color palette, a type system, and usage rules written for people who aren't designers.",
+    blurb: "A full visual identity, logo through guidelines.",
+    tags: ["Brand Identity", "Logo Design", "Graphic Design"],
+    role: "Brand Designer",
+    contributions: [
+      "Wrote the design brief: positioning, personality, deliverables",
+      "Logo mark, construction grid and animated reveal",
+      "Six-color palette and Sora type specimen",
+      "Usage guidelines: clearspace and do/don't rules",
+      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
+    ],
+    year: "2026",
+    client: "Aperture (concept brand)",
+    results: [
+      { label: "Brand deliverables", value: "5" },
+      { label: "Palette colors", value: "6" },
+      { label: "Clearspace unit", value: "1× iris" },
+    ],
+    overview:
+      "A startup with a name, an idea, and nothing to look at. The brief was an identity that could hold up from a 16px favicon to a dark-mode app, with rules clear enough that the team could use it without asking a designer first. Five deliverables came out of it: the animated mark, its construction sheet, the palette, the type specimen and the usage guidelines.",
+    blocks: [
+      {
+        heading: "A mark built on a grid",
+        body: "Aperture is a camera word, so the mark is a lens: a violet iris around a warm amber center, with one segment cut to suggest the blades of a shutter. It's constructed on a 100px modular grid: an outer boundary circle, the opening at its center, and six blades with a 120° overlap. Every proportion comes from that geometry rather than from eyeballing, which is what makes the construction sheet worth having. Anyone redrawing the mark later can rebuild it exactly.",
+      },
+      {
+        heading: "Six colors, each with a job",
+        body: "Ink for text, three indigo-to-violet shades for the brand surfaces, amber for the one thing on a page that should catch your eye, and Mist as the light background. Amber is deliberately the only warm color, the same idea as the lens's lit center: one spot of warmth in a cool field.",
+      },
+      {
+        heading: "Type that matches the geometry",
+        body: "Sora for display and headings: a geometric sans whose round letterforms echo the circles the mark is built on. On the dark specimen it holds its weight at large sizes without turning heavy, which matters for a brand whose app would run in dark mode.",
+      },
+      {
+        heading: "Rules anyone can follow",
+        body: "The clearspace rule uses a unit taken from the mark itself, one iris radius, so it scales with the logo and nobody has to measure in pixels. The do and don't examples show the mistake people actually make, a washed-out or recolored mark, next to the right version, because a picture of the wrong thing gets followed more reliably than a sentence about it.",
+      },
+      {
+        heading: "What I'd change",
+        body: "The guidelines contradict the brief. The usage page says the mark always sits on Paper or Mist, and forbids desaturating it, yet the brief asked for a dark-mode app and the logo reveal itself plays on deep indigo. So the system needs two things it doesn't have yet: a reversed version for dark backgrounds, and a single-color version for embossing, one-color print and the places full color can't go. I'd also give each of the three purples a written role. Three close shades with no rule for when to use which is where an identity starts drifting.",
+      },
+    ],
+    gallery: 4,
+    accent: 0,
+    concept: true,
+    resultsNote:
+      "Concept project: Aperture isn't a real company, so there's no adoption story to tell. These numbers describe the identity itself, and each one is visible in the deliverables on this page.",
   },
 ]; export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);

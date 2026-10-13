@@ -4,7 +4,7 @@ test.describe("home page", () => {
   test("renders hero and core sections", async ({ page }) => {
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { level: 1, name: /brands & products/i }),
+      page.getByRole("heading", { level: 1, name: /products & design systems/i }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /written up properly/i }),
@@ -115,7 +115,7 @@ test.describe("case study routing", () => {
   test("navigates to a case study and back", async ({ page }) => {
     await page.goto("/work/learning-platform-ui");
     await expect(
-      page.getByRole("heading", { name: /online learning platform/i }),
+      page.getByRole("heading", { name: /lumin: online learning/i }),
     ).toBeVisible();
     await expect(page.getByText(/next project/i)).toBeVisible();
   });

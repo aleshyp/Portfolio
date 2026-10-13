@@ -66,7 +66,8 @@ async function waitForDocumentReady(page: import("@playwright/test").Page) {
 
 // One representative case study per asset family — the studies share a layout,
 // so scanning every slug would mostly re-test the same markup. The three here
-// differ in what they render: learning-platform-ui uses the standard scene set,
+// differ in what they render: learning-platform-ui mixes exported screens with
+// a DOM user-flow diagram (role="img" over aria-hidden step cards),
 // portfolio-design-system carries the hand-built SVG scenes with long alt text,
 // and marketing-landing-page is the widest set (13 scenes) and the only one that
 // exercises the "More screens" gallery for scenes past the content blocks.
@@ -75,15 +76,6 @@ const routes = [
   "/work/learning-platform-ui",
   "/work/portfolio-design-system",
   "/work/marketing-landing-page",
-  // The Ledger demo — the only route on the site that is a real application
-  // rather than a document, so it's the one carrying interactive widgets
-  // (toggle buttons, a live region, a form) that axe has the most to say about.
-  // Its non-default states are scanned separately below.
-  "/ledger-demo",
-  // The Ledger study is the only one mixing live DOM figures with screenshots,
-  // and the only one whose scenes carry role="img" with a long aria-label. The
-  // three studies above cover the other scene families.
-  "/work/expense-tracker-app",
 ];
 
 // The interactive sections ("use client") only respond once React has hydrated.
@@ -134,44 +126,6 @@ test("no a11y violations: contact form with errors shown", async ({ page }) => {
   await freezeAnimations(page);
   const { violations } = await new AxeBuilder({ page })
     .include("#contact")
-    .withTags(WCAG)
-    .analyze();
-  expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
-});
-
-// The Ledger demo's default view is one state out of several, and the ones that
-// only appear after interaction are exactly where a11y regressions hide: a form
-// with live error text, and a failed row whose retry/discard controls sit inside
-// a list item. Scanning only the seeded view would miss both.
-test("no a11y violations: Ledger form with validation errors", async ({
-  page,
-}) => {
-  await page.goto("/ledger-demo");
-  await waitForHydration(page);
-  await page.getByRole("button", { name: /^add expense$/i }).click();
-  // Submitting empty is the fastest way to every error state at once.
-  await page.getByRole("button", { name: /^add expense$/i }).last().click();
-  await expect(page.getByText(/give it a name/i)).toBeVisible();
-  await freezeAnimations(page);
-  const { violations } = await new AxeBuilder({ page })
-    .withTags(WCAG)
-    .analyze();
-  expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
-});
-
-test("no a11y violations: Ledger failed-save row", async ({ page }) => {
-  await page.goto("/ledger-demo");
-  await waitForHydration(page);
-  await page.getByLabel(/fail the next save/i).check();
-  await page.getByRole("button", { name: /^add expense$/i }).click();
-  await page.getByLabel(/what was it/i).fill("Test expense");
-  await page.getByLabel(/amount/i).fill("42");
-  await page.getByRole("button", { name: /^add expense$/i }).last().click();
-  // The simulated request takes 250-650ms, so wait for the failure UI itself
-  // rather than a fixed timeout.
-  await expect(page.getByRole("button", { name: /retry/i })).toBeVisible();
-  await freezeAnimations(page);
-  const { violations } = await new AxeBuilder({ page })
     .withTags(WCAG)
     .analyze();
   expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);

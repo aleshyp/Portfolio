@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowRight, CornerDownRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -27,7 +28,8 @@ import { cn } from "@/lib/utils";
  * reintroduces layout shift.
  */
 
-type Scene =
+/** An exported Figma screen. */
+type Screen =
   | "homepage"
   | "catalog"
   | "detail"
@@ -39,8 +41,11 @@ type Scene =
   | "website-login"
   | "emptycatalog";
 
+/** A screen, or the user-flow diagram (rendered as DOM, not an export). */
+type Scene = Screen | "flow";
+
 /** Intrinsic dimensions of each export — drives both `aspect-ratio` and CLS-free layout. */
-const DIMENSIONS: Record<Scene, { w: number; h: number }> = {
+const DIMENSIONS: Record<Screen, { w: number; h: number }> = {
   homepage: { w: 1800, h: 5133 },
   catalog: { w: 1800, h: 1751 },
   detail: { w: 1800, h: 2649 },
@@ -66,7 +71,162 @@ type LuminAssetProps = {
   ratio?: number;
 };
 
+/**
+ * The route from visitor to enrolled student, through the designed screens.
+ *
+ * Responsive DOM rather than an exported artboard, for the same reason as the
+ * Ledger and design-system diagrams: it reflows on a phone instead of shrinking
+ * its labels to nothing, and it's themed by the site's tokens.
+ *
+ * It documents the screens that exist — every solid step is one of the exports
+ * below, and every branch is a control visible on that screen ("Skip for now",
+ * "Browse all courses", "Try a Sample Lesson"). The dashed step is honest
+ * about where the set stops. If a screen is added or re-exported with
+ * different controls, update this to match; a flow that disagrees with its own
+ * screens is worse than no flow.
+ */
+const FLOW: {
+  name: string;
+  note: string;
+  account: boolean;
+  designed: boolean;
+  branch?: string;
+}[] = [
+  {
+    name: "Homepage",
+    note: "Lesson formats, popular courses, reviews",
+    account: false,
+    designed: true,
+  },
+  {
+    name: "Course catalog",
+    note: "Search by topic, tool or skill; filter by category",
+    account: false,
+    designed: true,
+    branch: "No results → empty state → Browse all courses",
+  },
+  {
+    name: "Course page",
+    note: "Curriculum, reviews, price card pinned while scrolling",
+    account: false,
+    designed: true,
+    branch: "Not ready to pay → Try a sample lesson",
+  },
+  {
+    name: "Sign up",
+    note: "Email, Google or GitHub",
+    account: true,
+    designed: true,
+    branch: "Already a member → Log in",
+  },
+  {
+    name: "Onboarding",
+    note: "Three steps: what do you want to learn?",
+    account: true,
+    designed: true,
+    branch: "Skip for now → no questions asked",
+  },
+  {
+    name: "Checkout, then first lesson",
+    note: "Not in this set — the next screens to design",
+    account: true,
+    designed: false,
+  },
+];
+
+function LuminFlow({ alt }: { alt: string }) {
+  return (
+    <div
+      className="overflow-hidden rounded-4xl border border-border-subtle bg-surface p-6 shadow-soft sm:p-8"
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
+    >
+      {/* The board's aria-label carries the content; the visible text is
+          hidden from AT so it isn't announced twice. */}
+      <div aria-hidden={alt ? true : undefined}>
+        <p className="font-display text-base font-semibold text-fg sm:text-lg">
+          User flow: curious to enrolled
+        </p>
+        <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-fg-muted sm:text-sm">
+          The main path runs 01 to 06. Every branch rejoins it, and no
+          account is needed until someone decides to enroll.
+        </p>
+
+        <ol className="mt-6 flex flex-col gap-2 xl:flex-row xl:items-stretch">
+          {FLOW.map((step, i) => (
+            <li
+              key={step.name}
+              className="flex flex-col gap-2 xl:flex-1 xl:flex-row xl:items-center"
+            >
+              <div
+                className={cn(
+                  "flex h-full flex-1 flex-col rounded-2xl border p-4",
+                  step.designed
+                    ? "border-border-subtle bg-surface-raised"
+                    : "border-dashed border-fg-faint",
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-display text-xs font-semibold text-brand-700 dark:text-brand-400">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={cn(
+                      "shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
+                      step.account
+                        ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300"
+                        : "bg-surface text-fg-muted",
+                    )}
+                  >
+                    {step.account ? "Account" : "No account"}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm font-semibold text-fg">{step.name}</p>
+                <p className="mt-1 text-xs leading-relaxed text-fg-muted">
+                  {step.note}
+                </p>
+                {/* mt-auto on a wrapper pins branches to the card's foot, so
+                    they line up across the row; pt-3 keeps a minimum gap. */}
+                {step.branch && (
+                  <div className="mt-auto pt-3">
+                    <p className="flex items-start gap-1.5 border-t border-border-subtle pt-2.5 text-xs leading-relaxed text-fg-soft">
+                      <CornerDownRight
+                        size={14}
+                        className="mt-0.5 shrink-0 text-fg-faint"
+                      />
+                      {step.branch}
+                    </p>
+                  </div>
+                )}
+              </div>
+              {i < FLOW.length - 1 && (
+                <span className="flex justify-center text-fg-faint">
+                  <ArrowDown size={16} className="xl:hidden" />
+                  <ArrowRight size={16} className="hidden xl:block" />
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+
+        <p className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-fg-faint">
+          Solid: a designed screen, shown on this page. Dashed: not designed yet.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function LuminAsset({ scene, className, alt, ratio }: LuminAssetProps) {
+  if (scene === "flow") {
+    return (
+      <div className={cn("w-full", className)}>
+        <LuminFlow alt={alt} />
+      </div>
+    );
+  }
+
   const { w, h } = DIMENSIONS[scene];
 
   return (
@@ -91,19 +251,20 @@ export function LuminAsset({ scene, className, alt, ratio }: LuminAssetProps) {
 }
 
 /**
- * Scene order maps to the case study's structure, so each screen lands beside
- * the block it illustrates:
+ * Scene order maps to the case study's structure, so each scene lands under the
+ * block it illustrates:
  *
- *   0 homepage    → hero (the video plays here; this is the card thumbnail and
- *                   the reduced-motion still)
- *   1 onboarding  → "The problem"    — the first-run path students dropped off
- *   2 catalog     → "Design goals"   — making the next action obvious
- *   3 detail      → "The solution"   — the lesson/curriculum view with progress
- *   4 mentors     → "Outcome"        — the payoff screen
+ *   0 homepage      → hero (the video plays here; this is the card thumbnail and
+ *                     the reduced-motion still)
+ *   1 flow          → "From curious to enrolled" — the route through the set
+ *   2 onboarding    → "Ask, but don't gate"
+ *   3 emptycatalog  → "No dead ends"
+ *   4 detail        → "Two ways in"
+ *   5 catalog       → "What I'd change" — the violet Enroll buttons and the
+ *                     drifted card are both visible here, under the text that
+ *                     names them
  *
- * Scenes past index 4 aren't rendered by the current four-block study; they stay
- * here so a new block (or a future gallery section) can pull one in without
- * re-exporting anything.
+ * Everything past index 5 renders in the case study's "More screens" gallery.
  */
 export const luminScenes: { scene: Scene; alt: string }[] = [
   {
@@ -111,32 +272,24 @@ export const luminScenes: { scene: Scene; alt: string }[] = [
     alt: "Lumin marketing homepage with a 'Master the craft of digital design' hero above a video player, three lesson-format cards (Interactive Video, Real-world Tasks, Guided Paths), a popular-courses row, and student testimonials.",
   },
   {
+    scene: "flow",
+    alt: "User flow from visitor to enrolled student, six steps in order. One, homepage, no account. Two, course catalog, no account; branch: no results leads to an empty state with a Browse all courses action. Three, course page, no account; branch: not ready to pay leads to Try a sample lesson. Four, sign up, account required; branch: already a member leads to log in. Five, onboarding, three steps; branch: Skip for now. Six, checkout then first lesson, drawn dashed because it isn't designed yet.",
+  },
+  {
     scene: "onboarding",
     alt: "Onboarding step 1 of 3, headed 'What do you want to learn?', with eight selectable interest tiles (UI/UX Design selected), a Continue button, and a 'Skip for now' escape hatch.",
   },
   {
-    scene: "catalog",
-    alt: "Course catalog with a search field and category filter chips above a grid of course cards, each showing its category, title, instructor, star rating, length, and an Enroll button.",
+    scene: "emptycatalog",
+    alt: "Catalog empty state where a search for 'Advanced Motion' returns 'No courses found' with a friendly illustration and a 'Browse all courses' recovery action.",
   },
   {
     scene: "detail",
     alt: "Course detail page for 'Design Systems for Scale', showing a violet hero with instructor and last-updated date, a sticky $149 enrollment card, a three-module curriculum with completion checkmarks, and student reviews.",
   },
   {
-    scene: "mentors",
-    alt: "Mentors directory headed 'Learn from the best in the craft', above a filterable grid of mentor cards showing photo, expertise tags, role, rating and review count, each with a 'Book a Session' button.",
-  },
-  {
-    scene: "pricing",
-    alt: "Pricing page with three tiers (Free, Pro at $29/mo highlighted in violet, Team at $99/mo) with feature checklists, above a 'Need help choosing?' discovery-call prompt.",
-  },
-  {
-    scene: "resources",
-    alt: "Free resource library with filter chips above a grid of downloadable templates, guides, toolkits and checklists, each with a description and Download Free button, over a newsletter sign-up band.",
-  },
-  {
-    scene: "emptycatalog",
-    alt: "Catalog empty state where a search for 'Advanced Motion' returns 'No courses found' with a friendly illustration and a 'Browse all courses' recovery action.",
+    scene: "catalog",
+    alt: "Course catalog with a search field and category filter chips above a grid of course cards, each showing its category, title, instructor, star rating, length, and an Enroll button.",
   },
   {
     scene: "signup",
@@ -145,5 +298,17 @@ export const luminScenes: { scene: Scene; alt: string }[] = [
   {
     scene: "website-login",
     alt: "Log-in screen headed 'Welcome back', with completion-rate and active-learner stats beside an email and password form, social log-in options, and a link to sign up.",
+  },
+  {
+    scene: "pricing",
+    alt: "Pricing page with three tiers (Free, Pro at $29/mo highlighted in violet, Team at $99/mo) with feature checklists, above a 'Need help choosing?' discovery-call prompt.",
+  },
+  {
+    scene: "mentors",
+    alt: "Mentors directory headed 'Learn from the best in the craft', above a filterable grid of mentor cards showing photo, expertise tags, role, rating and review count, each with a 'Book a Session' button.",
+  },
+  {
+    scene: "resources",
+    alt: "Free resource library with filter chips above a grid of downloadable templates, guides, toolkits and checklists, each with a description and Download Free button, over a newsletter sign-up band.",
   },
 ];
