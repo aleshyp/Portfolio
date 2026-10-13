@@ -13,11 +13,11 @@ const stats = [
 ];
 
 const focusAreas = [
-  "Web Design",
-  "Front-End Development",
+  "Product Design",
   "Design Systems",
   "UX/UI Design",
-  "Graphic Design",
+  "Front-End Development",
+  "Accessibility",
   "Brand Identity",
 ];
 
@@ -82,8 +82,9 @@ export function About() {
               <p>
                 In 2022 it became full-time. I was hired as a graphic designer
                 and talked my way into the web side; now I design the pages, own
-                the design system, and build them in React. Most of my time goes
-                into details nobody is supposed to notice.
+                the design system, and build them in React, working in sprints
+                alongside our engineers. Most of my time goes into details
+                nobody is supposed to notice.
               </p>
             </Prose>
           </AnimatedReveal>

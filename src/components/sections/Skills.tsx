@@ -1,6 +1,6 @@
 import {
   PenTool,
-  Sparkles,
+  Layers,
   Layout,
   Code2,
   type LucideIcon,
@@ -10,52 +10,18 @@ import { AnimatedReveal, StaggerGroup, StaggerItem } from "@/components/Animated
 import { Eyebrow } from "@/components/Badge";
 import { Card } from "@/components/Card";
 import { Pill } from "@/components/Pill";
+import { skillGroups, tools } from "@/data/site";
 
-type SkillGroup = {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  items: string[];
+// The skill DATA lives in src/data/site.ts so the generated résumé lists the
+// same things. Only the icons are a UI concern, so they're keyed here.
+const icons: Record<(typeof skillGroups)[number]["title"], LucideIcon> = {
+  "UX/UI Design": Layout,
+  "Design Systems": Layers,
+  "Front-End": Code2,
+  "Brand & Graphic Design": PenTool,
 };
 
-const groups: SkillGroup[] = [
-  {
-    icon: PenTool,
-    title: "Graphic Design",
-    description: "Where it all started.",
-    items: ["Brand Identity", "Social Media", "Layout", "Visual Design"],
-  },
-  {
-    icon: Sparkles,
-    title: "Branding",
-    description: "Marks that still work at 16px.",
-    items: ["Logo Design", "Brand Identity", "Style Guides", "Typography"],
-  },
-  {
-    icon: Layout,
-    title: "UX/UI Design",
-    description: "Screens that don't need a tutorial.",
-    items: ["UI Design", "Prototyping", "Interaction", "Design Systems"],
-  },
-  {
-    icon: Code2,
-    title: "Front-End",
-    description: "Shipping design in code.",
-    items: ["React", "TypeScript", "Tailwind CSS", "TanStack"],
-  },
-];
-
-const tools = [
-  "Figma",
-  "Photoshop",
-  "Illustrator",
-  "Affinity",
-  "React",
-  "TypeScript",
-  "Tailwind CSS",
-  "TanStack",
-  "Claude Code",
-];
+const groups = skillGroups.map((group) => ({ ...group, icon: icons[group.title] }));
 
 export function Skills() {
   return (
@@ -67,8 +33,8 @@ export function Skills() {
             What I work with.
           </h2>
           <p className="mt-4 text-fg-muted">
-            Brand and graphics, product interfaces, and the code that ships
-            them, roughly in the order a project moves through them.
+            Product interfaces, the systems behind them, and the code that
+            ships them, with brand work where it all started.
           </p>
         </div>
       </AnimatedReveal>

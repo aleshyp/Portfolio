@@ -16,6 +16,7 @@ npm run lint     # eslint
 npm run test:unit # Node test runner — pure logic (src/lib/ledger), no browser
 npm run test:e2e # Playwright suite (e2e/) — boots a dev server if none is up
 npm run test:lh  # Lighthouse budget gate (needs a production build served first)
+npm run resume   # regenerate public/resume.pdf from src/data (fails if it isn't one page)
 ```
 
 ### Environment
@@ -61,7 +62,7 @@ import Image from "next/image";
 
 <Image
   src="/work/northwind/01-hero.webp"
-  alt="Northwind banking app home screen"
+  alt="Northwind marketing site homepage hero"
   width={1280}
   height={800}
   className="aspect-[16/10] w-full rounded-4xl object-cover"
