@@ -156,7 +156,7 @@ test("keyboard: submit moves focus to the confirmation status", async ({
   await waitForHydration(page);
   await page.getByLabel("Name").fill("Jane Doe");
   await page.getByLabel("Email").fill("jane@company.com");
-  await page.getByLabel(/project details/i).fill("Testing keyboard flow.");
+  await page.getByLabel(/^message$/i).fill("Testing keyboard flow.");
 
   // Locate the submit by its stable attribute, NOT by accessible name: the
   // label flips from "Send message" to "Sending…" on submit, and Playwright

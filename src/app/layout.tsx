@@ -22,7 +22,7 @@ const sora = Sora({
 const titleDefault = `${site.name} · ${site.role}`;
 
 const ogDescription =
-  "Graphic design, UX/UI, and the front-end code to ship it. Brand identity through to accessible, production-ready interfaces.";
+  "UX/UI design for web and app interfaces, the design systems behind them, and the front-end code that ships them. Accessible and production-ready.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -30,10 +30,10 @@ export const metadata: Metadata = {
     default: titleDefault,
     template: `%s · ${site.name}`,
   },
-  description: `${site.name} is a designer and front-end developer in Kansas City. Brand identity, UX/UI, and the production React that ships it. One person from Figma to live.`,
+  description: `${site.name} is a UX/UI designer and front-end developer in Kansas City. Web and app interfaces, the design systems behind them, and the production React that ships them. One person from Figma to live.`,
   keywords: [
-    "Designer & Front-End Developer",
     "UX/UI Designer",
+    "Product Designer",
     "Front-End Developer",
     "Design Systems",
     "Brand Identity",

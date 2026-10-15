@@ -89,6 +89,15 @@ const cardScene: Record<
     width: 2400,
     height: 1350,
   },
+  // The study's scenes are responsive DOM sized for the case-study column; in a
+  // 16:9 card the token-layers cover cropped mid-word ("ive token layers"). This
+  // is a real capture of the home hero, half light and half dark — regenerate
+  // it with scripts/capture-portfolio-card.mjs whenever the hero changes.
+  "portfolio-design-system": {
+    src: "/work/portfolio/card.webp",
+    width: 2400,
+    height: 1350,
+  },
   // A dedicated crop, not the case-study cover.
   //
   // The full-app capture makes a poor thumbnail: at 526x296 it's two competing
@@ -116,7 +125,12 @@ type AssetKind =
   | "portfolio-system";
 
 type AssetSet = {
-  scenes: { scene: string; alt: string }[];
+  /**
+   * `caption` is the visible one-liner under the scene on the case study: what
+   * to notice, where `alt` describes what's there. A visual with no caption
+   * leaves the reader to guess why it's on the page.
+   */
+  scenes: { scene: string; alt: string; caption?: string }[];
   kind: AssetKind;
   /**
    * True when the scenes carry their OWN aspect ratio and must not be forced
@@ -291,6 +305,12 @@ export function renderProjectScene(
           alt={alt}
           width={3200}
           height={1800}
+          /* Lazy: none of these is above the fold (scene 0 is the video), and
+             an eager <img> gets a React preload hint in the route's RSC
+             payload. When the Work grid prefetched this study, that hint made
+             the HOME page download all four ~200-380KB frames it never shows. */
+          loading="lazy"
+          decoding="async"
           className={cn("block object-cover shadow-soft", className)}
         />
       );

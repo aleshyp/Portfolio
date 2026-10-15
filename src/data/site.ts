@@ -13,16 +13,15 @@ export const siteUrl =
 export const site = {
   name: "Ian Riley",
   firstName: "Ian",
-  role: "Product Designer & Front-End Developer",
+  role: "UX/UI Designer & Front-End Developer",
   tagline:
-    "I design products and the design systems behind them, then write the front-end code that ships them.",
+    "I design web and app interfaces, then write the front-end code that ships them.",
   location: "Kansas City, United States",
   email: "hello@ianriley.co",
   available: true,
   resumeUrl: "/resume.pdf",
   socials: {
     linkedin: "https://www.linkedin.com/in/ian-riley-242a4a300/",
-    behance: "https://www.behance.net/aleshyp",
   },
   nav: [
     { label: "Work", href: "/#work" },
@@ -64,7 +63,7 @@ export const skillGroups = [
   {
     title: "Brand & Graphic Design",
     description: "Where it all started.",
-    items: ["Brand Identity", "Logo Design", "Typography", "Layout"],
+    items: ["Brand Identity", "Logo Design", "Motion Design", "Typography"],
   },
 ] as const;
 
@@ -95,18 +94,18 @@ export type ExperienceItem = {
 
 export const experience: ExperienceItem[] = [
   {
-    role: "Web Designer & Front-End Developer",
+    role: "UX/UI Designer & Front-End Developer",
     company: "International Academy of Science",
     period: "2022 – Present",
     location: "United States",
     summary:
-      "Joined as a graphic designer and grew the role into web design and front-end development. I design pages for Acellus, an online learning program, own and maintain the design system, then build those designs into shippable pages in code.",
+      "Joined doing graphic and motion design, and after two years moved into UX/UI and front-end development. I design web and app pages for Acellus, an online learning program, help maintain its design system, and build those designs into shippable pages in code.",
     highlights: [
-      "Design web pages for Acellus, an online learning platform.",
-      "Created and maintain the design system that keeps the product consistent.",
-      "Transform designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
+      "Design web and app pages for Acellus, an online learning platform.",
+      "Helped create, and help maintain, the design system that keeps the product consistent, working in Figma and with Claude.",
+      "Build designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
       "Work in sprints alongside the programming team, planning and shipping work through GitLab.",
-      "Use Claude Code to boost development efficiency and productivity.",
+      "Spent the first two years on graphic and motion design before moving into UX/UI.",
     ],
   },
   {
@@ -199,3 +198,35 @@ export const education: EducationItem[] = [
     period: "October 2025",
   },
 ];
+
+/**
+ * Education collapsed by institution, so five Coursera courses read as one
+ * line of coursework instead of five entries outweighing the work history.
+ * Shared by the Experience section and the résumé so they can't disagree.
+ */
+export type EducationGroup = { title: string; detail: string; period: string };
+
+export function educationGroups(): EducationGroup[] {
+  const byInstitution = new Map<string, EducationItem[]>();
+  for (const e of education) {
+    byInstitution.set(e.institution, [
+      ...(byInstitution.get(e.institution) ?? []),
+      e,
+    ]);
+  }
+  return [...byInstitution.entries()].map(([institution, items]) =>
+    items.length === 1
+      ? {
+          title: items[0].credential,
+          detail: institution,
+          period: items[0].period,
+        }
+      : {
+          title: `${institution} coursework`,
+          // "Play It Safe: Manage Security Risks" → "Manage Security Risks"
+          detail: items.map((i) => i.credential.split(": ").at(-1)).join("; "),
+          // "October 2025" → "2025"
+          period: items.at(-1)!.period.split(" ").at(-1)!,
+        },
+  );
+}

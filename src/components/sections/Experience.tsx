@@ -4,7 +4,7 @@ import { AnimatedReveal, StaggerGroup, StaggerItem } from "@/components/Animated
 import { Eyebrow } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
-import { experience, education, site } from "@/data/site";
+import { experience, educationGroups, site } from "@/data/site";
 
 export function Experience() {
   return (
@@ -89,13 +89,11 @@ export function Experience() {
             dependencies actually get attacked is part of the job.
           </p>
           <dl className="mt-6 grid gap-6 sm:grid-cols-2">
-            {education.map((e) => (
-              <div key={`${e.credential}-${e.period}`}>
-                <dt className="font-medium text-fg">
-                  {e.credential}
-                </dt>
+            {educationGroups().map((g) => (
+              <div key={g.title}>
+                <dt className="font-medium text-fg">{g.title}</dt>
                 <dd className="mt-1 text-sm text-fg-muted">
-                  {e.institution} · {e.period}
+                  {g.detail} · {g.period}
                 </dd>
               </div>
             ))}

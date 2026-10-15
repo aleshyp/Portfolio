@@ -8,16 +8,17 @@ import { site } from "@/data/site";
 
 const stats = [
   { value: "13+", label: "Years designing" },
-  { value: "1", label: "Design system, owned end to end" },
-  { value: "2022", label: "Designing and shipping in code" },
+  { value: "4", label: "Years on an in-house product team" },
+  { value: "2", label: "Sides of the handoff: design and code" },
 ];
 
 const focusAreas = [
+  "UX/UI Design",
   "Product Design",
   "Design Systems",
-  "UX/UI Design",
   "Front-End Development",
   "Accessibility",
+  "Motion Design",
   "Brand Identity",
 ];
 
@@ -80,11 +81,19 @@ export function About() {
                 job.
               </p>
               <p>
-                In 2022 it became full-time. I was hired as a graphic designer
-                and talked my way into the web side; now I design the pages, own
-                the design system, and build them in React, working in sprints
-                alongside our programmers. Most of my time goes into details
-                nobody is supposed to notice.
+                In 2022 it became full-time. I was hired for graphic and motion
+                design, and after two years moved into UX/UI and front-end. Now
+                I design web and app pages for an online learning platform, help
+                maintain the design system behind them, and build those pages in
+                React, working in sprints alongside our programmers.
+              </p>
+              <p>
+                I like to settle what a screen has to do before deciding how it
+                looks. Because I also write the front-end, I find out early
+                whether a design will survive the build, not at handoff. I use AI
+                where it saves time, like first-pass layouts and boilerplate
+                code, and keep the decisions for myself. Most of my time goes
+                into details nobody is supposed to notice.
               </p>
             </Prose>
           </AnimatedReveal>
