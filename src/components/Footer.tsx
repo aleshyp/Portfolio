@@ -7,10 +7,11 @@ import { site } from "@/data/site";
 import { Container } from "./Container";
 import { IconButton } from "./IconButton";
 import { Pill } from "./Pill";
+import { CopyEmailButton } from "./CopyEmailButton";
 
 const socialLinks = [
   { label: "LinkedIn", href: site.socials.linkedin },
-  { label: "Behance", href: site.socials.behance },
+  { label: "Résumé (PDF)", href: site.resumeUrl },
 ];
 
 export function Footer() {
@@ -23,16 +24,19 @@ export function Footer() {
               <p className="font-display text-2xl font-semibold text-fg">
                 Still reading? <span className="text-gradient">Say hi</span>.
               </p>
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-3 inline-flex items-center gap-2 text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
-              >
-                <Mail size={16} />
-                {site.email}
-              </a>
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="inline-flex items-center gap-2 text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+                >
+                  <Mail size={16} />
+                  {site.email}
+                </a>
+                <CopyEmailButton />
+              </div>
             </div>
 
-            <nav aria-label="Social links">
+            <nav aria-label="Profiles">
               <ul className="flex flex-wrap gap-2">
                 {socialLinks.map((s) => (
                   <li key={s.label}>

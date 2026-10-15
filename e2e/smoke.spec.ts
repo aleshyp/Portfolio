@@ -10,7 +10,7 @@ test.describe("home page", () => {
       page.getByRole("heading", { name: /written up properly/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /something you need built/i }),
+      page.getByRole("heading", { name: /hiring for a ux\/ui role/i }),
     ).toBeVisible();
   });
 });
@@ -55,14 +55,14 @@ test.describe("contact form", () => {
     await page.getByRole("button", { name: /send message/i }).click();
     await expect(page.getByText(/what should i call you/i)).toBeVisible();
     await expect(page.getByText(/i'll need an email to reply to/i)).toBeVisible();
-    await expect(page.getByText(/tell me what you're working on/i)).toBeVisible();
+    await expect(page.getByText(/add a short message/i)).toBeVisible();
   });
 
   test("rejects an invalid email", async ({ page }) => {
     await page.goto("/#contact");
     await page.getByLabel("Name").fill("Jane Doe");
     await page.getByLabel("Email").fill("not-an-email");
-    await page.getByLabel(/project details/i).fill("Hello there, this is a test.");
+    await page.getByLabel(/^message$/i).fill("Hello there, this is a test.");
     await page.getByRole("button", { name: /send message/i }).click();
     await expect(page.getByText(/that email doesn't look right/i)).toBeVisible();
   });
@@ -91,7 +91,7 @@ test.describe("contact form", () => {
     await page.goto("/#contact");
     await page.getByLabel("Name").fill("Jane Doe");
     await page.getByLabel("Email").fill("jane@company.com");
-    await page.getByLabel(/project details/i).fill("Hello there, this is a test.");
+    await page.getByLabel(/^message$/i).fill("Hello there, this is a test.");
     // Locate the submit by its stable attribute, NOT by accessible name: the
     // label flips from "Send message" to "Sending…" on submit, and Playwright
     // re-resolves a locator on every assertion, so a name-based handle stops
@@ -189,5 +189,26 @@ test.describe("mobile navigation", () => {
     const menu = page.getByRole("link", { name: /^work$/i });
     await expect(menu.last()).toBeVisible();
     await page.getByRole("button", { name: /close menu/i }).click();
+  });
+});
+
+// A hiring manager's first click is often the résumé, so it lives in the
+// header (desktop) or the menu (mobile) and must point at a real PDF.
+test.describe("résumé", () => {
+  test("is linked from the header and serves a PDF", async ({
+    page,
+    request,
+  }, testInfo) => {
+    await page.goto("/");
+    if (testInfo.project.name === "mobile") {
+      await page.getByRole("button", { name: /open menu/i }).click();
+    }
+    const link = page.getByRole("banner").getByRole("link", { name: /résumé/i });
+    await expect(link).toBeVisible();
+    const href = await link.getAttribute("href");
+    expect(href).toBeTruthy();
+    const res = await request.get(href!);
+    expect(res.ok()).toBe(true);
+    expect(res.headers()["content-type"]).toContain("application/pdf");
   });
 });

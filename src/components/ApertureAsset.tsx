@@ -340,25 +340,30 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
 }
 
 /** Ordered scenes for the case-study gallery (hero first, then blocks). */
-export const apertureScenes: { scene: Scene; alt: string }[] = [
+export const apertureScenes: { scene: Scene; alt: string; caption?: string }[] = [
   {
     scene: "logomark",
     alt: "Aperture logo reveal: the violet lens mark with its glowing amber center animates in beside the 'Aperture' wordmark and the tagline 'Focus the frame.', on a deep indigo field.",
+    caption: "The mark and its animated reveal.",
   },
   {
     scene: "logo-construction",
     alt: "Logo construction sheet showing the aperture mark built on a modular grid with concentric circle guides and measurement ticks.",
+    caption: "Construction sheet: every proportion comes from the grid, so anyone can rebuild the mark exactly.",
   },
   {
     scene: "palette",
     alt: "Color palette showing six swatches, from ink and indigo through violet and amber to a light mist, each labeled with its hex value.",
+    caption: "Six colors, each with a job. Amber is the only warm one.",
   },
   {
     scene: "type-specimen",
     alt: "Type specimen showing a large Aa in Sora with the tagline 'Focus the frame.' and the full alphabet, on a dark ink background.",
+    caption: "Sora, whose round letterforms echo the circles the mark is built on.",
   },
   {
     scene: "usage",
     alt: "Usage guidelines defining logo clearspace as one iris radius, with correct full-color and incorrect desaturated do/don't examples.",
+    caption: "Clearspace measured in iris radii, with the most common mistake shown beside the right version.",
   },
 ];

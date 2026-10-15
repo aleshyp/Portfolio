@@ -46,12 +46,14 @@ export function Navbar() {
     };
   }, [open]);
 
-  // Close the menu when the viewport crosses into the desktop nav (md, 768px).
+  // Close the menu when the viewport crosses into the desktop nav (lg, 1024px).
   // Without this, resizing or rotating while it's open hides the toggle button
   // but leaves `open` true — which keeps body scroll locked with no way to
-  // undo it. Matches the md: breakpoint the markup below uses.
+  // undo it. Matches the lg: breakpoint the markup below uses — lg, not md:
+  // with six links, the theme toggle and the CTA, the row didn't fit at 768px
+  // (the CTA wrapped to two lines and the links ran into the logo).
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
+    const mq = window.matchMedia("(min-width: 1024px)");
     const onChange = (e: MediaQueryListEvent) => {
       if (e.matches) setOpen(false);
     };
@@ -97,7 +99,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {site.nav.map((item) => {
               const isActive =
                 activeSection === item.href.replace("/#", "");
@@ -129,6 +131,19 @@ export function Navbar() {
                 </li>
               );
             })}
+            {/* Résumé sits outside site.nav: that list doubles as the
+                scroll-spy's section ids, and a PDF isn't a section. New tab so
+                a reader who opens it doesn't lose their place on the page. */}
+            <li>
+              <a
+                href={site.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full px-4 py-2 text-sm font-medium text-fg-muted transition-colors duration-200 hover:text-brand-700 dark:text-fg-faint dark:hover:text-brand-300"
+              >
+                Résumé
+              </a>
+            </li>
             <li className="ml-1">
               <ThemeToggle />
             </li>
@@ -140,7 +155,7 @@ export function Navbar() {
           </ul>
 
           {/* Mobile controls */}
-          <div className="flex items-center gap-1 md:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
             <ThemeToggle />
             <IconButton
               label={open ? "Close menu" : "Open menu"}
@@ -161,7 +176,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="border-b border-border-subtle bg-white shadow-soft backdrop-blur-xl md:hidden dark:bg-ink"
+            className="border-b border-border-subtle bg-white shadow-soft backdrop-blur-xl lg:hidden dark:bg-ink"
           >
             <Container>
               <ul className="flex flex-col gap-1 py-4">
@@ -186,6 +201,17 @@ export function Navbar() {
                     </li>
                   );
                 })}
+                <li>
+                  <a
+                    href={site.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-xl px-4 py-3 text-base font-medium text-fg-soft transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-fg-faint dark:hover:bg-white/5 dark:hover:text-brand-300"
+                  >
+                    Résumé (PDF)
+                  </a>
+                </li>
                 <li className="pt-2">
                   <Link
                     href="/#contact"

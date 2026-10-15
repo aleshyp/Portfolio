@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { site } from "@/data/site";
 import { Container } from "@/components/Container";
 import { Button } from "@/components/Button";
@@ -39,12 +39,12 @@ export function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden pt-32 sm:pt-40">
+    <section className="relative overflow-hidden pb-4 pt-28 sm:pb-6 sm:pt-36">
       {/* soft emerald backdrop */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 grid-pattern opacity-60" />
         <div className="absolute -left-32 top-0 h-96 w-96 rounded-full bg-brand-200/40 blur-3xl dark:bg-brand-500/10" />
-        <div className="absolute -right-24 top-24 h-80 w-80 rounded-full bg-emerald-100/60 blur-3xl dark:bg-emerald-500/10" />
+        <div className="absolute -right-24 top-24 h-80 w-80 rounded-full bg-brand-100/60 blur-3xl dark:bg-brand-500/10" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-white dark:to-ink" />
       </div>
 
@@ -62,7 +62,7 @@ export function Hero() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" />
                 </span>
-                Open to product design roles
+                Open to UX/UI design roles
               </span>
             </motion.div>
           )}
@@ -80,10 +80,10 @@ export function Hero() {
             variants={item}
             className="mx-auto mt-6 max-w-2xl text-lg text-fg-muted sm:text-xl"
           >
-            Product designer and front-end developer in{" "}
-            {site.location.split(",")[0]}. I own a Tailwind design system in
-            production, design in Figma, and build in React, so the thing you
-            approve is the thing that ships.
+            UX/UI designer and front-end developer in{" "}
+            {site.location.split(",")[0]}. I design web and app pages in Figma,
+            help maintain a production design system, and build in React, so
+            the thing you approve is the thing that ships.
           </motion.p>
 
           <motion.div
@@ -101,26 +101,13 @@ export function Hero() {
 
           <motion.div
             variants={item}
-            className="mt-16 flex items-center justify-center gap-2 text-sm text-fg-faint"
+            className="mt-12 flex items-center justify-center gap-2 text-sm text-fg-faint"
           >
             <Sparkles size={15} className="text-brand-400" />
-            <span>Designing since 2014 · shipping in code since 2022</span>
+            <span>Graphic and motion design roots · UX/UI and front-end today</span>
           </motion.div>
         </motion.div>
       </Container>
-
-      {/* gentle scroll hint */}
-      <div className="mt-14 flex justify-center pb-10">
-        <motion.a
-          href="/#work"
-          aria-label="Scroll to work"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-brand-200 text-brand-600 dark:border-brand-500/30 dark:text-brand-400"
-          animate={reduce ? undefined : { y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ArrowDown size={18} />
-        </motion.a>
-      </div>
     </section>
   );
 }

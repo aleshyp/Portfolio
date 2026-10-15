@@ -8,11 +8,12 @@ import { Eyebrow } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Field } from "@/components/Field";
 import { Pill } from "@/components/Pill";
+import { CopyEmailButton } from "@/components/CopyEmailButton";
 import { site } from "@/data/site";
 
-const socials = [
+const links = [
   { label: "LinkedIn", href: site.socials.linkedin },
-  { label: "Behance", href: site.socials.behance },
+  { label: "Résumé (PDF)", href: site.resumeUrl },
 ];
 
 type Errors = Partial<Record<"name" | "email" | "message", string>>;
@@ -58,7 +59,7 @@ export function Contact() {
     else if (email.length > LIMITS.email || !EMAIL_RE.test(email))
       next.email = "That email doesn't look right.";
 
-    if (!message) next.message = "Tell me what you're working on.";
+    if (!message) next.message = "Add a short message so I know what this is about.";
     else if (message.length > LIMITS.message)
       next.message = `Keep this under ${LIMITS.message.toLocaleString()} characters.`;
 
@@ -175,23 +176,27 @@ export function Contact() {
                 Contact
               </Eyebrow>
               <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-                Got something you need built?
+                Hiring for a UX/UI role?
               </h2>
               <p className="mt-4 max-w-md text-on-dark-muted">
-                I have room for a couple more projects right now. Send me the
-                details and I&apos;ll usually reply within a day or two.
+                I&apos;m looking for a UX/UI or product design role where I can
+                design and help build. Send a note about the role or the team
+                and I&apos;ll usually reply within a day or two.
               </p>
 
               <div className="mt-8 space-y-4">
-                <a
-                  href={`mailto:${site.email}`}
-                  className="flex items-center gap-3 rounded-lg text-on-dark-muted transition-colors hover:text-on-dark"
-                >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-on-dark">
-                    <Mail size={18} />
-                  </span>
-                  {site.email}
-                </a>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="flex min-w-0 items-center gap-3 rounded-lg text-on-dark-muted transition-colors hover:text-on-dark"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-on-dark">
+                      <Mail size={18} />
+                    </span>
+                    {site.email}
+                  </a>
+                  <CopyEmailButton tone="onDark" />
+                </div>
                 <div className="flex items-center gap-3 text-on-dark-muted">
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-on-dark">
                     <MapPin size={18} />
@@ -200,10 +205,11 @@ export function Contact() {
                 </div>
               </div>
 
-              {/* gap-1.5 below `sm`: the three socials need every pixel to stay on
-                  one line at 360px — see the padding note in Pill. */}
+              {/* gap-1.5 below `sm`: keeps the pills on one line at 360px — see
+                  the padding note in Pill. The résumé opens in a new tab like
+                  LinkedIn, so the reader doesn't lose their place here. */}
               <div className="mt-8 flex flex-wrap gap-1.5 sm:gap-2">
-                {socials.map((s) => (
+                {links.map((s) => (
                   <Pill key={s.label} href={s.href} external tone="onDark">
                     {s.label}
                   </Pill>
@@ -277,10 +283,10 @@ export function Contact() {
                       disabled={pending}
                     />
                     <Field
-                      label="Project details"
+                      label="Message"
                       id="message"
                       multiline
-                      placeholder="What you need, and when you need it by."
+                      placeholder="The role, the team, or just a question."
                       maxLength={LIMITS.message}
                       disabled={pending}
                       error={errors.message}

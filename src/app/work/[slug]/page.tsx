@@ -92,6 +92,22 @@ export default async function CaseStudy({
       node
     );
 
+  // Visible caption under a scene. Wraps in a <figure> only when there's a
+  // caption to show, and passes null through so the Placeholder fallbacks
+  // below still fire (same reason as wrapScene).
+  const captioned = (node: React.ReactNode, index: number) => {
+    const caption = assetSet?.scenes[index]?.caption;
+    if (!node || !caption) return node;
+    return (
+      <figure>
+        {node}
+        <figcaption className="mt-3 max-w-prose text-sm text-fg-muted">
+          {caption}
+        </figcaption>
+      </figure>
+    );
+  };
+
   // Scene 0 is the cover and each content block claims the next one, so a set
   // with more scenes than `blocks.length + 1` has leftovers. They render in the
   // "More screens" gallery below rather than being silently dropped.
@@ -190,7 +206,7 @@ export default async function CaseStudy({
       {/* Cover */}
       <Container>
         <AnimatedReveal delay={0.05}>
-          {wrapScene(
+          {captioned(wrapScene(
             // The cover uses the same ratio rule as the gallery: the video-hero
             // sets are genuinely 16:9 and get pinned, while a set that sizes
             // itself (the responsive design-system scenes, the full-page
@@ -198,7 +214,7 @@ export default async function CaseStudy({
             // the design-system cover to a 187px-tall letterbox on a phone.
             renderScene(0, cn("mt-10 w-full rounded-4xl", galleryRatio)),
             0,
-          ) ?? (
+          ), 0) ?? (
             <Placeholder
               label="Hero visual"
               seed={project.accent}
@@ -275,10 +291,13 @@ export default async function CaseStudy({
 
               {/* Insert a gallery image between blocks */}
               {assetSet
-                ? wrapScene(
-                    renderScene(
+                ? captioned(
+                    wrapScene(
+                      renderScene(
+                        i + 1,
+                        cn("mt-10 w-full rounded-4xl", galleryRatio),
+                      ),
                       i + 1,
-                      cn("mt-10 w-full rounded-4xl", galleryRatio),
                     ),
                     i + 1,
                   )
@@ -307,10 +326,13 @@ export default async function CaseStudy({
             <div className="mt-10 space-y-10">
               {extraScenes.map((sceneIndex) => (
                 <AnimatedReveal key={sceneIndex}>
-                  {wrapScene(
-                    renderScene(
+                  {captioned(
+                    wrapScene(
+                      renderScene(
+                        sceneIndex,
+                        cn("w-full rounded-4xl", galleryRatio),
+                      ),
                       sceneIndex,
-                      cn("w-full rounded-4xl", galleryRatio),
                     ),
                     sceneIndex,
                   )}

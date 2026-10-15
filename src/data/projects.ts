@@ -88,7 +88,7 @@ export const projects: Project[] = [
     title: "This Site: A Design System, Shipped",
     summary:
       "The site you're reading. A token-driven Tailwind design system with light and dark theming, WCAG 2.2 AA checked by an axe-core suite, and a Lighthouse budget that fails the build when a score slips. Designed and built end to end.",
-    blurb: "The design system behind this site, built and tested in public.",
+    blurb: "A token-based design system whose accessibility and Lighthouse checks fail the build if a score slips.",
     tags: ["Design System", "Tailwind CSS", "Accessibility"],
     role: "Designer & Front-End Developer",
     contributions: [
@@ -138,7 +138,7 @@ export const projects: Project[] = [
     title: "Lumin: Online Learning, From Curious to Enrolled",
     summary:
       "The part of an online-learning product that decides whether anyone ever reaches a lesson: finding a course, judging it, and signing up. Ten screens held to one rule: nobody needs an account until they've decided to enroll.",
-    blurb: "Course discovery and sign-up, designed with no dead ends.",
+    blurb: "Ten screens from catalog to enrolled, and nobody needs an account to browse.",
     tags: ["UX/UI Design", "User Flows", "EdTech"],
     role: "Product Designer",
     contributions: [
@@ -190,7 +190,7 @@ export const projects: Project[] = [
     title: "Northwind: A SaaS Marketing Site",
     summary:
       "A marketing site and account screens for a team-analytics startup, designed in Figma around a single ask: start a free trial.",
-    blurb: "A SaaS marketing site, from brand mark to sign-in.",
+    blurb: "Six marketing pages and three account screens built around one ask: start a free trial.",
     tags: ["Web Design", "Branding", "Marketing Site"],
     role: "Web & Brand Designer",
     contributions: [
@@ -241,7 +241,7 @@ export const projects: Project[] = [
     title: "Aperture: A Brand Identity From Scratch",
     summary:
       "A visual identity built from nothing: a lens mark constructed on a grid, a six-color palette, a type system, and usage rules written for people who aren't designers.",
-    blurb: "A full visual identity, logo through guidelines.",
+    blurb: "A lens mark built on a grid, with usage rules written for people who aren't designers.",
     tags: ["Brand Identity", "Logo Design", "Graphic Design"],
     role: "Brand Designer",
     contributions: [

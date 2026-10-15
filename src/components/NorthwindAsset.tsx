@@ -110,60 +110,73 @@ export function NorthwindAsset({
  *   5+ full-page screens — product, pricing, docs, about, community, then the
  *      three auth screens.
  */
-export const northwindScenes: { scene: Scene; alt: string }[] = [
+export const northwindScenes: { scene: Scene; alt: string; caption?: string }[] = [
   {
     // Scene 0 fills the hero slot, where projectAssets swaps in NorthwindHero
     // (the logo-reveal video) — so this alt describes the ANIMATION, not the
     // frame below it. The 16:9 landing view returns as scene 1.
     scene: "01-hero",
     alt: "Northwind logo animation in which the cyan rounded-square mark with its paired up and down triangles resolves beside the 'Northwind' wordmark on a deep navy grid.",
+    caption: "The logo mark and its animated reveal.",
   },
   {
     scene: "01-hero",
     alt: "Northwind homepage hero with the 'See what your team actually ships.' headline over start-trial and book-a-demo buttons, beside a weekly-velocity bar chart, a 47-PRs card, a +12% velocity card, and a 12k+ teams stat.",
+    caption: "The homepage hero shows the product instead of describing it, with Start free trial as the one primary action.",
   },
   {
     scene: "02-value-props",
     alt: "Value-props section headed 'Clarity, not more charts.' beside three numbered cards: One digest every Monday, Connect in two clicks, and Every teammate same picture.",
+    caption: "Three value props, each answering an objection an engineering lead would raise.",
   },
   {
     scene: "03-social-proof",
     alt: "Social-proof section showing +22% trial conversion, a 4.9/5 average rating, 12k+ teams, a testimonial from Priya Nair reading 'We replaced three dashboards with one Monday-morning email,' and a 'Ready to see what your team ships?' call-to-action band.",
+    caption: "Proof before the closing ask. Northwind is invented, so every figure here is placeholder content, not a result.",
   },
   {
     scene: "04-mobile",
     alt: "Responsive view of the Northwind dashboard on a phone showing weekly velocity, PRs merged and average review time, beside the heading 'Designed mobile-first.' and its supporting bullets.",
+    caption: "The dashboard at phone width: stacked cards instead of a squeezed table.",
   },
   {
     scene: "product",
     alt: "Product page headed 'The engineering hub for high-velocity teams.' above a PR-merge-velocity dashboard, a Weekly Velocity Digest panel, a real-time PR-tracking section, an integrations row, and a 'Stop babysitting dashboards' closing band.",
+    caption: "Product page.",
   },
   {
     scene: "pricing",
     alt: "Pricing page headed 'Transparent pricing for every team scale' above three tiers (Starter free, Team at $12 highlighted in cyan, Enterprise custom) with feature checklists, a six-row feature-comparison table, and a 'Stop babysitting dashboards' closing band.",
+    caption: "Pricing, with a feature-comparison table.",
   },
   {
     scene: "docs",
     alt: "Documentation page showing a 'Quick Start Guide' article with a docs sidebar (Getting Started, Integrations, API Reference, CLI), numbered install steps with copyable bash snippets, and a Slack integration settings panel of toggles.",
+    caption: "Docs: the quick-start guide.",
   },
   {
     scene: "about",
     alt: "About page headed 'We make engineering work visible.' above the team grid, four core-value cards (Transparency, Speed, Signal over Noise, Builder-first), the investor row, and a 'Come build the future of visibility' hiring band.",
+    caption: "About page.",
   },
   {
     scene: "community",
     alt: "Community page headed 'Built by engineers, for engineers.' above a Recent Discussions row, growth stats (4,200+ engineers, 890+ teams, 120+ countries), a 'Trending this week' thread grid, and a 'Ready to share what you have built?' band.",
+    caption: "Community page.",
   },
   {
     scene: "login",
     alt: "Log-in screen with a 'Welcome back' card offering a Continue-with-GitHub option, email and password fields, a Sign in button, and a trusted-by logo row.",
+    caption: "Sign-in.",
   },
   {
     scene: "signup",
     alt: "Create-account screen with a 'Create your account' card offering a Continue-with-GitHub option, full-name, work-email and password fields, a 'Get started for free' button, and a link back to sign in.",
+    caption: "Sign-up.",
   },
   {
     scene: "forgot-password",
     alt: "Password-reset screen with a 'Reset your password' card containing an email field, a Send reset link button, and a back-to-sign-in link.",
+    caption: "Password reset.",
   },
 ];

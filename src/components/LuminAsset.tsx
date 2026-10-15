@@ -246,8 +246,9 @@ export function LuminAsset({ scene, className, alt, ratio }: LuminAssetProps) {
  * Scene order maps to the case study's structure, so each scene lands under the
  * block it illustrates:
  *
- *   0 homepage      → hero (the video plays here; this is the card thumbnail and
- *                     the reduced-motion still)
+ *   0 homepage      → hero SLOT: the logo-reveal video plays here, so this entry
+ *                     describes the animation. (The card thumbnail is the course
+ *                     page — see cardScene in projectAssets.)
  *   1 flow          → "From curious to enrolled" — the route through the set
  *   2 onboarding    → "Ask, but don't gate"
  *   3 emptycatalog  → "No dead ends"
@@ -256,51 +257,72 @@ export function LuminAsset({ scene, className, alt, ratio }: LuminAssetProps) {
  *                     drifted card are both visible here, under the text that
  *                     names them
  *
- * Everything past index 5 renders in the case study's "More screens" gallery.
+ * Everything past index 5 renders in the case study's "More screens" gallery,
+ * starting with the homepage. It used to sit only at index 0, where the video
+ * hid it, so the homepage design never appeared anywhere on the site.
  */
-export const luminScenes: { scene: Scene; alt: string }[] = [
+export const luminScenes: { scene: Scene; alt: string; caption?: string }[] = [
   {
+    // Scene 0 is the hero SLOT, where projectAssets plays LuminHero (the
+    // logo-reveal video) instead — so this alt describes the ANIMATION. The
+    // homepage screen itself appears in "More screens", below.
     scene: "homepage",
-    alt: "Lumin marketing homepage with a 'Master the craft of digital design' hero above a video player, three lesson-format cards (Interactive Video, Real-world Tasks, Guided Paths), a popular-courses row, and student testimonials.",
+    alt: "Lumin logo reveal: a violet rounded-square app icon with a gold four-pointed star resolves beside the 'Lumin' wordmark on a soft lavender field.",
+    caption: "Lumin's logo reveal.",
   },
   {
     scene: "flow",
     alt: "User flow from visitor to enrolled student, six steps in order. One, homepage, no account. Two, course catalog, no account; branch: no results leads to an empty state with a Browse all courses action. Three, course page, no account; branch: not ready to pay leads to Try a sample lesson. Four, sign up, account required; branch: already a member leads to log in. Five, onboarding, three steps; branch: Skip for now. Six, checkout then first lesson, drawn dashed because it isn't designed yet.",
+    caption: "The route from visitor to enrolled student. Nothing asks for an account until step four.",
   },
   {
     scene: "onboarding",
     alt: "Onboarding step 1 of 3, headed 'What do you want to learn?', with eight selectable interest tiles (UI/UX Design selected), a Continue button, and a 'Skip for now' escape hatch.",
+    caption: "Onboarding step one of three, with Skip for now directly under Continue.",
   },
   {
     scene: "emptycatalog",
     alt: "Catalog empty state where a search for 'Advanced Motion' returns 'No courses found' with a friendly illustration and a 'Browse all courses' recovery action.",
+    caption: "The empty search keeps the query in view and offers one way back.",
   },
   {
     scene: "detail",
     alt: "Course detail page for 'Design Systems for Scale', showing a violet hero with instructor and last-updated date, a sticky $149 enrollment card, a three-module curriculum with completion checkmarks, and student reviews.",
+    caption: "The course page: a pinned price card with a lower-stakes second action, Try a sample lesson.",
   },
   {
     scene: "catalog",
     alt: "Course catalog with a search field and category filter chips above a grid of course cards, each showing its category, title, instructor, star rating, length, and an Enroll button.",
+    caption: "The catalog, showing two problems block 05 names: violet Enroll buttons, and one card that drifted from the others.",
+  },
+  {
+    scene: "homepage",
+    alt: "Lumin marketing homepage with a 'Master the craft of digital design' hero above a video player, three lesson-format cards (Interactive Video, Real-world Tasks, Guided Paths), a popular-courses row, and student testimonials.",
+    caption: "The marketing homepage, where the route starts.",
   },
   {
     scene: "signup",
     alt: "Create-account screen in a split layout, with 'Your next skill is waiting' and social-proof stats on the left, and a name/email/password form with Google and GitHub options on the right.",
+    caption: "Sign-up, reached only once someone decides to enroll.",
   },
   {
     scene: "website-login",
     alt: "Log-in screen headed 'Welcome back', with completion-rate and active-learner stats beside an email and password form, social log-in options, and a link to sign up.",
+    caption: "Log-in for returning students.",
   },
   {
     scene: "pricing",
     alt: "Pricing page with three tiers (Free, Pro at $29/mo highlighted in violet, Team at $99/mo) with feature checklists, above a 'Need help choosing?' discovery-call prompt.",
+    caption: "Pricing: three tiers, with Pro highlighted.",
   },
   {
     scene: "mentors",
     alt: "Mentors directory headed 'Learn from the best in the craft', above a filterable grid of mentor cards showing photo, expertise tags, role, rating and review count, each with a 'Book a Session' button.",
+    caption: "Mentor directory, filterable by expertise.",
   },
   {
     scene: "resources",
     alt: "Free resource library with filter chips above a grid of downloadable templates, guides, toolkits and checklists, each with a description and Download Free button, over a newsletter sign-up band.",
+    caption: "Free resource library above a newsletter sign-up.",
   },
 ];

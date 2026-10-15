@@ -19,7 +19,7 @@
 import { writeFile } from "node:fs/promises";
 import { chromium } from "@playwright/test";
 
-const { site, siteUrl, experience, education, skillGroups, tools } =
+const { site, siteUrl, experience, educationGroups, skillGroups, tools } =
   await import("../src/data/site.ts");
 const { projects } = await import("../src/data/projects.ts");
 
@@ -55,10 +55,6 @@ const contact = [
   link(`mailto:${site.email}`, site.email),
   link(`${siteUrl}/`, host),
   link(site.socials.linkedin, "linkedin.com/in/ian-riley"),
-  link(
-    site.socials.behance,
-    site.socials.behance.replace(/^https?:\/\/(www\.)?/, ""),
-  ),
 ].join('<span class="dot">•</span>');
 
 const skillsHtml = skillGroups
@@ -81,22 +77,11 @@ const workHtml = projects
   })
   .join("");
 
-// Group certificates by institution, so five Coursera courses read as one
-// line of coursework instead of five entries.
-const byInstitution = new Map();
-for (const e of education) {
-  const list = byInstitution.get(e.institution) ?? [];
-  list.push(e);
-  byInstitution.set(e.institution, list);
-}
-const educationHtml = [...byInstitution.entries()]
-  .map(([institution, items]) =>
-    items.length === 1
-      ? `<div class="item"><h4>${esc(items[0].credential)}</h4><p>${esc(institution)} · ${esc(items[0].period)}</p></div>`
-      : `<div class="item"><h4>${esc(institution)} coursework</h4><p>${esc(
-          // "Play It Safe: Manage Security Risks" → "Manage Security Risks"
-          items.map((i) => i.credential.split(": ").at(-1)).join("; "),
-        )}</p><p class="meta">${esc(items.at(-1).period.split(" ").at(-1))}</p></div>`,
+// Grouped by institution in site.ts, shared with the site's Education card.
+const educationHtml = educationGroups()
+  .map(
+    (g) =>
+      `<div class="item"><h4>${esc(g.title)}</h4><p>${esc(g.detail)}</p><p class="meta">${esc(g.period)}</p></div>`,
   )
   .join("");
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import { site } from "@/data/site";
 import { Container } from "./Container";
 import { AnimatedReveal } from "./AnimatedReveal";
@@ -14,10 +14,13 @@ import { buttonClasses } from "./Button";
  * contact was handed more reading instead of a way to do it.
  *
  * This sits above that next-project link rather than replacing it: browsing on
- * is still a legitimate intent, it just shouldn't be the *only* offer. The
- * contact CTA is named for the action ("Start a project") rather than the
- * generic "Contact me", and the mailto is exposed as a second, lower-commitment
- * route for readers who would rather not use a form.
+ * is still a legitimate intent, it just shouldn't be the *only* offer.
+ *
+ * Written for a hiring manager, not a client: this site is a job search, so
+ * the end of a study offers a conversation and the résumé, not a freelance
+ * engagement. The résumé is the second action because it's what that reader
+ * needs next; the email address is in the Contact section the first one leads
+ * to.
  */
 export function CaseStudyCta() {
   return (
@@ -33,11 +36,12 @@ export function CaseStudyCta() {
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-xl">
                 <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                  Want something like this for your project?
+                  Want to talk about this work?
                 </h2>
                 <p className="mt-3 text-on-dark-muted">
-                  I take on a couple of projects at a time. Tell me what you
-                  need and I&apos;ll usually reply within a day or two.
+                  I&apos;m open to UX/UI and product design roles, and happy to
+                  walk through any of this in more depth. I&apos;ll usually
+                  reply within a day or two.
                 </p>
               </div>
 
@@ -50,15 +54,17 @@ export function CaseStudyCta() {
                     className: "whitespace-nowrap",
                   })}
                 >
-                  Start a project
+                  Get in touch
                   <ArrowRight size={16} />
                 </Link>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={site.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-3.5 text-base font-medium text-on-dark-muted transition-colors hover:text-on-dark"
                 >
-                  <Mail size={16} />
-                  Email me
+                  <FileText size={16} />
+                  Résumé (PDF)
                 </a>
               </div>
             </div>

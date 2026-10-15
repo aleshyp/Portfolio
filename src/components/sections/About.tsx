@@ -7,17 +7,18 @@ import { Prose } from "@/components/Prose";
 import { site } from "@/data/site";
 
 const stats = [
-  { value: "13+", label: "Years designing" },
-  { value: "1", label: "Design system, owned end to end" },
-  { value: "2022", label: "Designing and shipping in code" },
+  { value: "12+", label: "Years designing" },
+  { value: "4", label: "Years on an in-house product team" },
+  { value: "2", label: "Sides of the handoff: design and code" },
 ];
 
 const focusAreas = [
+  "UX/UI Design",
   "Product Design",
   "Design Systems",
-  "UX/UI Design",
   "Front-End Development",
   "Accessibility",
+  "Motion Design",
   "Brand Identity",
 ];
 
@@ -66,25 +67,33 @@ export function About() {
           <AnimatedReveal>
             <Eyebrow>About me</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-              Thirteen years in, still fixing the small stuff.
+              Twelve years in, still fixing the small stuff.
             </h2>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
             <Prose className="mt-6 max-w-none">
               <p>
-                I picked up graphic design at 10 and started freelancing at 13,
+                I started designing at 13, freelancing from the start:
                 mostly social graphics for esports orgs and influencers. I never
                 really stopped. Getting paid for that as a teenager taught me to
                 work fast and hit a deadline, which turned out to be most of the
                 job.
               </p>
               <p>
-                In 2022 it became full-time. I was hired as a graphic designer
-                and talked my way into the web side; now I design the pages, own
-                the design system, and build them in React, working in sprints
-                alongside our programmers. Most of my time goes into details
-                nobody is supposed to notice.
+                In 2022 it became full-time. I was hired for graphic and motion
+                design, and after two years moved into UX/UI and front-end. Now
+                I design web and app pages for an online learning platform, help
+                maintain the design system behind them, and build those pages in
+                React, working in sprints alongside our programmers.
+              </p>
+              <p>
+                I like to settle what a screen has to do before deciding how it
+                looks. Because I also write the front-end, I find out early
+                whether a design will survive the build, not at handoff. I use AI
+                where it saves time, like first-pass layouts and boilerplate
+                code, and keep the decisions for myself. Most of my time goes
+                into details nobody is supposed to notice.
               </p>
             </Prose>
           </AnimatedReveal>
