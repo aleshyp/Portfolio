@@ -10,7 +10,7 @@ own test gates. Reviewed against a production build on :3000, at 1440px and
 | # | Finding | Status |
 |---|---|---|
 | 1 | Freelance CTAs | **Fixed.** Contact, the form and the case-study CTA now address hiring managers |
-| 2 | One real project, no research | **Open, needs you.** Run the 5-person Lumin test; decide on a text-only Acellus write-up |
+| 2 | One real project, no research | **Open, needs you.** Test plan written (Claude Doc "Lumin usability test plan"); run it, then update the study |
 | 3 | Behance | **Fixed.** Removed from site and résumé |
 | 4 | Cropped first card | **Fixed.** New split light/dark capture (`scripts/capture-portfolio-card.mjs`) |
 | 5 | Hero fills the fold | **Fixed.** Tighter spacing, scroll hint removed; Work now starts in the first screen |
@@ -18,9 +18,9 @@ own test gates. Reviewed against a production build on :3000, at 1440px and
 | 7 | Résumé in nav/footer | **Fixed.** Header (desktop and mobile menu), footer, contact, case-study CTA |
 | 8 | No captions | **Fixed.** Every scene has a visible caption |
 | 9 | Logo-video covers | **Kept, deliberately.** They're motion work; captioned instead. Also fixed: the Lumin video carried the homepage's alt text, and the homepage screen itself never appeared anywhere. It's now in "More screens" |
-| 10 | About | **Copy fixed** (accurate role history, how-I-work paragraph, real stats). **Photo needs you** |
-| 11 | Timeline | **Partly fixed.** Hero no longer says "since 2014"; 2012 vs 2014 needs you to confirm |
-| 12 | Testimonials | **Open, needs you** |
+| 10 | About | **Copy fixed** (accurate role history, how-I-work paragraph, real stats). Photo deferred by choice |
+| 11 | Timeline | **Fixed.** Confirmed 2014: "12+ years" and "since 2014" everywhere |
+| 12 | Testimonials | Skipped: none available yet |
 | 13 | Education card | **Fixed.** Grouped, shared with the résumé |
 | 14 | Esports entries | Left as is (judgment call) |
 | 15 | Copy email | **Fixed** |

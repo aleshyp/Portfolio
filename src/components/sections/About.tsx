@@ -7,7 +7,7 @@ import { Prose } from "@/components/Prose";
 import { site } from "@/data/site";
 
 const stats = [
-  { value: "13+", label: "Years designing" },
+  { value: "12+", label: "Years designing" },
   { value: "4", label: "Years on an in-house product team" },
   { value: "2", label: "Sides of the handoff: design and code" },
 ];
@@ -67,14 +67,14 @@ export function About() {
           <AnimatedReveal>
             <Eyebrow>About me</Eyebrow>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-              Thirteen years in, still fixing the small stuff.
+              Twelve years in, still fixing the small stuff.
             </h2>
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
             <Prose className="mt-6 max-w-none">
               <p>
-                I picked up graphic design at 10 and started freelancing at 13,
+                I started designing at 13, freelancing from the start:
                 mostly social graphics for esports orgs and influencers. I never
                 really stopped. Getting paid for that as a teenager taught me to
                 work fast and hit a deadline, which turned out to be most of the

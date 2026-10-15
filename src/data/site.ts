@@ -168,9 +168,9 @@ export type EducationItem = {
 
 export const education: EducationItem[] = [
   {
-    credential: "Self-taught Designer – 13+ years",
+    credential: "Self-taught Designer – 12+ years",
     institution: "Graphic & UX/UI design",
-    period: "Since 2012",
+    period: "Since 2014",
   },
   {
     credential: "Foundations of Cybersecurity",
