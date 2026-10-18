@@ -1,13 +1,19 @@
 // Captures the Work-grid thumbnail for the "This Site" case study into
-// public/work/portfolio/card.webp.
+// public/work/portfolio/card-light.webp and card-dark.webp.
 //
-// The study's case-study scenes are responsive DOM sized for the full column,
-// so squeezed into a 16:9 card they cropped mid-word. The card shows the site
-// itself instead: the home hero, left half light theme and right half dark,
-// split down the middle. One page, one set of utilities, two themes, which is
-// the study's whole argument in one frame.
+// The card shows the study's contrast-audit scene: every text token's ratio
+// against the 4.5:1 line, with the one failure in red. At card size the labels
+// are too small to read, but the shape still says "accessibility, measured".
+// The card used to be a light/dark capture of the home hero. It was accurate,
+// but it showed the reader the screen they had just scrolled past.
 //
-// It's a real capture, so re-run it whenever the hero changes:
+// One capture per theme: the card swaps them with the site's theme class (see
+// cardScene in src/components/projectAssets.tsx), so it never shows a white
+// tile on the dark page or the reverse.
+//
+// It's a real capture of the live scene, so re-run it whenever the scene, the
+// tokens or their ratios change. Use a production build: under `next dev` the
+// dev-tools badge can land inside the shot.
 //
 //   npm run build && npm run start
 //   node scripts/capture-portfolio-card.mjs [baseUrl]
@@ -22,10 +28,16 @@ import sharp from "sharp";
 const base = process.argv[2] ?? "http://localhost:3000";
 const outDir = new URL("../public/work/portfolio/", import.meta.url);
 
-// 1600x900 CSS px at DPR 1.5 → 2400x1350, the same width the other case-study
-// exports use (≥2400px, so a DPR-2 card at 526px still has headroom).
-const VIEWPORT = { width: 1600, height: 900 };
-const DPR = 1.5;
+// A narrower column than desktop keeps the scene's labels larger relative to
+// the frame. 900px wide gives an 836px column, still above the scene's @md
+// container breakpoint, so it keeps its one-row-per-pair desktop layout.
+const VIEWPORT = { width: 900, height: 1200 };
+const DPR = 3;
+// Final file: 2400x1350, the same as the other case-study exports (≥2400px,
+// so a DPR-2 card at 526px still has headroom).
+const OUT = { width: 2400, height: 1350 };
+// Page background per theme: white, and ink (#0b1220) in dark.
+const BG = { light: "#ffffff", dark: "#0b1220" };
 
 async function shoot(browser, theme) {
   const context = await browser.newContext({
@@ -37,29 +49,50 @@ async function shoot(browser, theme) {
   // next-themes reads its choice from localStorage before first paint.
   await context.addInitScript((t) => localStorage.setItem("theme", t), theme);
   const page = await context.newPage();
-  await page.goto(base, { waitUntil: "networkidle" });
+  await page.goto(`${base}/work/portfolio-design-system`, {
+    waitUntil: "networkidle",
+  });
   await page.evaluate(() => document.fonts.ready);
-  const png = await page.screenshot({ type: "png" });
+  // The scene board only, not its <figcaption>: the card names the project.
+  const scene = page
+    .locator("figure", { hasText: "Contrast audit" })
+    .locator(":scope > :first-child");
+  const png = await scene.screenshot({ type: "png" });
   await context.close();
   return png;
 }
 
+async function compose(png, theme) {
+  // Fit the scene inside the 16:9 frame with a margin, centered on the page
+  // background, so nothing is cropped whatever height the scene settles at.
+  const pad = Math.round(OUT.width * 0.06);
+  const fitted = await sharp(png)
+    .resize({
+      width: OUT.width - pad * 2,
+      height: OUT.height - pad * 2,
+      fit: "inside",
+    })
+    .toBuffer({ resolveWithObject: true });
+  return sharp({
+    create: { ...OUT, channels: 3, background: BG[theme] },
+  })
+    .composite([
+      {
+        input: fitted.data,
+        left: Math.round((OUT.width - fitted.info.width) / 2),
+        top: Math.round((OUT.height - fitted.info.height) / 2),
+      },
+    ])
+    .webp({ quality: 90, smartSubsample: true })
+    .toFile(fileURLToPath(new URL(`card-${theme}.webp`, outDir)));
+}
+
 const browser = await chromium.launch();
-const [light, dark] = [await shoot(browser, "light"), await shoot(browser, "dark")];
-await browser.close();
-
-const W = VIEWPORT.width * DPR;
-const H = VIEWPORT.height * DPR;
-const half = W / 2;
-
-const rightHalf = await sharp(dark)
-  .extract({ left: half, top: 0, width: W - half, height: H })
-  .toBuffer();
-
 await mkdir(outDir, { recursive: true });
-await sharp(light)
-  .composite([{ input: rightHalf, left: half, top: 0 }])
-  .webp({ quality: 90, smartSubsample: true })
-  .toFile(fileURLToPath(new URL("card.webp", outDir)));
-
-console.log(`Wrote public/work/portfolio/card.webp (${W}x${H})`);
+for (const theme of ["light", "dark"]) {
+  await compose(await shoot(browser, theme), theme);
+  console.log(
+    `Wrote public/work/portfolio/card-${theme}.webp (${OUT.width}x${OUT.height})`,
+  );
+}
+await browser.close();

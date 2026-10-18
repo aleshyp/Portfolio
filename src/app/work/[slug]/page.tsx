@@ -118,7 +118,7 @@ export default async function CaseStudy({
   );
 
   return (
-    <article className="pt-28 sm:pt-36">
+    <article className="pt-28 sm:pt-32">
       {/* Header */}
       <Container>
         <AnimatedReveal>
@@ -178,32 +178,11 @@ export default async function CaseStudy({
               ))}
           </dl>
         </AnimatedReveal>
-
-        {/* What I did — the reader's first question about any project is "what
-            was YOUR part", so it's answered as a list right under the meta row
-            rather than left to be inferred from the prose below. */}
-        <AnimatedReveal delay={0.1}>
-          <div className="border-b border-border-subtle py-8">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-fg-faint">
-              What I did
-            </h2>
-            <ul className="mt-4 grid gap-x-10 gap-y-3 sm:grid-cols-2">
-              {project.contributions.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-fg-soft">
-                  <Check
-                    size={18}
-                    aria-hidden="true"
-                    className="mt-0.5 shrink-0 text-brand-700 dark:text-brand-400"
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </AnimatedReveal>
       </Container>
 
-      {/* Cover */}
+      {/* Cover — straight after the meta row, so the first screen of a study
+          shows the work and not only words about it. At 1440x900 it used to
+          start below the fold, under the "What I did" list. */}
       <Container>
         <AnimatedReveal delay={0.05}>
           {captioned(wrapScene(
@@ -224,6 +203,31 @@ export default async function CaseStudy({
         </AnimatedReveal>
       </Container>
 
+      <Container>
+        {/* What I did — the reader's first question about any project is "what
+            was YOUR part", so it's answered as a list right under the cover
+            rather than left to be inferred from the prose below. */}
+        <AnimatedReveal delay={0.1}>
+          <div className="mt-10 border-y border-border-subtle py-8">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-fg-faint">
+              What I did
+            </h2>
+            <ul className="mt-4 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+              {project.contributions.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-fg-soft">
+                  <Check
+                    size={18}
+                    aria-hidden="true"
+                    className="mt-0.5 shrink-0 text-brand-700 dark:text-brand-400"
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </AnimatedReveal>
+      </Container>
+
       {/* Overview + results */}
       <Container>
         <div className="mt-16 grid gap-10 lg:grid-cols-3 lg:gap-16">
@@ -232,6 +236,29 @@ export default async function CaseStudy({
             <p className="mt-4 text-lg leading-relaxed text-fg-soft">
               {project.overview}
             </p>
+
+            {/* The cold-read version: what was decided, and what was turned
+                down. A reviewer who stops here can still say both. */}
+            {project.decisions && (
+              <div className="mt-8">
+                <h2 className="text-xs font-medium uppercase tracking-wider text-fg-faint">
+                  Key decisions
+                </h2>
+                <ul className="mt-4 space-y-4">
+                  {project.decisions.map((d) => (
+                    <li
+                      key={d.chose}
+                      className="border-l-2 border-brand-700 pl-4 dark:border-brand-400"
+                    >
+                      <p className="font-medium text-fg">{d.chose}</p>
+                      <p className="mt-1 text-sm text-fg-muted">
+                        Instead of {d.over}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </AnimatedReveal>
 
           <AnimatedReveal delay={0.1}>
@@ -241,11 +268,14 @@ export default async function CaseStudy({
               </p>
               <dl className="mt-4 space-y-5">
                 {project.results.map((r) => (
-                  <div key={r.label}>
-                    <dt className="font-display text-3xl font-bold text-brand-600 dark:text-brand-400">
+                  // The label is the term and the figure its description, so a
+                  // screen reader hears "Screens designed: 10". The column is
+                  // reversed so the figure still reads first by eye.
+                  <div key={r.label} className="flex flex-col-reverse">
+                    <dt className="text-sm text-fg-muted">{r.label}</dt>
+                    <dd className="font-display text-3xl font-bold text-brand-600 dark:text-brand-400">
                       {r.value}
-                    </dt>
-                    <dd className="text-sm text-fg-muted">{r.label}</dd>
+                    </dd>
                   </div>
                 ))}
               </dl>

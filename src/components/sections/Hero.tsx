@@ -53,7 +53,11 @@ export function Hero() {
           variants={container}
           initial={reduce ? false : "hidden"}
           animate="visible"
-          className="mx-auto max-w-3xl text-center"
+          // No max-width: at the full 1088px column the headline sets in two
+          // lines instead of four on desktop. That's ~130px back, which is what
+          // puts the top of the Work grid inside a 1440x900 first screen. The
+          // paragraph below keeps its own max-w-2xl measure.
+          className="mx-auto text-center"
         >
           {site.available && (
             <motion.div variants={item} className="mb-6 flex justify-center">

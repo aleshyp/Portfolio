@@ -215,7 +215,7 @@ test.describe("case-study media fits the phone viewport", () => {
 
     for (const scene of await scenes.all()) {
       const state = await scene.evaluate((el) => {
-        const heading = el.querySelector("h3");
+        const heading = el.querySelector("h2, h3");
         return {
           scrolls: el.scrollWidth > el.clientWidth + 1,
           width: el.getBoundingClientRect().width,
@@ -248,7 +248,7 @@ test.describe("case-study media fits the phone viewport", () => {
       .all()) {
       const state = await scene.evaluate((el) => {
         const cs = getComputedStyle(el);
-        const heading = el.querySelector("h3");
+        const heading = el.querySelector("h2, h3");
         const box = el.getBoundingClientRect();
         const hbox = heading!.getBoundingClientRect();
         return {
@@ -288,7 +288,7 @@ test.describe("case-study media fits the phone viewport", () => {
       const scenes = [
         ...document.querySelectorAll("article [role='group'][aria-label]"),
       ].map((el) => {
-        const h = el.querySelector("h3")!;
+        const h = el.querySelector("h2, h3")!;
         const r = h.getBoundingClientRect();
         return {
           title: h.textContent ?? "",

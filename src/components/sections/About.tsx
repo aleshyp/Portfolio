@@ -9,7 +9,7 @@ import { site } from "@/data/site";
 const stats = [
   { value: "12+", label: "Years designing" },
   { value: "4", label: "Years on an in-house product team" },
-  { value: "2", label: "Sides of the handoff: design and code" },
+  { value: "13", label: "Age I took my first paid client" },
 ];
 
 const focusAreas = [
@@ -109,11 +109,14 @@ export function About() {
           <AnimatedReveal delay={0.2}>
             <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-border-subtle pt-8 sm:gap-6">
               {stats.map((s) => (
-                <div key={s.label}>
-                  <dt className="font-display text-2xl font-bold leading-tight text-balance text-fg sm:text-3xl">
+                // Label as the term, figure as its description, so a screen
+                // reader hears "Years designing: 12+". Reversed so the figure
+                // still reads first by eye.
+                <div key={s.label} className="flex flex-col-reverse">
+                  <dt className="mt-1 text-sm text-fg-muted">{s.label}</dt>
+                  <dd className="font-display text-2xl font-bold leading-tight text-balance text-fg sm:text-3xl">
                     {s.value}
-                  </dt>
-                  <dd className="mt-1 text-sm text-fg-muted">{s.label}</dd>
+                  </dd>
                 </div>
               ))}
             </dl>
