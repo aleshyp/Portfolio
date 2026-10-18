@@ -174,3 +174,56 @@ test("exactly one h1 on the home page", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
 });
+
+// The Lumin prototype is one route whose screen comes from the query string,
+// so each screen is its own scan. It renders client-side (useSearchParams
+// opts it out of prerendering), so wait for the screen heading to mount
+// before scanning. The static HTML carries the catalog as the Suspense
+// fallback, so wait for the live (URL-driven) app, or a deep link would scan
+// the catalog instead of the screen it names.
+const luminScreens = [
+  "/prototypes/lumin",
+  "/prototypes/lumin?screen=course&course=design-systems-for-scale",
+  "/prototypes/lumin?screen=signup&course=design-systems-for-scale",
+  "/prototypes/lumin?screen=login",
+  "/prototypes/lumin?screen=onboarding&step=1",
+  "/prototypes/lumin?screen=onboarding&step=2",
+  "/prototypes/lumin?screen=sample&course=ui-animation",
+  "/prototypes/lumin?screen=checkout&course=design-systems-for-scale",
+];
+
+for (const route of luminScreens) {
+  test(`no a11y violations: ${route}`, async ({ page }) => {
+    await page.goto(route);
+    await waitForDocumentReady(page);
+    await expect(
+      page.locator("[data-lumin-live] #lumin-screen-heading"),
+    ).toBeVisible();
+    await freezeAnimations(page);
+    const { violations } = await new AxeBuilder({ page })
+      .withTags(WCAG)
+      .analyze();
+    expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
+  });
+}
+
+test("no a11y violations: Lumin empty search and sign-up errors", async ({
+  page,
+}) => {
+  const live = page.locator("[data-lumin-live] #lumin-screen-heading");
+  await page.goto("/prototypes/lumin");
+  await expect(live).toBeVisible();
+  await page.getByRole("searchbox").fill("Advanced Motion");
+  await expect(page.getByText("No courses found").first()).toBeVisible();
+  await freezeAnimations(page);
+  let { violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze();
+  expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
+
+  await page.goto("/prototypes/lumin?screen=signup");
+  await expect(live).toHaveText("Create account");
+  await page.getByRole("button", { name: "Create account" }).click();
+  await expect(page.getByText("Enter your name.")).toBeVisible();
+  await freezeAnimations(page);
+  ({ violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze());
+  expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
+});

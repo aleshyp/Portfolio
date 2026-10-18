@@ -50,11 +50,14 @@ export type ContentBlock = {
    * Route of a working demo for studies whose claims can be exercised rather
    * than just read. Renders a "Try it" link in the case-study header.
    *
-   * Only set this where the demo runs the SAME code the study describes — its
-   * whole value is that a reader can check. A canned walkthrough or a video
-   * belongs in `gallery`, not here.
+   * Only set this where the demo IS the thing the study describes, working:
+   * the same code (Ledger's engine), or the same designed route built for real
+   * (Lumin's prototype). Its whole value is that a reader can check. A canned
+   * walkthrough or a video belongs in `gallery`, not here.
    */
   demoHref?: string;
+  /** Label for the `demoHref` button. Defaults to "Try the live demo". */
+  demoLabel?: string;
   /**
    * Overrides the default concept-project disclaimer under the results panel.
    *
@@ -175,6 +178,7 @@ export const projects: Project[] = [
       "Ten screens in Figma, including the empty search state",
       "Reviewed my own screens against the brief (see What I'd change)",
       "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
+      "Built the route as a coded prototype in React, with Claude Code, applying those fixes",
     ],
     year: "2026",
     client: "Lumin (concept product)",
@@ -222,12 +226,14 @@ export const projects: Project[] = [
       },
       {
         heading: "What I'd change",
-        body: "Reviewing the set against my own brief turned up three problems. First, the brief reserves gold for the primary action, and onboarding, the empty state and the course page all follow it, but the catalog's Enroll buttons are violet. That's six loud buttons competing on one screen, and I'd make the whole card the link and drop the button. Second, the course page shows curriculum items ticked as complete next to 'Enroll now', which is progress belonging to someone who hasn't started. Logged out, those should be plain outlines, with progress appearing after enrollment. Third, one catalog card puts its rating and length together where the other five split them, a small sign the card drifted rather than being built as one component, which is the first thing I'd fix in the Figma file. And none of it has met a real student. The next step is a five-person test of this route, starting at the empty search.",
+        body: "Reviewing the set against my own brief turned up three problems. First, the brief reserves gold for the primary action, and onboarding, the empty state and the course page all follow it, but the catalog's Enroll buttons are violet. That's six loud buttons competing on one screen, and I'd make the whole card the link and drop the button. Second, the course page shows curriculum items ticked as complete next to 'Enroll now', which is progress belonging to someone who hasn't started. Logged out, those should be plain outlines, with progress appearing after enrollment. Third, one catalog card puts its rating and length together where the other five split them, a small sign the card drifted rather than being built as one component, which is the first thing I'd fix in the Figma file. The coded prototype linked at the top applies all three fixes; the Figma screens on this page are the originals. Building it meant adding what the set was missing: onboarding steps two and three, which follow step one's pattern, and a plain end screen where checkout and the lesson player would be. None of it has met a real student yet. The prototype is what the next step tests: a five-person test of this route, starting at the empty search.",
       },
     ],
     gallery: 4,
     accent: 2,
     concept: true,
+    demoHref: "/prototypes/lumin",
+    demoLabel: "Try the coded prototype",
     resultsNote:
       "Concept project: Lumin isn't a real client and hasn't been tested with users, so there are no outcome figures here. These numbers describe the design itself, and each one is visible in the screens on this page.",
   },

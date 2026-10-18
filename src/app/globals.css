@@ -172,8 +172,11 @@
     background-color: var(--background);
     color: var(--foreground);
     /* Decorative blurred backdrops use negative offsets; keep them from
-       creating a horizontal scrollbar on narrow viewports. */
-    overflow-x: hidden;
+       creating a horizontal scrollbar on narrow viewports.
+       `clip`, not `hidden`: hidden forces overflow-y to auto, which makes the
+       body a scroll container that never scrolls, and position: sticky
+       anywhere inside it silently stops working. */
+    overflow-x: clip;
   }
 
   ::selection {
