@@ -30,7 +30,8 @@ export const metadata: Metadata = {
     default: titleDefault,
     template: `%s · ${site.name}`,
   },
-  description: `${site.name} is a UX/UI designer and front-end developer in Kansas City. Web and app interfaces, the design systems behind them, and the production React that ships them. One person from Figma to live.`,
+  // Kept under ~155 characters, where search results start truncating.
+  description: `${site.name}, UX/UI designer and front-end developer in Kansas City. Web and app interfaces, the design systems behind them, and the React that ships them.`,
   keywords: [
     "UX/UI Designer",
     "Product Designer",

@@ -9,6 +9,9 @@ import {
   LuminPrototype,
   LuminPrototypeFallback,
 } from "@/components/lumin/LuminPrototype";
+import { JsonLd } from "@/components/JsonLd";
+import { getProject } from "@/data/projects";
+import { pageMetadata, prototypeJsonLd } from "@/lib/seo";
 
 /**
  * The Lumin prototype page.
@@ -26,21 +29,27 @@ import {
 const description =
   "The Lumin case study's route from course catalog to enrolled, built as a working prototype: search, a course page, sign-up and onboarding.";
 
-export const metadata: Metadata = {
+const path = "/prototypes/lumin";
+
+export const metadata: Metadata = pageMetadata({
   title: "Lumin prototype",
   description,
-  alternates: { canonical: "/prototypes/lumin" },
-  openGraph: {
-    title: "Lumin prototype",
-    description,
-    url: "/prototypes/lumin",
-    type: "website",
-  },
-};
+  path,
+});
+
+const study = getProject("learning-platform-ui")!;
 
 export default function LuminPrototypePage() {
   return (
     <article className="pb-24 pt-28 sm:pt-32">
+      <JsonLd
+        data={prototypeJsonLd({
+          name: "Lumin, from catalog to enrolled",
+          description,
+          path,
+          study,
+        })}
+      />
       <Container>
         {/* No AnimatedReveal on the header: it fades from opacity 0, and LCP
             only records once text is fully opaque, so the fade decided this
@@ -48,7 +57,7 @@ export default function LuminPrototypePage() {
             hero avoids the same trap; see the note in Hero.tsx. */}
         <div>
           <Link
-            href="/work/learning-platform-ui"
+            href={`/work/${study.slug}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
           >
             <ArrowLeft size={16} aria-hidden="true" />

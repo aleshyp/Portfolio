@@ -84,6 +84,20 @@ const nextConfig = {
     // (640), so only values above that are usable here.
     imageSizes: [32, 48, 64, 96, 128, 256, 384, 1052],
   },
+  // One host. www.ianriley.co served the whole site as a 200 duplicate of the
+  // apex; canonical tags covered it for Google, but a permanent redirect
+  // consolidates links and shares onto the apex too. Matches siteUrl in
+  // src/data/site.ts. Preview deployments use other hosts and are unaffected.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.ianriley.co" }],
+        destination: "https://ianriley.co/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

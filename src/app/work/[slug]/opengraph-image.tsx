@@ -1,39 +1,43 @@
 import { ImageResponse } from "next/og";
 import { getProject, projects } from "@/data/projects";
 import { site } from "@/data/site";
+import { OgFrame, OgTitleBlock, ogColors as C, ogSize } from "@/lib/ogCard";
 
 /**
  * Per-case-study Open Graph / Twitter image. Next auto-wires og:image +
  * twitter:image for /work/[slug] from this file, generating one per slug at
- * build time. Mirrors the site's brand (emerald) styling.
+ * build time.
  *
- * Composed as the same stacked absolute layers as the home card in
- * ../../opengraph-image.tsx — glow, grid rules, top row, type block, footer bar
- * — so a shared case-study link and a shared home link read as one family.
- * Keep the two in sync when either changes.
- *
- * Satori implements a FLEXBOX SUBSET only: no CSS grid, and any element with
- * more than one child needs an explicit `display: flex`.
+ * Shares its frame with the home card through @/lib/ogCard, so a shared
+ * case-study link and a shared home link read as one family.
  */
-
-export const alt = "Case study";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
 
 // Pre-generate an image for each known slug (matches generateStaticParams).
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-// Mirrors the `brand` ramp in globals.css @theme.
-const C = {
-  brand500: "#10b981",
-  brand400: "#34d399",
-  brand300: "#6ee7b7",
-  brand200: "#a7f3d0",
-  brand100: "#d1fae5",
-  slate100: "#f1f5f9",
-};
+/**
+ * One image per study, here rather than as a static `alt` export so the alt
+ * text can name the study. A fixed export gave every card the alt "Case
+ * study", which is what screen readers and crawlers got for all of them.
+ */
+export async function generateImageMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }> | { slug: string };
+}) {
+  const { slug } = await params;
+  const title = getProject(slug)?.title ?? "Case study";
+  return [
+    {
+      id: "card",
+      alt: `${title}, a case study by ${site.name}`,
+      size: ogSize,
+      contentType: "image/png",
+    },
+  ];
+}
 
 export default async function CaseStudyOgImage({
   params,
@@ -42,182 +46,26 @@ export default async function CaseStudyOgImage({
 }) {
   const { slug } = await params;
   const project = getProject(slug);
-  const title = project?.title ?? "Case study";
-  const tags = project?.tags.join("  ·  ") ?? "";
-
-  // Long study titles need to step down a size or they run past the safe area.
-  const titleSize = title.length > 34 ? 64 : 78;
 
   return new ImageResponse(
     (
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          overflow: "hidden",
-          background:
-            "linear-gradient(135deg, #022c22 0%, #064e3b 52%, #022c22 100%)",
-          color: "#ffffff",
-          fontFamily: "sans-serif",
-        }}
-      >
-        {/* Emerald corner glow, matching the home card. */}
-        <div
-          style={{
-            position: "absolute",
-            top: -260,
-            right: -200,
-            width: 720,
-            height: 720,
-            borderRadius: 9999,
-            background:
-              "radial-gradient(circle, rgba(16,185,129,0.30) 0%, rgba(16,185,129,0.10) 45%, rgba(16,185,129,0) 70%)",
-          }}
-        />
-
-        {/* Grid rules — a nod to the brutalist-grid logo mark. */}
-        {[300, 600, 900].map((x) => (
-          <div
-            key={x}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: x,
-              width: 1,
-              height: 630,
-              background: "rgba(209,250,229,0.07)",
-            }}
-          />
-        ))}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 248,
-            width: 1200,
-            height: 1,
-            background: "rgba(209,250,229,0.07)",
-          }}
-        />
-
-        {/* Top row: "case study" marker (left) + framed IR mark (right) */}
-        <div
-          style={{
-            position: "absolute",
-            top: 72,
-            left: 80,
-            right: 80,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 18,
-              padding: "14px 30px 14px 22px",
-              borderRadius: 9999,
-              border: "1px solid rgba(110,231,183,0.35)",
-              background: "rgba(16,185,129,0.10)",
-              fontSize: 26,
-              fontWeight: 600,
-              color: C.brand300,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-            }}
-          >
-            <div
-              style={{
-                width: 14,
-                height: 14,
-                borderRadius: 9999,
-                background: C.brand400,
-              }}
-            />
-            Case study
-          </div>
-
-          <svg width="116" height="116" viewBox="0 0 160 160" fill="none">
-            <rect
-              x="1.5"
-              y="1.5"
-              width="157"
-              height="157"
-              stroke={C.slate100}
-              strokeWidth="3"
-            />
-            <path
-              d="M52.88 62H65.264V98H52.88V62ZM79.5646 77.408H91.6606C92.8766 77.408 93.8206 77.12 94.4926 76.544C95.1646 75.968 95.5006 75.136 95.5006 74.048C95.5006 72.96 95.1646 72.128 94.4926 71.552C93.8206 70.976 92.8766 70.688 91.6606 70.688H77.8366L83.4046 65.12V98H71.0206V62H93.5806C96.4606 62 98.9726 62.512 101.117 63.536C103.293 64.528 104.973 65.92 106.157 67.712C107.373 69.504 107.981 71.616 107.981 74.048C107.981 76.416 107.373 78.512 106.157 80.336C104.973 82.128 103.293 83.52 101.117 84.512C98.9726 85.504 96.4606 86 93.5806 86H79.5646V77.408ZM83.7886 81.152H97.4686L109.421 98H95.2606L83.7886 81.152Z"
-              fill={C.brand500}
-            />
-          </svg>
-        </div>
-
-        {/* Study title + tags, anchored above the footer bar. */}
-        <div
-          style={{
-            position: "absolute",
-            left: 80,
-            right: 80,
-            bottom: 150,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div
-            style={{
-              fontSize: titleSize,
-              fontWeight: 800,
-              lineHeight: 1.06,
-              letterSpacing: "-0.03em",
-              maxWidth: 960,
-            }}
-          >
-            {title}
-          </div>
-          {tags ? (
-            <div
-              style={{
-                marginTop: 22,
-                fontSize: 29,
-                fontWeight: 500,
-                color: C.brand200,
-              }}
-            >
-              {tags}
-            </div>
-          ) : null}
-        </div>
-
-        {/* Footer bar: whose portfolio this is + where the link goes. */}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: 86,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 80px",
-            borderTop: "1px solid rgba(110,231,183,0.18)",
-            background: "rgba(2,44,34,0.55)",
-            fontSize: 25,
-            color: C.brand200,
-          }}
-        >
+      <OgFrame
+        marker="Case study"
+        footerLeft={
           <div style={{ display: "flex", color: C.brand100 }}>{site.name}</div>
+        }
+        footerRight={
           <div style={{ display: "flex", opacity: 0.8 }}>
             {site.email.split("@")[1]}
           </div>
-        </div>
-      </div>
+        }
+      >
+        <OgTitleBlock
+          title={project?.title ?? "Case study"}
+          subtitle={project?.tags.join("  ·  ")}
+        />
+      </OgFrame>
     ),
-    { ...size },
+    { ...ogSize },
   );
 }
