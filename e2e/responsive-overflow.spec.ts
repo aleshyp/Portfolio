@@ -4,7 +4,7 @@ import { test, expect, type Page } from "@playwright/test";
  * Element-level overflow checks.
  *
  * Why this exists alongside responsive.spec.ts: `html`/`body` carry
- * `overflow-x: hidden` (globals.css) to tame the decorative blurred backdrops.
+ * `overflow-x: hidden`/`clip` (globals.css) to tame the decorative blurred backdrops.
  * That silently MASKS real layout bugs from a `scrollWidth > clientWidth`
  * assertion — content can be clipped off-screen while documentElement still
  * measures clean. These tests measure every painted box against the viewport
@@ -96,6 +96,56 @@ for (const route of ROUTES) {
         offenders,
         `elements painted past the viewport:\n${JSON.stringify(offenders, null, 2)}`,
       ).toEqual([]);
+    });
+  }
+}
+
+// The Lumin prototype paints inside a frame with `overflow: clip` (it rounds
+// its corners), so the scan above would excuse anything cut off INSIDE it:
+// isClipped() sees a clipping parent that fits the viewport. Measure each
+// screen against the frame's own edges instead.
+const LUMIN_SCREENS = [
+  "",
+  "?screen=course&course=design-systems-for-scale",
+  "?screen=signup&course=design-systems-for-scale",
+  "?screen=onboarding&step=1",
+  "?screen=onboarding&step=2",
+  "?screen=checkout&course=design-systems-for-scale",
+];
+for (const screen of LUMIN_SCREENS) {
+  for (const width of [320, 390, 768, 1280]) {
+    test(`Lumin prototype fits its frame: ${screen || "catalog"} @ ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/prototypes/lumin${screen}`);
+      // The live app, not the prerendered catalog fallback.
+      await expect(
+        page.locator("[data-lumin-live] #lumin-screen-heading"),
+      ).toBeVisible();
+
+      const offenders = await page.evaluate(() => {
+        const frame = document.querySelector("[data-lumin-frame]")!;
+        const edge = frame.getBoundingClientRect();
+        const out: string[] = [];
+        for (const el of frame.querySelectorAll("*")) {
+          const cs = getComputedStyle(el);
+          if (cs.display === "none" || cs.position === "absolute") continue;
+          const r = el.getBoundingClientRect();
+          if (r.width === 0) continue;
+          if (r.right > edge.right + 1 || r.left < edge.left - 1) {
+            out.push(
+              `${(el as HTMLElement).className?.toString().slice(0, 60)} "${(
+                el.textContent ?? ""
+              )
+                .trim()
+                .slice(0, 30)}"`,
+            );
+          }
+        }
+        return out;
+      });
+      expect(offenders, offenders.join("; ")).toEqual([]);
     });
   }
 }

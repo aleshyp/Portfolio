@@ -3,7 +3,8 @@ import { siteUrl } from "@/data/site";
 import { projects } from "@/data/projects";
 
 /**
- * Sitemap: the home page plus every case-study route. Next serves this at
+ * Sitemap: the home page, every case-study route, and any working demo a study
+ * links to (`demoHref`). Next serves this at
  * /sitemap.xml. Derives URLs from `siteUrl` so it stays correct per-environment.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -25,6 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.8,
     });
+    if (project.demoHref) {
+      routes.push({
+        url: `${siteUrl}${project.demoHref}`,
+        lastModified: now,
+        changeFrequency: "yearly",
+        priority: 0.6,
+      });
+    }
   }
 
   return routes;

@@ -46,6 +46,12 @@ type ButtonAsLink = CommonProps & {
    * wrong for a button that says "Download". Ignored when `external` is set.
    */
   download?: boolean;
+  /**
+   * Passed to next/link. Set false for a link to a heavy route that sits in
+   * the first screen: prefetching it when it scrolls into view competes with
+   * the page's own LCP image for bandwidth.
+   */
+  prefetch?: boolean;
 };
 
 type ButtonAsButton = CommonProps &
@@ -111,7 +117,7 @@ export function Button(props: ButtonAsLink | ButtonAsButton) {
       );
     }
     return (
-      <Link href={props.href} className={classes}>
+      <Link href={props.href} prefetch={props.prefetch} className={classes}>
         {children}
       </Link>
     );

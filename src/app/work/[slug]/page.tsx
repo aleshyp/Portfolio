@@ -149,8 +149,10 @@ export default async function CaseStudy({
               header still finds it. */}
           {project.demoHref && (
             <div className="mt-7">
-              <Button href={project.demoHref} size="md">
-                Try the live demo
+              {/* No prefetch: this sits in the first screen, and fetching the
+                  demo's bundle there cost the Lumin study ~150ms of LCP. */}
+              <Button href={project.demoHref} size="md" prefetch={false}>
+                {project.demoLabel ?? "Try the live demo"}
                 <ArrowRight size={16} aria-hidden="true" />
               </Button>
             </div>
