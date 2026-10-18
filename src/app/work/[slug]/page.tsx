@@ -18,6 +18,8 @@ import { Card } from "@/components/Card";
 import { CaseStudyCta } from "@/components/CaseStudyCta";
 import { Button, buttonClasses } from "@/components/Button";
 import { cn } from "@/lib/utils";
+import { JsonLd } from "@/components/JsonLd";
+import { caseStudyJsonLd, pageMetadata } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -33,24 +35,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return { title: "Project not found" };
-  const path = `/work/${project.slug}`;
-  return {
+  // og:image comes from ./opengraph-image.tsx (Next injects it per-slug).
+  return pageMetadata({
     title: project.title,
     description: project.summary,
-    alternates: { canonical: path },
-    openGraph: {
-      title: project.title,
-      description: project.summary,
-      url: path,
-      type: "article",
-      // og:image comes from ./opengraph-image.tsx (Next injects it per-slug).
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: project.title,
-      description: project.summary,
-    },
-  };
+    path: `/work/${project.slug}`,
+    type: "article",
+  });
 }
 
 export default async function CaseStudy({
@@ -119,6 +110,8 @@ export default async function CaseStudy({
 
   return (
     <article className="pt-28 sm:pt-32">
+      <JsonLd data={caseStudyJsonLd(project)} />
+
       {/* Header */}
       <Container>
         <AnimatedReveal>
