@@ -25,6 +25,16 @@ export type ContentBlock = {
   /** Three quick outcome stats shown on the case study. */
   results: { label: string; value: string }[];
   overview: string;
+  /**
+   * The cold-read summary under the overview: each decision paired with the
+   * option it turned down. A reviewer who reads only this should be able to say
+   * what was decided and what wasn't.
+   *
+   * Every entry restates a choice the study's own blocks already make, including
+   * the rejected option. Don't add a decision here that the body doesn't argue.
+   * `over` is a lowercase phrase that completes "Instead of …".
+   */
+  decisions?: { chose: string; over: string }[];
   blocks: ContentBlock[];
   /** Number of gallery placeholders to render. */
   gallery: number;
@@ -108,6 +118,24 @@ export const projects: Project[] = [
     ],
     overview:
       "A portfolio usually shows you the output of the work. This one is the work. Every screen is built from a documented token system, themed light and dark from one source of truth, and checked against WCAG 2.2 AA by tests that run before anything ships. It's the clearest evidence I can give you of how I actually work, mostly because you can go read the code and check.",
+    decisions: [
+      {
+        chose: "Split the palette into text tokens that flip in dark mode and background tokens that never do.",
+        over: "re-pointing one navy for dark mode, which inverted the whole page.",
+      },
+      {
+        chose: "Accessibility checks that fail the build.",
+        over: "an accessibility review step before launch.",
+      },
+      {
+        chose: "Any value the system doesn't have yet becomes a token.",
+        over: "hardcoded hex and one-off arbitrary values.",
+      },
+      {
+        chose: "Gate LCP against Lighthouse's simulated figure, with a ratchet.",
+        over: "claiming a 2.5-second pass the gate hasn't earned.",
+      },
+    ],
     blocks: [
       {
         heading: "The problem with a two-layer color model",
@@ -145,7 +173,7 @@ export const projects: Project[] = [
       "Wrote the design brief: audience, palette, type, screen list",
       "Mapped the route from visitor to enrolled student (the flow below)",
       "Ten screens in Figma, including the empty search state",
-      "Reviewed my own screens against the brief (block 05)",
+      "Reviewed my own screens against the brief (see What I'd change)",
       "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
     ],
     year: "2026",
@@ -157,6 +185,24 @@ export const projects: Project[] = [
     ],
     overview:
       "Most learning-platform case studies start at the lesson player. Lumin starts earlier, at the stretch where people actually leave: a visitor who's curious, scrolling a catalog, deciding whether a course is worth their time and money. The client is invented and the screens haven't been tested with users yet, so there are no outcome numbers here. What there is: a route mapped end to end, the decisions that shape it, and an honest list of what I'd fix.",
+    decisions: [
+      {
+        chose: "No account until someone decides to enroll.",
+        over: "asking visitors to sign up before they can browse.",
+      },
+      {
+        chose: "Onboarding asks one question per step, with Skip for now under Continue.",
+        over: "a required questionnaire between sign-up and the course.",
+      },
+      {
+        chose: "An empty search keeps the query in view and offers one way back.",
+        over: "a blank grid with the filters still showing.",
+      },
+      {
+        chose: "The price card carries a second, lower-stakes action: Try a sample lesson.",
+        over: "a lone Enroll button that sends an unconvinced student off to compare tabs.",
+      },
+    ],
     blocks: [
       {
         heading: "From curious to enrolled",
@@ -208,6 +254,20 @@ export const projects: Project[] = [
     ],
     overview:
       "Northwind is an invented team-analytics tool for engineering teams, and this is its marketing site: homepage, product, pricing, docs, about and community pages, plus sign-in, sign-up and password reset. It's a design study. I specified it for a React and Tailwind build, the same stack this site runs on, but Northwind itself was never built, so there's no performance or conversion number to quote.",
+    decisions: [
+      {
+        chose: "The hero shows the product: a weekly-velocity chart beside the headline.",
+        over: "describing it, to engineering leads who are allergic to marketing copy.",
+      },
+      {
+        chose: "One ask, repeated after the proof.",
+        over: "making whoever is ready scroll back up to act.",
+      },
+      {
+        chose: "On a phone, the dashboard stacks its metrics as cards.",
+        over: "squeezing the desktop table onto a small screen.",
+      },
+    ],
     blocks: [
       {
         heading: "The brief",
@@ -260,6 +320,20 @@ export const projects: Project[] = [
     ],
     overview:
       "A startup with a name, an idea, and nothing to look at. The brief was an identity that could hold up from a 16px favicon to a dark-mode app, with rules clear enough that the team could use it without asking a designer first. Five deliverables came out of it: the animated mark, its construction sheet, the palette, the type specimen and the usage guidelines.",
+    decisions: [
+      {
+        chose: "Every proportion of the mark comes from a 100px construction grid, so anyone can redraw it exactly.",
+        over: "eyeballed proportions.",
+      },
+      {
+        chose: "Clearspace is measured in iris radii, a unit taken from the mark itself.",
+        over: "a pixel measurement that breaks when the logo scales.",
+      },
+      {
+        chose: "Usage rules shown as do and don't pictures.",
+        over: "rules written only as sentences.",
+      },
+    ],
     blocks: [
       {
         heading: "A mark built on a grid",

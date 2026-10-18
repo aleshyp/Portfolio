@@ -7,7 +7,9 @@ import { projects } from "@/data/projects";
 
 export function Projects() {
   return (
-    <Section id="work">
+    // Tighter top than the shared rhythm: the hero above already ends in its
+    // own whitespace, and every px here pushes the first cards below the fold.
+    <Section id="work" className="pt-16!">
       <AnimatedReveal>
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
@@ -26,7 +28,12 @@ export function Projects() {
         </div>
       </AnimatedReveal>
 
-      <StaggerGroup className="mt-12 grid gap-6 sm:gap-8 md:grid-cols-2">
+      {/* margin 0: at 1440x900 only the top ~40px of the first cards is in the
+          first screen. With the default -80px they'd stay hidden there. */}
+      <StaggerGroup
+        className="mt-12 grid gap-6 sm:gap-8 md:grid-cols-2"
+        margin="0px"
+      >
         {projects.map((project) => (
           <ProjectCard
             key={project.slug}

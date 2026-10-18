@@ -41,6 +41,12 @@ const root = new URL("../", import.meta.url);
  * centered on a much larger canvas; without the trim they'd float in a wide
  * band of whitespace. Don't trim the rest: on a full-page frame the threshold
  * also eats ~30px of the page's own light footer.
+ *
+ * An entry with `cover: true` keeps only the TOP of the page, cropped to 16:9,
+ * for slots that show a full-page screen as a 16:9 frame (the Work card and the
+ * case-study cover). Cropping with object-fit would still download the whole
+ * 1:1.5 page to show its first third, and on the cover that's the LCP image.
+ * A master can feed several outputs: pass an array of entries.
  */
 const MASTERS = {
   northwind: {
@@ -61,7 +67,7 @@ const MASTERS = {
   lumin: {
     "homepage.jpg": "homepage",
     "catalog.jpg": "catalog",
-    "detail.jpg": "detail",
+    "detail.jpg": ["detail", { name: "detail-cover", cover: true }],
     "mentors.jpg": "mentors",
     "pricing.jpg": "pricing",
     "resources.jpg": "resources",
@@ -89,34 +95,42 @@ for (const [project, files] of Object.entries(MASTERS)) {
   await mkdir(outDir, { recursive: true });
   manifest[project] = {};
 
-  for (const [master, entry] of Object.entries(files)) {
-    const { name, trim = false } =
-      typeof entry === "string" ? { name: entry } : entry;
-    const src = new URL(`assets-src/work/${project}/${master}`, root);
-    // Trim to a buffer first: sharp applies trim before resize either way, but
-    // doing it once keeps both sizes cropped identically.
-    const input = trim
-      ? await sharp(fileURLToPath(src)).trim({ threshold: 12 }).toBuffer()
-      : fileURLToPath(src);
-    const encode = ({ width, quality }) =>
-      sharp(input)
-        .resize({ width, withoutEnlargement: true })
-        .webp({ quality, effort: 6, smartSubsample: true })
-        .toBuffer({ resolveWithObject: true });
+  for (const [master, entries] of Object.entries(files)) {
+    for (const entry of [entries].flat()) {
+      const { name, trim = false, cover = false } =
+        typeof entry === "string" ? { name: entry } : entry;
+      const src = new URL(`assets-src/work/${project}/${master}`, root);
+      // Trim or crop to a buffer first: sharp applies those before resize either
+      // way, but doing it once keeps both sizes cropped identically.
+      let input = fileURLToPath(src);
+      if (trim) {
+        input = await sharp(input).trim({ threshold: 12 }).toBuffer();
+      } else if (cover) {
+        const { width } = await sharp(input).metadata();
+        input = await sharp(input)
+          .extract({ left: 0, top: 0, width, height: Math.round((width * 9) / 16) })
+          .toBuffer();
+      }
+      const encode = ({ width, quality }) =>
+        sharp(input)
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality, effort: 6, smartSubsample: true })
+          .toBuffer({ resolveWithObject: true });
 
-    const large = await encode(LARGE);
-    const small = await encode(SMALL);
-    await writeFile(new URL(`${name}.webp`, outDir), large.data);
-    await writeFile(new URL(`${name}-1200.webp`, outDir), small.data);
+      const large = await encode(LARGE);
+      const small = await encode(SMALL);
+      await writeFile(new URL(`${name}.webp`, outDir), large.data);
+      await writeFile(new URL(`${name}-1200.webp`, outDir), small.data);
 
-    manifest[project][name] = { w: large.info.width, h: large.info.height };
-    const kb = (large.data.length + small.data.length) / 1024;
-    totalKb += kb;
-    console.log(
-      `${project}/${name}`.padEnd(28),
-      `${large.info.width}x${large.info.height}`.padEnd(10),
-      `${Math.round(large.data.length / 1024)}KB + ${Math.round(small.data.length / 1024)}KB`,
-    );
+      manifest[project][name] = { w: large.info.width, h: large.info.height };
+      const kb = (large.data.length + small.data.length) / 1024;
+      totalKb += kb;
+      console.log(
+        `${project}/${name}`.padEnd(28),
+        `${large.info.width}x${large.info.height}`.padEnd(10),
+        `${Math.round(large.data.length / 1024)}KB + ${Math.round(small.data.length / 1024)}KB`,
+      );
+    }
   }
 }
 

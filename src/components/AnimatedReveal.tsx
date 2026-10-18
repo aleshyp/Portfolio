@@ -86,11 +86,18 @@ export function StaggerGroup({
   className,
   as = "div",
   stagger = 0.08,
+  margin = "-80px",
 }: {
   children: React.ReactNode;
   className?: string;
   as?: "div" | "ul";
   stagger?: number;
+  /**
+   * How far inside the viewport the group must be before it reveals. The
+   * default waits until it's 80px in. Pass "0px" for a group that only just
+   * reaches the first screen, or it stays invisible until the visitor scrolls.
+   */
+  margin?: string;
 }) {
   const MotionTag = motion[as];
   return (
@@ -98,7 +105,7 @@ export function StaggerGroup({
       className={cn(className)}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin }}
       variants={{
         hidden: {},
         visible: { transition: { staggerChildren: stagger } },

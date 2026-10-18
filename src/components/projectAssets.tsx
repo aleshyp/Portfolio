@@ -5,7 +5,6 @@ import { ApertureHero } from "@/components/ApertureHero";
 import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
 import { LedgerAsset, ledgerScenes } from "@/components/LedgerAsset";
 import { LuminAsset, luminScenes } from "@/components/LuminAsset";
-import { LuminHero } from "@/components/LuminHero";
 import { NorthwindHero } from "@/components/NorthwindHero";
 import {
   PortfolioSystemAsset,
@@ -61,28 +60,38 @@ const aperturePng: Record<string, string> = {
  * `width`/`height` are the file's INTRINSIC size, so next/image reserves the
  * right box and picks a sane candidate.
  *
- * `position` sets the object-position for the 16:9 crop. It matters for the
- * full-page captures: object-cover centers by default, so Lumin's 1800x2649
- * course page would show its MIDDLE — a washed-out curriculum checklist —
- * instead of the violet hero at the top. Aperture's 4:3 specimen is close
- * enough to 16:9 that centering is right; top-cropping it would cut off the
- * wordmark it's meant to show.
+ * `darkSrc`, where set, is the same frame captured in the dark theme. Both are
+ * rendered and the site's theme class shows one; the hidden one is
+ * `display: none`, and a lazy image that isn't displayed is never fetched.
+ *
+ * `position` sets the object-position for the 16:9 crop. No entry needs it
+ * today: Lumin's full-page capture is now pre-cropped by `npm run images`, and
+ * Aperture's 4:3 specimen is close enough to 16:9 that centering is right
+ * (top-cropping it would cut off the wordmark it's meant to show). Prefer a
+ * pre-cropped file for any new full-page capture; the crop is the download.
  */
 const cardScene: Record<
   string,
-  { src: string; width: number; height: number; position?: string }
+  {
+    src: string;
+    darkSrc?: string;
+    width: number;
+    height: number;
+    position?: string;
+  }
 > = {
   "brand-identity-system": {
     src: "/work/aperture/04-type-specimen@2x.png",
     width: 3200,
     height: 2400,
   },
+  // The top of the course page, pre-cropped to 16:9 by `npm run images`, so
+  // the card doesn't download the whole 1:1.5 page to show its first third.
+  // Same file as the case-study cover.
   "learning-platform-ui": {
-    src: "/work/lumin/detail.webp",
+    src: "/work/lumin/detail-cover.webp",
     width: 2400,
-    height: 3532,
-    // Full-page capture: pin to the top so the card shows the course hero.
-    position: "object-top",
+    height: 1350,
   },
   "marketing-landing-page": {
     src: "/work/northwind/01-hero.webp",
@@ -90,11 +99,13 @@ const cardScene: Record<
     height: 1350,
   },
   // The study's scenes are responsive DOM sized for the case-study column; in a
-  // 16:9 card the token-layers cover cropped mid-word ("ive token layers"). This
-  // is a real capture of the home hero, half light and half dark — regenerate
-  // it with scripts/capture-portfolio-card.mjs whenever the hero changes.
+  // 16:9 card the token-layers cover cropped mid-word ("ive token layers").
+  // These are real captures of its contrast-audit scene, framed for 16:9, one
+  // per theme. Regenerate with scripts/capture-portfolio-card.mjs whenever the
+  // scene or the token ratios change.
   "portfolio-design-system": {
-    src: "/work/portfolio/card.webp",
+    src: "/work/portfolio/card-light.webp",
+    darkSrc: "/work/portfolio/card-dark.webp",
     width: 2400,
     height: 1350,
   },
@@ -250,14 +261,14 @@ export function renderProjectScene(
   // scene from the study rather than the animation's end-card. See cardScene.
   const still = index === 0 && !allowVideoHero ? cardScene[slug] : undefined;
   if (still) {
-    return (
+    const image = (src: string, themeClass?: string) => (
       /* next/image, not a raw <img>: these are full-size case-study exports
          (up to 3200px wide) being shown in a ~526px card. A raw <img> ships the
          whole file at every viewport; the optimizer re-encodes to WebP/AVIF and
          serves a width-appropriate candidate, which is what the rest of the site
          already does. */
       <Image
-        src={still.src}
+        src={src}
         alt={alt}
         width={still.width}
         height={still.height}
@@ -273,8 +284,20 @@ export function renderProjectScene(
            re-encoding a WebP that's already lossy. 90 is on the allow-list in
            next.config.mjs (images.qualities). */
         quality={90}
-        className={cn("block object-cover", still.position, className)}
+        className={cn(
+          "block object-cover",
+          still.position,
+          themeClass,
+          className,
+        )}
       />
+    );
+    if (!still.darkSrc) return image(still.src);
+    return (
+      <>
+        {image(still.src, "dark:hidden")}
+        {image(still.darkSrc, "hidden dark:block")}
+      </>
     );
   }
 
@@ -325,15 +348,12 @@ export function renderProjectScene(
   }
 
   if (assetSet.kind === "lumin") {
-    // Like Aperture, Lumin's hero (scene 0) is a logo-reveal animation; the rest
-    // are exported product screens at their own aspect ratios.
-    if (index === 0 && allowVideoHero) {
-      return (
-        <div className={cn("overflow-hidden shadow-soft", className)}>
-          <LuminHero alt={alt} />
-        </div>
-      );
-    }
+    // Unlike Aperture and Northwind, Lumin's cover (scene 0) is a product
+    // screen, not the logo reveal: it's a product study, so the first visual
+    // should be the product. The reveal is still in its scene list, under
+    // "More screens". Everything here is an exported screen at its own ratio;
+    // the cover's export is already cropped to 16:9.
+    const cover = index === 0 && allowVideoHero;
     return (
       <LuminAsset
         scene={item.scene as Parameters<typeof LuminAsset>[0]["scene"]}
@@ -341,9 +361,9 @@ export function renderProjectScene(
         className={className}
         // Card-sized contexts (allowVideoHero: false) need a uniform thumbnail,
         // so pin it to 16:9 and crop from the top. The case study passes no
-        // ratio and shows each screen whole. Scene 0 no longer arrives here in
-        // a card — the hero still handles it — but the later screens still do.
+        // ratio and shows each screen whole.
         ratio={allowVideoHero ? undefined : 16 / 9}
+        cover={cover}
       />
     );
   }
@@ -367,10 +387,13 @@ export function renderProjectScene(
         }
         alt={alt}
         className={className}
+        // The cover follows the case study's h1 directly; later scenes sit
+        // under a block's h2.
+        headingLevel={index === 0 ? 2 : 3}
       />
     );
   }
-  // Northwind ("marketing"), like Aperture and Lumin, opens on a logo-reveal
+  // Northwind ("marketing"), like Aperture, opens on a logo-reveal
   // animation; every other scene is a real exported screen.
   //
   // This is the last branch because it's the last asset KIND — `marketing` was

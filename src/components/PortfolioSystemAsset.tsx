@@ -93,6 +93,8 @@ type PortfolioSystemAssetProps = {
   className?: string;
   /** Accessible description of the deliverable. */
   alt: string;
+  /** 2 for the case-study cover, which follows the h1 directly. */
+  headingLevel?: HeadingLevel;
 };
 
 /**
@@ -119,19 +121,28 @@ function Board({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * h3 under a case-study block's h2. The cover scene sits straight after the
+ * page's h1, so it renders as h2 instead; an h3 there skips a level.
+ */
+type HeadingLevel = 2 | 3;
+
 /** Scene title + monospace subtitle. `onDark` for the always-ink board. */
 function Heading({
   title,
   meta,
   onDark = false,
+  level,
 }: {
   title: string;
   meta: string;
   onDark?: boolean;
+  level: HeadingLevel;
 }) {
+  const H = level === 2 ? "h2" : "h3";
   return (
     <header className="mb-5 @md:mb-7">
-      <h3
+      <H
         className={cn(
           "font-display text-lg font-bold tracking-tight @md:text-2xl @xl:text-3xl",
           !onDark && "text-fg",
@@ -139,7 +150,7 @@ function Heading({
         style={onDark ? { color: P.darkFg } : undefined}
       >
         {title}
-      </h3>
+      </H>
       <p
         className={cn(
           "mt-1 font-mono text-[11px] @md:text-sm",
@@ -154,7 +165,7 @@ function Heading({
 }
 
 /** Scene 1 — the five token layers, and which ones flip with the theme. */
-function Layers() {
+function Layers({ level }: { level: HeadingLevel }) {
   const rows = [
     {
       name: "fg",
@@ -194,6 +205,7 @@ function Layers() {
   return (
     <Board>
       <Heading
+        level={level}
         title="Five token layers"
         meta="src/app/globals.css · 35 color tokens"
       />
@@ -320,10 +332,11 @@ function SpecimenPanel({
 }
 
 /** Scene 2 — why ink and fg had to be split apart. */
-function ThemeSplit() {
+function ThemeSplit({ level }: { level: HeadingLevel }) {
   return (
     <Board>
       <Heading
+        level={level}
         title="One value, two jobs"
         meta="#0b1220 is light-mode text AND the dark-mode page background."
       />
@@ -387,7 +400,7 @@ function ThemeSplit() {
 }
 
 /** Scene 3 — the contrast audit, including the real brand-600 → 700 fix. */
-function Contrast() {
+function Contrast({ level }: { level: HeadingLevel }) {
   // Ratios are computed from the real token hex values against white using the
   // WCAG 2.x relative-luminance formula — not eyeballed. Bar width is derived
   // from the ratio against the 18.7:1 maximum, so the chart cannot disagree with
@@ -405,6 +418,7 @@ function Contrast() {
   return (
     <Board>
       <Heading
+        level={level}
         title="Contrast audit · WCAG 2.2 AA"
         meta="body text must clear 4.5:1"
       />
@@ -475,7 +489,7 @@ function Contrast() {
 }
 
 /** Scene 4 — the automated gates that run before anything ships. */
-function Gates() {
+function Gates({ level }: { level: HeadingLevel }) {
   const budgets = [
     { label: "Accessibility", value: "100" },
     { label: "SEO", value: "100" },
@@ -505,6 +519,7 @@ function Gates() {
           it takes the theme tokens like every other scene heading. Left as
           on-dark it was near-white on a white page in light mode. */}
       <Heading
+        level={level}
         title="The build gate"
         meta="scripts/lh-gate.mjs · exits 1 on regression"
       />
@@ -585,7 +600,10 @@ function Gates() {
   );
 }
 
-const scenes: Record<Scene, () => React.JSX.Element> = {
+const scenes: Record<
+  Scene,
+  (props: { level: HeadingLevel }) => React.JSX.Element
+> = {
   layers: Layers,
   "theme-split": ThemeSplit,
   contrast: Contrast,
@@ -596,6 +614,7 @@ export function PortfolioSystemAsset({
   scene,
   className,
   alt,
+  headingLevel = 3,
 }: PortfolioSystemAssetProps) {
   const Scene = scenes[scene];
   return (
@@ -631,7 +650,7 @@ export function PortfolioSystemAsset({
       aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
     >
-      <Scene />
+      <Scene level={headingLevel} />
     </div>
   );
 }

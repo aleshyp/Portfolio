@@ -48,6 +48,10 @@ test("no broken images or failed requests on home", async ({ page }) => {
 
   const broken = await page.evaluate(() =>
     [...document.images]
+      // Skip images that aren't displayed: a themed card renders one image per
+      // theme and hides the other, and a lazy image that's display:none is
+      // never fetched, so it would always read as "broken" here.
+      .filter((img) => img.checkVisibility())
       .filter((img) => !img.complete || img.naturalWidth === 0)
       .map((img) => img.currentSrc),
   );
