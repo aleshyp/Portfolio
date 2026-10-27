@@ -10,15 +10,27 @@ on:
     - cron: "0 9 * * 1"
 
 # A new push to a PR makes the in-flight run obsolete; don't burn minutes on it.
+# Pushes to main are never cancelled: Vercel deploys every main commit, so each
+# one should end with its own CI verdict.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   verify:
     name: Lint, typecheck, build & e2e
+    # The weekly run exists for `npm audit`; the code itself hasn't changed.
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Browsers and their OS libraries come baked into the image, so there's no
+    # browser cache or `playwright install-deps` (apt) on the critical path —
+    # that step once stalled for 11 minutes on a slow mirror. The tag MUST match
+    # @playwright/test in package-lock.json; the check below fails fast if not.
+    # --user 1001 matches the runner's uid so the workspace stays writable.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v7
 
@@ -29,6 +41,19 @@ jobs:
 
       - run: npm ci
 
+      - name: Check Playwright image matches @playwright/test
+        run: |
+          node -e '
+            const fs = require("fs");
+            const { chromium } = require("@playwright/test");
+            const v = require("@playwright/test/package.json").version;
+            if (!fs.existsSync(chromium.executablePath())) {
+              console.error(`::error::The Playwright container image does not match @playwright/test ${v}. Set the verify job image to mcr.microsoft.com/playwright:v${v}-noble.`);
+              process.exit(1);
+            }
+            console.log(`Playwright ${v}: browsers present`);
+          '
+
       - run: npm run lint
 
       - name: Typecheck
@@ -36,29 +61,8 @@ jobs:
 
       - run: npm run build
 
-      # Keyed on the resolved Playwright version so a bump re-downloads
-      # matching browsers instead of silently reusing stale ones.
-      - name: Resolve Playwright version
-        id: pw
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v6
-        id: pw-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-
-      # Browsers are cached but the OS-level shared libraries are not.
-      - name: Install Playwright system deps
-        run: npx playwright install-deps chromium
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-
       # Covers smoke, responsive, seo and a11y (axe-core) across both projects.
+      # On CI, playwright.config.ts serves the build above via `next start`.
       - run: npm run test:e2e
 
       # Only on failure: a green run's report is noise, and this is the one
@@ -77,6 +81,7 @@ jobs:
 
   lighthouse:
     name: Lighthouse budget
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
