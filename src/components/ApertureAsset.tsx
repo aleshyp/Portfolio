@@ -38,6 +38,13 @@ type Scene =
   | "type-specimen"
   | "usage";
 
+/**
+ * The fixes from the study's "What I'd change". These exist only as Figma PNG
+ * exports, with no SVG stand-in, so ApertureAsset never renders them:
+ * projectAssets serves their PNGs.
+ */
+type ExportOnlyScene = "logo-versions" | "purple-roles" | "usage-revised";
+
 type ApertureAssetProps = {
   scene: Scene;
   className?: string;
@@ -339,8 +346,16 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
   );
 }
 
-/** Ordered scenes for the case-study gallery (hero first, then blocks). */
-export const apertureScenes: { scene: Scene; alt: string; caption?: string }[] = [
+/**
+ * Ordered scenes for the case-study gallery (hero first, then blocks). The last
+ * three are the fixes, all shown under "What I'd change" (`scenes: 3` in
+ * projects.ts). They're revised COPIES; frames 02–05 above them are unchanged.
+ */
+export const apertureScenes: {
+  scene: Scene | ExportOnlyScene;
+  alt: string;
+  caption?: string;
+}[] = [
   {
     scene: "logomark",
     alt: "Aperture logo reveal: the violet lens mark with its glowing amber center animates in beside the 'Aperture' wordmark and the tagline 'Focus the frame.', on a deep indigo field.",
@@ -365,5 +380,20 @@ export const apertureScenes: { scene: Scene; alt: string; caption?: string }[] =
     scene: "usage",
     alt: "Usage guidelines defining logo clearspace as one iris radius, with correct full-color and incorrect desaturated do/don't examples.",
     caption: "Clearspace measured in iris radii, with the most common mistake shown beside the right version.",
+  },
+  {
+    scene: "logo-versions",
+    alt: "Logo versions sheet showing the mark three ways: full color, a violet lens with an amber center and a dark wordmark on light; reversed, the same mark with a white wordmark on deep indigo; and one color, a solid dark ring with the shutter segment marked by two thin cuts, beside a small light-on-dark version. Each is labeled with where to use it.",
+    caption: "Three versions of the mark, each labeled with where it goes. The one-color ring stays whole, with the shutter segment marked by two thin cuts.",
+  },
+  {
+    scene: "purple-roles",
+    alt: "Purple roles sheet with large swatches of Indigo #4F46E5, Deep #312E81 and Violet #7C6CF0, each with a one-sentence rule for its use, above crossed-out examples of an Indigo and a Violet button side by side and of white text on Violet.",
+    caption: "One job per purple, with the two mistakes the rules exist to stop.",
+  },
+  {
+    scene: "usage-revised",
+    alt: "Revised usage guidelines: the clearspace panel unchanged, two Do examples (the full-color mark on light, and the mark with a white wordmark on deep indigo), and the Don't example of a washed-out mark.",
+    caption: "The usage page now allows what the logo reveal already does: the mark on dark.",
   },
 ];

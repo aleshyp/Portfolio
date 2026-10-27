@@ -13,8 +13,17 @@ const SMALL_WIDTH = 1200;
 
 /** `srcset` for a generated screen at `base` (no extension), `w` px wide. */
 export function workSrcSet(base: string, w: number): string {
-  return `${base}-1200.webp ${Math.min(SMALL_WIDTH, w)}w, ${base}.webp ${w}w`;
+  // A master narrower than the small size (a phone frame) comes out the same
+  // width twice, and two candidates with one descriptor is an invalid srcset.
+  if (w <= SMALL_WIDTH) return `${base}-1200.webp ${w}w`;
+  return `${base}-1200.webp ${SMALL_WIDTH}w, ${base}.webp ${w}w`;
 }
+
+/**
+ * A phone capture, shown at phone width (`max-w-sm`, 384px) rather than
+ * stretched across the column, where a 1:4 frame would run ~4,000px tall.
+ */
+export const PHONE_SIZES = "(min-width: 432px) 384px, calc(100vw - 3rem)";
 
 /**
  * Rendered width of a case-study scene: the Container is max-w-6xl (1152px)

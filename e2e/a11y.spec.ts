@@ -69,7 +69,7 @@ async function waitForDocumentReady(page: import("@playwright/test").Page) {
 // differ in what they render: learning-platform-ui mixes exported screens with
 // a DOM user-flow diagram (role="img" over aria-hidden step cards),
 // portfolio-design-system carries the hand-built SVG scenes with long alt text,
-// and marketing-landing-page is the widest set (13 scenes) and the only one that
+// and marketing-landing-page is the widest set (16 scenes) and the only one that
 // exercises the "More screens" gallery for scenes past the content blocks.
 const routes = [
   "/",

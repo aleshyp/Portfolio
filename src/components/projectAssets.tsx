@@ -27,12 +27,16 @@ import { cn } from "@/lib/utils";
 
 // Aperture's non-hero scenes map to exported Figma PNG frames (@2x, 3200×1800)
 // under /public. Keyed by ApertureAsset scene name so the SVG stays the fallback
-// for any scene without a PNG.
+// for any scene without a PNG. The last three have no SVG version at all, so
+// their entries here must stay.
 const aperturePng: Record<string, string> = {
   "logo-construction": "/work/aperture/02-logo-construction@2x.png",
   palette: "/work/aperture/03-palette@2x.png",
   "type-specimen": "/work/aperture/04-type-specimen@2x.png",
   usage: "/work/aperture/05-usage@2x.png",
+  "logo-versions": "/work/aperture/06-logo-versions@2x.png",
+  "purple-roles": "/work/aperture/07-purple-roles@2x.png",
+  "usage-revised": "/work/aperture/08-usage-revised@2x.png",
 };
 
 /**

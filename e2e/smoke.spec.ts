@@ -120,6 +120,40 @@ test.describe("case study routing", () => {
     await expect(page.getByText(/next project/i)).toBeVisible();
   });
 
+  // A block can claim several scenes (`scenes` in projects.ts). The fixes are
+  // the evidence for "What I'd change", so they must render under it, not
+  // drift into "More screens" if a scene is added or the count is miscounted.
+  test("What I'd change shows its fix frames under the block", async ({
+    page,
+  }) => {
+    for (const [slug, fixes] of [
+      ["brand-identity-system", 3],
+      ["marketing-landing-page", 4],
+    ] as const) {
+      await page.goto(`/work/${slug}`);
+      const heading = page.getByRole("heading", {
+        level: 2,
+        name: "What I'd change",
+      });
+      // Innermost div holding both the heading and figures: the block itself.
+      const block = page
+        .locator("div", { has: heading })
+        .filter({ has: page.getByRole("figure") })
+        .last();
+      await expect(block.getByRole("figure"), slug).toHaveCount(fixes);
+    }
+  });
+
+  test("a phone capture stays phone-width on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/work/marketing-landing-page");
+    const phone = page.getByRole("img", {
+      name: /first-run screen at phone width/i,
+    });
+    // Column width would make this 1:4 frame ~4,000px tall.
+    expect((await phone.boundingBox())?.width).toBeLessThanOrEqual(384);
+  });
+
   test("unknown slug renders the custom 404", async ({ page }) => {
     const res = await page.goto("/work/does-not-exist");
     expect(res?.status()).toBe(404);

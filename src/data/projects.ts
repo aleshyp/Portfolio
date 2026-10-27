@@ -1,6 +1,13 @@
 export type ContentBlock = {
   heading: string;
   body: string;
+  /**
+   * How many gallery scenes follow this block, in order. Defaults to 1. More
+   * than one keeps a related set together under the text that argues for it
+   * (e.g. the fixes under "What I'd change") instead of splitting it between
+   * this block and "More screens".
+   */
+  scenes?: number;
 }; export type Project = {
   slug: string;
   title: string;
@@ -176,7 +183,6 @@ export const projects: Project[] = [
       "Mapped the route from visitor to enrolled student (the flow below)",
       "Ten screens in Figma, including the empty search state",
       "Reviewed my own screens against the brief (see What I'd change)",
-      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
     ],
     year: "2026",
     client: "Lumin (concept product)",
@@ -248,7 +254,6 @@ export const projects: Project[] = [
       "Logo mark and its animated reveal",
       "Six marketing pages and three account screens in Figma",
       "Phone layout of the product dashboard",
-      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
     ],
     year: "2026",
     client: "Northwind (concept product)",
@@ -271,6 +276,10 @@ export const projects: Project[] = [
         chose: "On a phone, the dashboard stacks its metrics as cards.",
         over: "squeezing the desktop table onto a small screen.",
       },
+      {
+        chose: "The first-run screen fills from 30 days of imported history.",
+        over: "an empty dashboard waiting for this week's data.",
+      },
     ],
     blocks: [
       {
@@ -291,7 +300,8 @@ export const projects: Project[] = [
       },
       {
         heading: "What I'd change",
-        body: "The page argues with itself. The hero says 'No dashboards to babysit' beside what is plainly a dashboard, and the value-prop headline below it is 'Clarity, not more charts'. I'd lead with the Monday digest, the one thing the page says is different, and let the dashboard come second. The one action also goes by three names in the first screen alone (Start free, Start free trial, Get started), which is three decisions for a reader when there should be one. I'd also design the first-run state before any more marketing pages. A team that has just connected GitHub sees an empty dashboard, and that screen decides whether the free trial the whole site is selling actually converts. It isn't in this set, and it's the most important screen Northwind doesn't have.",
+        body: "Reviewing the set turned up three problems. The page argued with itself: the hero said 'No dashboards to babysit' beside what is plainly a dashboard, and the value-prop headline below it is 'Clarity, not more charts'. The one action went by three names in the first screen alone (Start free, Start free trial, Get started), which is three decisions for a reader when there should be one. And the most important screen didn't exist. A team that has just connected GitHub lands on an empty dashboard, and that screen decides whether the free trial the whole site is selling actually converts. The four frames below are the fixes; everything above them is the original set. The hero now leads with the Monday digest, the one thing the page says is different, and the dashboard comes second. 'Start free trial' is the only name for the trial, in the nav, the hero and the sign-up form. The first-run screen is never empty: it fills from 30 days of imported history, says plainly which number is still importing, and makes the next step getting the first digest early, because the digest is the product. None of it has been tested with a real team yet.",
+        scenes: 4,
       },
     ],
     gallery: 3,
@@ -313,7 +323,6 @@ export const projects: Project[] = [
       "Logo mark, construction grid and animated reveal",
       "Six-color palette and Sora type specimen",
       "Usage guidelines: clearspace and do/don't rules",
-      "First-pass layouts generated with Figma AI from my brief, then redesigned by hand",
     ],
     year: "2026",
     client: "Aperture (concept brand)",
@@ -337,6 +346,10 @@ export const projects: Project[] = [
         chose: "Usage rules shown as do and don't pictures.",
         over: "rules written only as sentences.",
       },
+      {
+        chose: "The one-color mark keeps its ring whole, with the shutter segment marked by two thin cuts.",
+        over: "cutting the segment out, which turned the lens into a letter C.",
+      },
     ],
     blocks: [
       {
@@ -357,7 +370,8 @@ export const projects: Project[] = [
       },
       {
         heading: "What I'd change",
-        body: "The guidelines contradict the brief. The usage page says the mark always sits on Paper or Mist, and forbids desaturating it, yet the brief asked for a dark-mode app and the logo reveal itself plays on deep indigo. So the system needs two things it doesn't have yet: a reversed version for dark backgrounds, and a single-color version for embossing, one-color print and the places full color can't go. I'd also give each of the three purples a written role. Three close shades with no rule for when to use which is where an identity starts drifting.",
+        body: "The guidelines contradicted the brief. The usage page said the mark always sits on Paper or Mist, and forbade desaturating it, yet the brief asked for a dark-mode app and the logo reveal itself plays on deep indigo. The system was missing a version for dark backgrounds and a single-color version for embossing, one-color print and the places full color can't go. And three close purples with no rule for when to use which is where an identity starts drifting. The three frames below are the fixes; the frames above them are the originals. The reversed version turned out to be the same mark with a light wordmark. The mark already worked on dark, and the rules just didn't allow it. The one-color version was the hard one: cutting the shutter segment clean out turned the lens into a letter C, so the segment is marked with two thin cuts and the ring stays whole. Each purple now has one written job, and Violet is never a background for light text, which at 3.8:1 it's too light to carry. The usage page adds 'Reversed on dark' as a Do, so the rules finally allow what the reveal already does.",
+        scenes: 3,
       },
     ],
     gallery: 4,

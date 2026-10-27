@@ -47,6 +47,22 @@
     "forgot-password": {
       "w": 2400,
       "h": 1350
+    },
+    "fix-hero": {
+      "w": 2400,
+      "h": 1350
+    },
+    "fix-signup": {
+      "w": 2400,
+      "h": 1350
+    },
+    "first-run": {
+      "w": 2400,
+      "h": 1617
+    },
+    "first-run-mobile": {
+      "w": 780,
+      "h": 3118
     }
   },
   "lumin": {
