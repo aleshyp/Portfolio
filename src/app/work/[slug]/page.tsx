@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -99,10 +100,16 @@ export default async function CaseStudy({
     );
   };
 
-  // Scene 0 is the cover and each content block claims the next one, so a set
-  // with more scenes than `blocks.length + 1` has leftovers. They render in the
-  // "More screens" gallery below rather than being silently dropped.
-  const usedScenes = project.blocks.length + 1;
+  // Scene 0 is the cover and each content block claims the next `scenes` of
+  // them (one by default), so blockScenes[i] lists block i's scene indices. A
+  // set with more scenes than that has leftovers. They render in the "More
+  // screens" gallery below rather than being silently dropped.
+  const blockScenes = project.blocks.reduce<number[][]>((acc, block) => {
+    const start = 1 + acc.flat().length;
+    const count = block.scenes ?? 1;
+    return [...acc, Array.from({ length: count }, (_, k) => start + k)];
+  }, []);
+  const usedScenes = 1 + blockScenes.flat().length;
   const extraScenes = Array.from(
     { length: Math.max(0, (assetSet?.scenes.length ?? 0) - usedScenes) },
     (_, i) => usedScenes + i,
@@ -314,18 +321,22 @@ export default async function CaseStudy({
                 </p>
               </div>
 
-              {/* Insert a gallery image between blocks */}
+              {/* Insert this block's gallery scenes between blocks */}
               {assetSet
-                ? captioned(
-                    wrapScene(
-                      renderScene(
-                        i + 1,
-                        cn("mt-10 w-full rounded-4xl", galleryRatio),
-                      ),
-                      i + 1,
-                    ),
-                    i + 1,
-                  )
+                ? blockScenes[i].map((index) => (
+                    <Fragment key={index}>
+                      {captioned(
+                        wrapScene(
+                          renderScene(
+                            index,
+                            cn("mt-10 w-full rounded-4xl", galleryRatio),
+                          ),
+                          index,
+                        ),
+                        index,
+                      )}
+                    </Fragment>
+                  ))
                 : i < project.gallery && (
                     <Placeholder
                       label={`Screen ${i + 1}`}

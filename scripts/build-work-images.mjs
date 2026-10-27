@@ -62,6 +62,14 @@ const MASTERS = {
     "pages/login-page.jpg": "login",
     "pages/signup-page.jpg": "signup",
     "pages/forgot-password-page.jpg": "forgot-password",
+    // The fixes from the study's "What I'd change", exported 2026-10-27 as
+    // revised copies; the originals above stay as they were.
+    "v6-01-hero.jpg": "fix-hero",
+    "pages/signup-page-v6.jpg": "fix-signup",
+    "first-run.jpg": "first-run",
+    // 390px phone frame at 2x. Only 780px wide, so both outputs stay 780px
+    // (withoutEnlargement) and workSrcSet lists it once.
+    "first-run-mobile.jpg": "first-run-mobile",
   },
   // 2880px (2x of a 1440 frame) Figma exports, re-exported 2026-10-13.
   lumin: {
