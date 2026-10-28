@@ -65,11 +65,17 @@ const skillsHtml = skillGroups
 
 const toolsHtml = tools.map((t) => `<span class="pill">${esc(t)}</span>`).join("");
 
+// "This Site" only makes sense while you're on the site. On paper it needs the
+// site's name.
+const resumeNames = { "portfolio-design-system": host };
+
 const workHtml = projects
   .map((p) => {
-    const name = p.title.split(":")[0];
+    const name = resumeNames[p.slug] ?? p.title.split(":")[0];
     // Role is on the case study; the résumé keeps each entry to two lines.
-    const meta = [p.year, p.concept ? "concept" : null].filter(Boolean).join(" · ");
+    const meta = [p.year, p.concept ? "concept" : null, p.demoHref ? "coded prototype" : null]
+      .filter(Boolean)
+      .join(" · ");
     return `<div class="item">
       <h4>${link(`${siteUrl}/work/${p.slug}`, name)} <span class="meta">${esc(meta)}</span></h4>
       <p>${esc(p.blurb)}</p>
@@ -81,7 +87,7 @@ const workHtml = projects
 const educationHtml = educationGroups()
   .map(
     (g) =>
-      `<div class="item"><h4>${esc(g.title)}</h4><p>${esc(g.detail)}</p><p class="meta">${esc(g.period)}</p></div>`,
+      `<div class="item"><h4>${esc(g.title)}</h4><p>${esc(g.brief ?? g.detail)} <span class="meta">· ${esc(g.period)}</span></p></div>`,
   )
   .join("");
 
@@ -115,7 +121,9 @@ const html = `<!doctype html>
   .dot { margin: 0 6pt; color: ${C.brandLine}; }
   header { padding-bottom: 12pt; border-bottom: 2pt solid ${C.brand}; }
   .cols { display: grid; grid-template-columns: 34% 1fr; gap: 26pt; margin-top: 14pt; }
-  h2 { font: 700 8.5pt Sora, sans-serif; letter-spacing: 0.14em; text-transform: uppercase;
+  /* Kept modest: wider tracking makes some PDF text extractors (and so some
+     applicant-tracking systems) read "SKILLS" as "SKI L LS". */
+  h2 { font: 700 8.5pt Sora, sans-serif; letter-spacing: 0.06em; text-transform: uppercase;
        color: ${C.fg}; padding-bottom: 5pt; border-bottom: 1pt solid ${C.rule}; margin: 14pt 0 8pt; }
   section:first-child h2 { margin-top: 0; }
   .item { margin-bottom: 7pt; }
