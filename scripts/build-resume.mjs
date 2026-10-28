@@ -19,7 +19,7 @@
 import { writeFile } from "node:fs/promises";
 import { chromium } from "@playwright/test";
 
-const { site, siteUrl, experience, educationGroups, skillGroups, tools } =
+const { site, siteUrl, experience, leadership, educationGroups, skillGroups, tools } =
   await import("../src/data/site.ts");
 const { projects } = await import("../src/data/projects.ts");
 
@@ -59,7 +59,9 @@ const contact = [
 
 const skillsHtml = skillGroups
   .map(
-    (g) => `<div class="item"><h4>${esc(g.title)}</h4><p>${esc(g.items.join(", "))}</p></div>`,
+    // Each skill stays whole, so a line never breaks inside "Accessibility (WCAG 2.2)".
+    (g) =>
+      `<div class="item"><h4>${esc(g.title)}</h4><p>${g.items.map((i) => `<span class="nowrap">${esc(i)}</span>`).join(", ")}</p></div>`,
   )
   .join("");
 
@@ -103,6 +105,18 @@ const experienceHtml = experience
   )
   .join("");
 
+// Same layout as a job. An entry without a title (see LeadershipItem) leads
+// with the organisation and puts its context where the company would go.
+const leadershipHtml = leadership
+  .map(
+    (x) => `<div class="job">
+      <div class="job-head"><h3>${esc(x.role ?? x.org)}</h3><span class="period">${esc(x.period)}</span></div>
+      ${x.role ? `<p class="company">${esc(x.org)}</p>` : `<p class="context">${esc(x.context ?? "")}</p>`}
+      <ul>${x.highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
+    </div>`,
+  )
+  .join("");
+
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <title>${esc(site.name)} — Résumé</title>
@@ -111,7 +125,7 @@ const html = `<!doctype html>
 <style>
   @page { size: Letter; margin: 0.5in 0.55in; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font: 9.4pt/1.42 Inter, sans-serif; color: ${C.muted}; }
+  body { font: 9.4pt/1.4 Inter, sans-serif; color: ${C.muted}; }
   a { color: inherit; text-decoration: none; white-space: nowrap; }
   h1 { font: 700 26pt/1.1 Sora, sans-serif; color: ${C.fg}; letter-spacing: -0.02em; }
   .title { margin-top: 4pt; font: 600 12pt Inter, sans-serif; color: ${C.brand}; }
@@ -120,25 +134,26 @@ const html = `<!doctype html>
   .nowrap { white-space: nowrap; }
   .dot { margin: 0 6pt; color: ${C.brandLine}; }
   header { padding-bottom: 12pt; border-bottom: 2pt solid ${C.brand}; }
-  .cols { display: grid; grid-template-columns: 34% 1fr; gap: 26pt; margin-top: 14pt; }
+  .cols { display: grid; grid-template-columns: 36% 1fr; gap: 22pt; margin-top: 14pt; }
   /* Kept modest: wider tracking makes some PDF text extractors (and so some
      applicant-tracking systems) read "SKILLS" as "SKI L LS". */
   h2 { font: 700 8.5pt Sora, sans-serif; letter-spacing: 0.06em; text-transform: uppercase;
-       color: ${C.fg}; padding-bottom: 5pt; border-bottom: 1pt solid ${C.rule}; margin: 14pt 0 8pt; }
+       color: ${C.fg}; padding-bottom: 5pt; border-bottom: 1pt solid ${C.rule}; margin: 12pt 0 7pt; }
   section:first-child h2 { margin-top: 0; }
-  .item { margin-bottom: 7pt; }
+  .item { margin-bottom: 6pt; }
   .item h4 { font: 600 9.6pt Inter, sans-serif; color: ${C.fg}; }
   .item h4 .meta { font-weight: 400; margin-left: 3pt; }
   .meta { color: ${C.faint}; font-size: 8.6pt; }
-  .pills { display: flex; flex-wrap: wrap; gap: 4pt; }
-  .pill { font-size: 8.4pt; color: ${C.brand}; background: ${C.brandSoft};
-          border: 0.75pt solid ${C.brandLine}; border-radius: 4pt; padding: 1.5pt 5pt; }
-  .job { margin-bottom: 10pt; break-inside: avoid; }
+  .pills { display: flex; flex-wrap: wrap; gap: 4pt 3pt; }
+  .pill { font-size: 8.2pt; color: ${C.brand}; background: ${C.brandSoft};
+          border: 0.75pt solid ${C.brandLine}; border-radius: 4pt; padding: 1.5pt 4pt; }
+  .job { margin-bottom: 9pt; break-inside: avoid; }
   .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8pt; }
   .job h3 { font: 600 10.6pt Inter, sans-serif; color: ${C.fg}; }
   .period { color: ${C.faint}; font-size: 8.8pt; white-space: nowrap; }
   .company { color: ${C.brand}; font-weight: 600; font-size: 9.6pt; }
   .summary { margin-top: 3pt; }
+  .context { color: ${C.faint}; font-size: 9pt; }
   ul { margin-top: 4pt; padding-left: 12pt; }
   li { margin-bottom: 1.5pt; }
   li::marker { color: ${C.brand}; }
@@ -155,10 +170,11 @@ const html = `<!doctype html>
       <section><h2>Skills</h2>${skillsHtml}</section>
       <section><h2>Tools</h2><div class="pills">${toolsHtml}</div></section>
       <section><h2>Selected work</h2>${workHtml}</section>
+      <section><h2>Education</h2>${educationHtml}</section>
     </div>
     <div>
       <section><h2>Experience</h2>${experienceHtml}</section>
-      <section><h2>Education</h2>${educationHtml}</section>
+      <section><h2>Leadership</h2>${leadershipHtml}</section>
     </div>
   </div>
 </body></html>`;

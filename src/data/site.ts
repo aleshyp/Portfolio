@@ -104,9 +104,9 @@ export const experience: ExperienceItem[] = [
       "I design web and app pages for Acellus, an online learning platform used by over a million students, help maintain the design system behind them, and build those pages in code.",
     highlights: [
       "Designed 50+ web and app pages for Acellus, an online learning platform used by over a million students.",
-      "Helped create, and help maintain, a 100-component design system in Figma and with Claude. It replaced a bloated stylesheet full of duplicate components, so one fix now reaches everywhere a component is used.",
+      "Helped create, and help maintain, a 100-component design system in Figma and with Claude, replacing a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
       "Build designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
-      "Work project by project with the programming team, from a kickoff that scopes the work to a retrospective on the result and the process, tracked in GitLab.",
+      "Work project by project with the programming team, from kickoff to retrospective, tracked in GitLab.",
     ],
   },
   {
@@ -118,11 +118,11 @@ export const experience: ExperienceItem[] = [
       "Hired for graphic and motion design. After two years I moved into UX/UI and front-end development.",
     highlights: [
       "Made motion and graphic design in After Effects and Photoshop.",
-      "Moved into UX/UI and front-end development in 2024.",
     ],
   },
   // The esports roles ran inside the freelance years, so they're named here
-  // rather than listed as three undated jobs of their own.
+  // rather than listed as undated jobs of their own. Noxious Gaming, a
+  // creative-director role, lives under `leadership` instead.
   {
     role: "Freelance Designer",
     company: "Self-employed",
@@ -132,8 +132,49 @@ export const experience: ExperienceItem[] = [
       "Started freelancing at 13, producing social media designs for esports organizations and influencers, and took on longer roles with a few orgs along the way. This is where the brand and design work began.",
     highlights: [
       "Built a client base of esports orgs and influencers, starting at 13.",
-      "Creative Director at Noxious Gaming for a year: set the org's visual identity and directed its creative output.",
-      "Graphic designer for Buzzkill Esports and Animosity Esports, six months each: matchday graphics, roster announcements, and results posts.",
+      "Graphic designer for Buzzkill Esports and Animosity Esports (six months each): matchday, roster, and results graphics.",
+    ],
+  },
+];
+
+/**
+ * Leadership, shared by the Experience section and the résumé.
+ *
+ * `role` is optional on purpose. The Acellus leadership is real but has no
+ * title, so it carries `context` instead and must never be given a `role`
+ * like "Team Lead": an interviewer will ask, and the answer has to match.
+ */
+export type LeadershipItem = {
+  org: string;
+  role?: string;
+  context?: string;
+  period: string;
+  highlights: string[];
+};
+
+export const leadership: LeadershipItem[] = [
+  {
+    org: "International Academy of Science",
+    context: "Alongside the UX/UI role",
+    period: "2024 – Present",
+    highlights: [
+      "As the only designer, the go-to for 20+ programmers over the years on design, specs, issues, code, and company questions, so the project manager can focus on the bigger picture.",
+      "Answer the daily “which token or component?” questions, keeping everyone on the right pieces and the product consistent.",
+      "Train new developers, review teammates' code every day, and help set the standards for the design system.",
+    ],
+  },
+  {
+    org: "Third Studio",
+    role: "Co-owner & Lead Designer",
+    period: "1 year",
+    highlights: ["Co-owned the studio and managed its team of 4 designers."],
+  },
+  {
+    org: "Noxious Gaming",
+    role: "Creative Director",
+    period: "1 year",
+    highlights: [
+      "Set the esports org's visual identity and directed its creative output.",
     ],
   },
 ];
