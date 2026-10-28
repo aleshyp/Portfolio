@@ -42,6 +42,12 @@ const root = new URL("../", import.meta.url);
  * band of whitespace. Don't trim the rest: on a full-page frame the threshold
  * also eats ~30px of the page's own light footer.
  *
+ * An entry with `crop: { left, top, width, height }` cuts that exact rectangle
+ * instead, for a frame whose edge matches the canvas. Onboarding's nav is white
+ * on Figma's white canvas, so trim found the frame's top edge at the logo and
+ * cut the nav's top padding off. Its rectangle was measured from the master:
+ * 2880px wide (a 1440 frame at 2x), with the logo centred in a 157px nav.
+ *
  * An entry with `cover: true` keeps only the TOP of the page, cropped to 16:9,
  * for slots that show a full-page screen as a 16:9 frame (the Work card and the
  * case-study cover). Cropping with object-fit would still download the whole
@@ -80,7 +86,10 @@ const MASTERS = {
     "pricing.jpg": "pricing",
     "resources.jpg": "resources",
     "emptycatalog.jpg": "emptycatalog",
-    "onboarding.jpg": { name: "onboarding", trim: true },
+    "onboarding.jpg": {
+      name: "onboarding",
+      crop: { left: 800, top: 801, width: 2880, height: 2025 },
+    },
     "signup.jpg": { name: "signup", trim: true },
     "website-login.jpg": { name: "website-login", trim: true },
   },
@@ -105,13 +114,15 @@ for (const [project, files] of Object.entries(MASTERS)) {
 
   for (const [master, entries] of Object.entries(files)) {
     for (const entry of [entries].flat()) {
-      const { name, trim = false, cover = false } =
+      const { name, trim = false, cover = false, crop } =
         typeof entry === "string" ? { name: entry } : entry;
       const src = new URL(`assets-src/work/${project}/${master}`, root);
       // Trim or crop to a buffer first: sharp applies those before resize either
       // way, but doing it once keeps both sizes cropped identically.
       let input = fileURLToPath(src);
-      if (trim) {
+      if (crop) {
+        input = await sharp(input).extract(crop).toBuffer();
+      } else if (trim) {
         input = await sharp(input).trim({ threshold: 12 }).toBuffer();
       } else if (cover) {
         const { width } = await sharp(input).metadata();
