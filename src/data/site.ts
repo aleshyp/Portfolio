@@ -104,7 +104,8 @@ export const experience: ExperienceItem[] = [
       "I design web and app pages for Acellus, an online learning platform used by over a million students, help maintain the design system behind them, and build those pages in code.",
     highlights: [
       "Designed 50+ web and app pages for Acellus, an online learning platform used by over a million students.",
-      "Helped create and maintain a 100-component design system in Figma. Using Claude, replaced a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
+      "Helped create and maintain a 100-component Figma design system.",
+      "Using Claude, replaced a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
       "Build designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
       "Work project by project with the programming team, from kickoff to retrospective, tracked in GitLab.",
     ],
