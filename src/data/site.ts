@@ -16,7 +16,7 @@ export const site = {
   role: "UX/UI Designer & Front-End Developer",
   tagline:
     "I design web and app interfaces, then write the front-end code that ships them.",
-  location: "Kansas City, United States",
+  location: "Kansas City, MO",
   email: "hello@ianriley.co",
   available: true,
   resumeUrl: "/resume.pdf",
@@ -67,17 +67,16 @@ export const skillGroups = [
   },
 ] as const;
 
+// Code tools already appear under the Front-End skill group; listing them here
+// too just spent résumé space saying the same thing twice.
 export const tools = [
   "Figma",
-  "Tailwind CSS",
-  "React",
-  "TypeScript",
-  "TanStack",
-  "GitLab",
-  "Claude Code",
+  "After Effects",
   "Photoshop",
   "Illustrator",
   "Affinity",
+  "Claude Code",
+  "GitLab",
 ] as const;
 
 /**
@@ -93,66 +92,89 @@ export type ExperienceItem = {
 };
 
 export const experience: ExperienceItem[] = [
+  // One employer, two entries: the move from graphic/motion into UX/UI is the
+  // strongest line on the résumé, and a dated title change shows it. The first
+  // entry is also `worksFor` in the JSON-LD (lib/seo.ts), so keep it current.
   {
     role: "UX/UI Designer & Front-End Developer",
     company: "International Academy of Science",
-    period: "2022 – Present",
+    period: "2024 – Present",
     location: "United States",
     summary:
-      "Joined doing graphic and motion design, and after two years moved into UX/UI and front-end development. I design web and app pages for Acellus, an online learning program, help maintain its design system, and build those designs into shippable pages in code.",
+      "I design web and app pages for Acellus, an online learning platform used by over a million students, help maintain the design system behind them, and build those pages in code.",
     highlights: [
-      "Design web and app pages for Acellus, an online learning platform.",
-      "Helped create, and help maintain, the design system that keeps the product consistent, working in Figma and with Claude.",
+      "Designed 50+ web and app pages for Acellus, an online learning platform used by over a million students.",
+      "Helped create, and help maintain, a 100-component design system in Figma and with Claude, replacing a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
       "Build designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
-      "Work in sprints alongside the programming team, planning and shipping work through GitLab.",
-      "Spent the first two years on graphic and motion design before moving into UX/UI.",
+      "Work project by project with the programming team, from kickoff to retrospective, tracked in GitLab.",
     ],
   },
   {
-    role: "Creative Director",
-    company: "Noxious Gaming",
-    period: "1 year",
-    location: "Remote",
+    role: "Graphic & Motion Designer",
+    company: "International Academy of Science",
+    period: "2022 – 2024",
+    location: "United States",
     summary:
-      "Led creative direction for an esports organization, setting the visual identity and producing social and brand designs across the org.",
+      "Hired for graphic and motion design. After two years I moved into UX/UI and front-end development.",
     highlights: [
-      "Directed the visual identity and creative output for the organization.",
-      "Produced social media and brand designs for players and the org.",
+      "Made motion and graphic design in After Effects and Photoshop.",
     ],
   },
-  {
-    role: "Graphic Designer",
-    company: "Buzzkill Esports",
-    period: "6 months",
-    location: "Remote",
-    summary:
-      "Social graphics and brand assets on a matchday schedule: announcements, results, and player content, on the turnaround a live season demands.",
-    highlights: [
-      "Made matchday graphics, roster announcements, and results posts.",
-      "Kept the org's look consistent while working within its existing brand.",
-    ],
-  },
-  {
-    role: "Graphic Designer",
-    company: "Animosity Esports",
-    period: "6 months",
-    location: "Remote",
-    summary:
-      "Social and brand design for the org, working to a weekly content calendar.",
-    highlights: [
-      "Made social designs and matchday graphics on a weekly turnaround.",
-    ],
-  },
+  // The esports roles ran inside the freelance years, so they're named here
+  // rather than listed as undated jobs of their own. Noxious Gaming, a
+  // creative-director role, lives under `leadership` instead.
   {
     role: "Freelance Designer",
     company: "Self-employed",
     period: "2014 – 2022",
     location: "Remote",
     summary:
-      "Started freelancing at 13, producing social media designs for esports organizations and influencers. This is where the brand and design work began.",
+      "Started freelancing at 13, producing social media designs for esports organizations and influencers, and took on longer roles with a few orgs along the way. This is where the brand and design work began.",
     highlights: [
-      "Built a client base of esports orgs and influencers as a teenager.",
-      "Specialized in social media designs and brand assets across multiple organizations.",
+      "Built a client base of esports orgs and influencers, starting at 13.",
+      "Graphic designer for Buzzkill Esports and Animosity Esports (six months each): matchday, roster, and results graphics.",
+    ],
+  },
+];
+
+/**
+ * Leadership, shared by the Experience section and the résumé.
+ *
+ * `role` is optional on purpose. The Acellus leadership is real but has no
+ * title, so it carries `context` instead and must never be given a `role`
+ * like "Team Lead": an interviewer will ask, and the answer has to match.
+ */
+export type LeadershipItem = {
+  org: string;
+  role?: string;
+  context?: string;
+  period: string;
+  highlights: string[];
+};
+
+export const leadership: LeadershipItem[] = [
+  {
+    org: "International Academy of Science",
+    context: "Alongside the UX/UI role",
+    period: "2024 – Present",
+    highlights: [
+      "As the only designer, the go-to for 20+ programmers over the years on design, specs, issues, code, and company questions, so the project manager can focus on the bigger picture.",
+      "Answer the daily “which token or component?” questions, keeping everyone on the right pieces and the product consistent.",
+      "Train new developers, review teammates' code every day, and help set the standards for the design system.",
+    ],
+  },
+  {
+    org: "Third Studio",
+    role: "Co-owner & Lead Designer",
+    period: "1 year",
+    highlights: ["Co-owned the studio and managed its team of 4 designers."],
+  },
+  {
+    org: "Noxious Gaming",
+    role: "Creative Director",
+    period: "1 year",
+    highlights: [
+      "Set the esports org's visual identity and directed its creative output.",
     ],
   },
 ];
@@ -164,6 +186,8 @@ export type EducationItem = {
   credential: string;
   institution: string;
   period: string;
+  /** Subject shared by a run of courses; titles the grouped entry. */
+  track?: string;
 };
 
 export const education: EducationItem[] = [
@@ -175,26 +199,31 @@ export const education: EducationItem[] = [
   {
     credential: "Foundations of Cybersecurity",
     institution: "Coursera",
+    track: "Cybersecurity",
     period: "September 2025",
   },
   {
     credential: "Play It Safe: Manage Security Risks",
     institution: "Coursera",
+    track: "Cybersecurity",
     period: "September 2025",
   },
   {
     credential: "Connect and Protect: Networks and Network Security",
     institution: "Coursera",
+    track: "Cybersecurity",
     period: "September 2025",
   },
   {
     credential: "Tools of the Trade: Linux and SQL",
     institution: "Coursera",
+    track: "Cybersecurity",
     period: "September 2025",
   },
   {
     credential: "Assets, Threats, and Vulnerabilities",
     institution: "Coursera",
+    track: "Cybersecurity",
     period: "October 2025",
   },
 ];
@@ -204,7 +233,13 @@ export const education: EducationItem[] = [
  * line of coursework instead of five entries outweighing the work history.
  * Shared by the Experience section and the résumé so they can't disagree.
  */
-export type EducationGroup = { title: string; detail: string; period: string };
+export type EducationGroup = {
+  title: string;
+  detail: string;
+  period: string;
+  /** One-line stand-in for `detail` where space is tight (the résumé). */
+  brief?: string;
+};
 
 export function educationGroups(): EducationGroup[] {
   const byInstitution = new Map<string, EducationItem[]>();
@@ -222,9 +257,10 @@ export function educationGroups(): EducationGroup[] {
           period: items[0].period,
         }
       : {
-          title: `${institution} coursework`,
+          title: `${items[0].track ?? institution} coursework`,
           // "Play It Safe: Manage Security Risks" → "Manage Security Risks"
           detail: items.map((i) => i.credential.split(": ").at(-1)).join("; "),
+          brief: `${institution} · ${items.length} courses`,
           // "October 2025" → "2025"
           period: items.at(-1)!.period.split(" ").at(-1)!,
         },

@@ -88,6 +88,7 @@ export function homeJsonLd() {
         address: {
           "@type": "PostalAddress",
           addressLocality: site.location.split(",")[0],
+          addressRegion: site.location.split(", ")[1],
           addressCountry: "US",
         },
         ...(currentRole && {

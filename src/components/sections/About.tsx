@@ -85,7 +85,7 @@ export function About() {
                 design, and after two years moved into UX/UI and front-end. Now
                 I design web and app pages for an online learning platform, help
                 maintain the design system behind them, and build those pages in
-                React, working in sprints alongside our programmers.
+                React, working project by project alongside our programmers.
               </p>
               <p>
                 I like to settle what a screen has to do before deciding how it

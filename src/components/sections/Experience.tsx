@@ -1,10 +1,10 @@
-import { Download, GraduationCap } from "lucide-react";
+import { Download, GraduationCap, Users } from "lucide-react";
 import { Section } from "@/components/Section";
 import { AnimatedReveal, StaggerGroup, StaggerItem } from "@/components/AnimatedReveal";
 import { Eyebrow } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
-import { experience, educationGroups, site } from "@/data/site";
+import { experience, educationGroups, leadership, site } from "@/data/site";
 
 export function Experience() {
   return (
@@ -72,9 +72,56 @@ export function Experience() {
         ))}
       </StaggerGroup>
 
-      {/* Education */}
+      {/* Leadership. An entry without a role is unofficial (see LeadershipItem),
+          so it leads with the organization and never shows a title. */}
       <AnimatedReveal delay={0.1}>
         <Card variant="soft" className="mt-12 p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
+              <Users size={20} />
+            </span>
+            <h3 className="font-display text-lg font-semibold text-fg">
+              Leadership
+            </h3>
+          </div>
+          <div className="mt-6 space-y-6">
+            {leadership.map((item) => (
+              <div key={item.org}>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                  <h4 className="font-medium text-fg">
+                    {item.role ?? item.org}
+                    {item.role && (
+                      <span className="text-brand-700 dark:text-brand-400">
+                        {" · "}
+                        {item.org}
+                      </span>
+                    )}
+                  </h4>
+                  <p className="shrink-0 text-sm text-fg-muted">{item.period}</p>
+                </div>
+                {item.context && (
+                  <p className="mt-1 text-sm text-fg-muted">{item.context}</p>
+                )}
+                <ul className="mt-3 space-y-2">
+                  {item.highlights.map((h) => (
+                    <li
+                      key={h}
+                      className="flex items-start gap-2 text-sm text-fg-soft"
+                    >
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </AnimatedReveal>
+
+      {/* Education */}
+      <AnimatedReveal delay={0.1}>
+        <Card variant="soft" className="mt-4 p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
               <GraduationCap size={20} />
