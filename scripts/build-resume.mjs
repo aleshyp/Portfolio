@@ -148,6 +148,9 @@ const html = `<!doctype html>
   .pill { font-size: 8.2pt; color: ${C.brand}; background: ${C.brandSoft};
           border: 0.75pt solid ${C.brandLine}; border-radius: 4pt; padding: 1.5pt 4pt; }
   .job { margin-bottom: 9pt; break-inside: avoid; }
+  /* Margins between sections collapse into the h2's anyway; the very last one
+     would only push an empty second page. */
+  .job:last-child, .item:last-child { margin-bottom: 0; }
   .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8pt; }
   .job h3 { font: 600 10.6pt Inter, sans-serif; color: ${C.fg}; }
   .period { color: ${C.faint}; font-size: 8.8pt; white-space: nowrap; }

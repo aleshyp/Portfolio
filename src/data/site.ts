@@ -104,7 +104,7 @@ export const experience: ExperienceItem[] = [
       "I design web and app pages for Acellus, an online learning platform used by over a million students, help maintain the design system behind them, and build those pages in code.",
     highlights: [
       "Designed 50+ web and app pages for Acellus, an online learning platform used by over a million students.",
-      "Helped create, and help maintain, a 100-component design system in Figma and with Claude, replacing a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
+      "Helped create and maintain a 100-component design system in Figma. Using Claude, replaced a bloated stylesheet full of duplicate components so one fix now reaches everywhere.",
       "Build designs into shippable pages with React, TypeScript, Tailwind CSS, and TanStack.",
       "Work project by project with the programming team, from kickoff to retrospective, tracked in GitLab.",
     ],
@@ -117,7 +117,7 @@ export const experience: ExperienceItem[] = [
     summary:
       "Hired for graphic and motion design. After two years I moved into UX/UI and front-end development.",
     highlights: [
-      "Made motion and graphic design in After Effects and Photoshop.",
+      "Proficient in motion and graphic design using After Effects and Photoshop.",
     ],
   },
   // The esports roles ran inside the freelance years, so they're named here
@@ -131,8 +131,8 @@ export const experience: ExperienceItem[] = [
     summary:
       "Started freelancing at 13, producing social media designs for esports organizations and influencers, and took on longer roles with a few orgs along the way. This is where the brand and design work began.",
     highlights: [
-      "Built a client base of esports orgs and influencers, starting at 13.",
-      "Graphic designer for Buzzkill Esports and Animosity Esports (six months each): matchday, roster, and results graphics.",
+      "Built a client base of esports orgs and influencers.",
+      "Graphic designer for Buzzkill Esports and Animosity Esports, producing matchday, roster, and results graphics.",
     ],
   },
 ];
@@ -159,7 +159,7 @@ export const leadership: LeadershipItem[] = [
     period: "2024 – Present",
     highlights: [
       "As the only designer, the go-to for 20+ programmers over the years on design, specs, issues, code, and company questions, so the project manager can focus on the bigger picture.",
-      "Answer the daily “which token or component?” questions, keeping everyone on the right pieces and the product consistent.",
+      "Answer the programmers' daily “which token or component?” questions, so the product stays consistent.",
       "Train new developers, review teammates' code every day, and help set the standards for the design system.",
     ],
   },
