@@ -11,8 +11,15 @@ import { defineConfig, devices } from "@playwright/test";
  * adopt that server when it's up, or boot one when it isn't.
  *
  * Override with PW_PORT to point at a server on another port.
+ *
+ * Server mode differs by environment. CI has already run `npm run build`, so
+ * it serves that production build: no per-route dev compilation (which was
+ * most of the e2e wall-clock), and the tests exercise what actually ships.
+ * Locally we stay on `next dev` — `next build` is blocked on this Windows
+ * machine (App Control rejects next-swc), and dev is the fast loop anyway.
  */
 const PORT = Number(process.env.PW_PORT ?? 3000);
+const SERVER = process.env.CI ? "next start" : "next dev";
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -24,6 +31,7 @@ export default defineConfig({
    * Capped deliberately. Unbounded workers (one per core, x2 projects) starve
    * the shared dev server and Chromium dies with "Target crashed" — a failure
    * that looks like a flaky assertion but is really resource exhaustion.
+   * CI stays at 2 because this private repo's runners have 2 vCPUs.
    */
   workers: process.env.CI ? 2 : 4,
   /**
@@ -45,7 +53,7 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
   webServer: {
-    command: `next dev --port ${PORT}`,
+    command: `${SERVER} --port ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
