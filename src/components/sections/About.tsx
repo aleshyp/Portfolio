@@ -111,8 +111,9 @@ export function About() {
               {stats.map((s) => (
                 // Label as the term, figure as its description, so a screen
                 // reader hears "Years designing: 12+". Reversed so the figure
-                // still reads first by eye.
-                <div key={s.label} className="flex flex-col-reverse">
+                // still reads first by eye. justify-end pins the reversed stack
+                // to the top, so figures line up when labels wrap unevenly.
+                <div key={s.label} className="flex flex-col-reverse justify-end">
                   <dt className="mt-1 text-sm text-fg-muted">{s.label}</dt>
                   <dd className="font-display text-2xl font-bold leading-tight text-balance text-fg sm:text-3xl">
                     {s.value}
