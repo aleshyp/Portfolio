@@ -101,17 +101,20 @@ test("the three fixes from the case study hold", async ({ page }) => {
   await expect(grid.getByRole("button")).toHaveCount(0);
   await expect(grid.getByText(/enroll/i)).toHaveCount(0);
 
-  // 3. One card component: every card has the same rating/length row.
-  const cards = grid.getByRole("link");
+  // 3. One card component: every card has one link and the same
+  // rating/length row.
+  const cards = grid.getByRole("listitem");
   const count = await cards.count();
   expect(count).toBe(9);
   for (let i = 0; i < count; i++) {
+    await expect(cards.nth(i).getByRole("link")).toHaveCount(1);
     await expect(cards.nth(i)).toContainText(/out of 5/);
     await expect(cards.nth(i)).toContainText(/\d+ hours/);
   }
 
   // 2. Logged out, the curriculum shows no progress: no completion checks.
-  await cards.first().click();
+  // Click the card's artwork, not its title: the whole card is the link.
+  await cards.first().click({ position: { x: 16, y: 16 } });
   const curriculum = page.getByRole("region", { name: "Course curriculum" });
   // Every lesson carries the plain outline ring and nothing else: no check,
   // no filled "current lesson" dot.
