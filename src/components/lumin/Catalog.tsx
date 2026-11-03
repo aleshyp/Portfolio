@@ -124,29 +124,29 @@ export function Catalog() {
   );
 }
 
-/** One component for every card: no drift between them. */
+/**
+ * One component for every card: no drift between them. The whole card is the
+ * link, but only the title is inside the <a>: its ::after stretches over the
+ * card. The link's name is then its visible text (WCAG 2.5.3), and the meta
+ * row reads as plain content after it.
+ */
 function CourseCard({ course }: { course: Course }) {
-  const titleId = useId();
-  const metaId = useId();
   return (
-    <LuminLink
-      to={{ screen: "course", course: course.id }}
-      aria-labelledby={titleId}
-      aria-describedby={metaId}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-(--l-line) bg-white transition-all hover:-translate-y-0.5 hover:border-(--l-lilac) hover:shadow-lift"
-    >
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-(--l-line) bg-white transition-all hover:-translate-y-0.5 hover:border-(--l-lilac) hover:shadow-lift has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-(--l-violet)">
       <div className="flex h-32 items-center justify-center bg-(--l-mist)">
         <CourseGlyph icon={course.icon} className="h-9 w-9 text-(--l-violet)" />
       </div>
       <div className="flex flex-1 flex-col p-4">
         <Tag className="self-start">{course.category}</Tag>
-        <h3
-          id={titleId}
-          className="mt-3 font-display text-lg font-bold leading-snug group-hover:text-(--l-violet)"
-        >
-          {course.title}
+        <h3 className="mt-3 font-display text-lg font-bold leading-snug group-hover:text-(--l-violet)">
+          <LuminLink
+            to={{ screen: "course", course: course.id }}
+            className="after:absolute after:inset-0 focus-visible:outline-none"
+          >
+            {course.title}
+          </LuminLink>
         </h3>
-        <div id={metaId} className="mt-auto">
+        <div className="mt-auto">
           <p className="mt-1 text-sm text-(--l-slate)">with {course.instructor}</p>
           <div className="mt-4 flex items-center justify-between border-t border-(--l-line) pt-3 text-sm">
             <Rating value={course.rating} />
@@ -154,7 +154,7 @@ function CourseCard({ course }: { course: Course }) {
           </div>
         </div>
       </div>
-    </LuminLink>
+    </div>
   );
 }
 
