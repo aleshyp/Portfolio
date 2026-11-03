@@ -29,7 +29,7 @@ jobs:
     # @playwright/test in package-lock.json; the check below fails fast if not.
     # --user 1001 matches the runner's uid so the workspace stays writable.
     container:
-      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
       options: --user 1001
     steps:
       - uses: actions/checkout@v7
