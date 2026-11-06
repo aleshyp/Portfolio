@@ -27,7 +27,7 @@ export function Footer() {
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
                 <a
                   href={`mailto:${site.email}`}
-                  className="inline-flex items-center gap-2 text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+                  className="inline-flex min-h-6 items-center gap-2 text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
                 >
                   <Mail size={16} />
                   {site.email}
@@ -87,7 +87,10 @@ export function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+                  // min-h-6: a bare text-sm link is a 20px target. WCAG 2.2's
+                  // spacing exception covers it, but a site that sells
+                  // accessibility shouldn't lean on the exception.
+                  className="inline-flex min-h-6 items-center transition-colors hover:text-brand-700 dark:hover:text-brand-300"
                 >
                   {item.label}
                 </Link>

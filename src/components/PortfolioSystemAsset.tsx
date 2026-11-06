@@ -501,7 +501,7 @@ function Gates({ level }: { level: HeadingLevel }) {
   // real observed LCP is ~136ms. Drawing "< 2.5s" here would claim a gate the
   // build doesn't enforce. Mirrors LCP_RATCHET in scripts/lh-gate.mjs.
   const cwv = [
-    { label: "LCP (simulated)", value: "< 3.2s ratchet" },
+    { label: "LCP (simulated)", value: "< 3.45s ratchet" },
     { label: "CLS", value: "< 0.1" },
     { label: "TBT", value: "< 200ms" },
   ];
@@ -670,11 +670,11 @@ export const portfolioSystemScenes: { scene: Scene; alt: string; caption?: strin
   {
     scene: "contrast",
     alt: "A WCAG 2.2 AA contrast audit of the text tokens, each with its measured ratio against the 4.5:1 body-text threshold. Five pairs pass, from fg at 18.7:1 down to fg-faint at 4.8:1; brand-600 on white fails at 3.8:1. That was the site's primary action color, fixed site-wide by stepping it to brand-700 at 5.5:1.",
-    caption: "Every text token against the 4.5:1 AA line. The one failure, brand-600, was the primary button color.",
+    caption: "Every text token against the 4.5:1 AA line. The one failure, brand-600 at 3.8:1, was the primary button color; brand-700 replaced it at 5.5:1.",
   },
   {
     scene: "gates",
-    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with CLS under 0.1, TBT under 200 milliseconds, and LCP held to a 3.2-second ratchet against Lighthouse's simulated figure rather than the 2.5-second target, since real observed LCP lands under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
+    alt: "The automated build gate: Lighthouse minimums of 100 accessibility, 100 SEO, 95 best practices and 90 performance, with CLS under 0.1, TBT under 200 milliseconds, and LCP held to a 3.45-second ratchet against Lighthouse's simulated figure rather than the 2.5-second target, since real observed LCP lands under 200 milliseconds. Below, axe-core WCAG 2.2 AA coverage across the home page, case studies, the 404 page, contact form errors and keyboard focus.",
     caption: "The budgets a production build has to pass before it ships.",
   },
 ];

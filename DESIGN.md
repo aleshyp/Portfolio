@@ -158,6 +158,12 @@ shadow-soft`, hover `-translate-y-1 shadow-lift`. Copy this recipe for new cards
   tuned to clear AA — don't lighten muted text past them.
 - **Motion:** 150–300ms, purposeful; `prefers-reduced-motion` respected globally
   (via the media query in `globals.css` **and** `useReducedMotion()` in JS).
+- **First-screen content never starts at opacity 0.** A framer `initial` state
+  is what the server renders, so a fade-in above the fold is invisible until
+  JavaScript loads and the animation runs, and it delays LCP (which only counts
+  text once it reaches final opacity). Above the fold, animate transform only:
+  paint opaque, slide a few px. `AnimatedReveal` fades are for content below
+  the fold. See `Hero.tsx`.
 
 ---
 

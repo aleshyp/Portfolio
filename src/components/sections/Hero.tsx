@@ -9,16 +9,23 @@ import { Button } from "@/components/Button";
 export function Hero() {
   const reduce = useReducedMotion();
 
+  // Nothing in the hero fades from opacity 0. The `hidden` variant is what the
+  // server renders, so an opacity-0 start left the pill, intro, buttons and
+  // tagline invisible until JavaScript arrived and the stagger ran: on a slow
+  // phone, a blank screen under the headline for well over a second. Starting
+  // opaque and animating only a short slide keeps the entrance while the
+  // content is readable on first paint. The hero is the one place not to make
+  // anyone wait.
   const container = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+    visible: { transition: { staggerChildren: 0.05 } },
   };
   const item = {
-    hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 18 },
+    hidden: reduce ? { opacity: 1 } : { opacity: 1, y: 12 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+      transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
     },
   };
 
@@ -28,15 +35,9 @@ export function Hero() {
   // ~1.05s locally (~3.1s under Lighthouse's CPU throttling — over the
   // LCP_RATCHET in scripts/lh-gate.mjs). Painting it opaque immediately and animating
   // only the transform keeps the entrance while letting LCP land on first frame;
-  // transforms don't affect LCP timing. Keep opacity out of this variant.
-  const heading = {
-    hidden: reduce ? { opacity: 1 } : { opacity: 1, y: 18 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-    },
-  };
+  // transforms don't affect LCP timing. Keep opacity out of this variant (and,
+  // per the note above, out of `item` too).
+  const heading = item;
 
   return (
     <section className="relative overflow-hidden pb-4 pt-28 sm:pb-6 sm:pt-36">

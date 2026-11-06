@@ -123,7 +123,7 @@ export function NorthwindAsset({
  *   2 02-value-props   → "Clarity, not more charts"
  *   3 03-social-proof  → metrics, testimonial, closing CTA
  *   4 04-mobile        → the responsive story
- *   5–8 the fixes      → "What I'd change" claims four scenes (`scenes: 4` in
+ *   5–8 the fixes      → "What review caught" claims four scenes (`scenes: 4` in
  *                        projects.ts): the revised hero and sign-up, then the
  *                        first-run screen at desktop and phone width. They're
  *                        revised COPIES; every other scene is the original set.

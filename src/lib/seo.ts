@@ -92,7 +92,16 @@ export function homeJsonLd() {
           addressCountry: "US",
         },
         ...(currentRole && {
-          worksFor: { "@type": "Organization", name: currentRole.company },
+          // Display form is "Legal name (Product)"; schema.org wants the two
+          // apart, so the product name goes in alternateName.
+          worksFor: (() => {
+            const [name, alt] = currentRole.company.split(/ \((.+)\)$/);
+            return {
+              "@type": "Organization",
+              name,
+              ...(alt && { alternateName: alt }),
+            };
+          })(),
         }),
         knowsAbout: skillGroups.flatMap((g) => g.items),
         sameAs: Object.values(site.socials),
