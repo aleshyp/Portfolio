@@ -19,6 +19,24 @@ export function workSrcSet(base: string, w: number): string {
   return `${base}-1200.webp ${SMALL_WIDTH}w, ${base}.webp ${w}w`;
 }
 
+/** Width of the extra phone candidate written for AVIF sets. */
+const PHONE_WIDTH = 720;
+
+/**
+ * `srcset` for an AVIF set (`<base>-720.avif`, `<base>-1200.avif` and
+ * `<base>.avif`), for the projects build-work-images.mjs encodes as AVIF (see
+ * AVIF_PROJECTS there for why they get a 720px candidate). Masters are never
+ * enlarged, so a master no wider than a size comes out at its own width, and
+ * each width is listed once. The `<base>-1200.webp` beside them is the
+ * <picture>'s plain-src fallback, not part of this.
+ */
+export function workAvifSrcSet(base: string, w: number): string {
+  if (w <= PHONE_WIDTH) return `${base}-720.avif ${w}w`;
+  const phone = `${base}-720.avif ${PHONE_WIDTH}w`;
+  if (w <= SMALL_WIDTH) return `${phone}, ${base}-1200.avif ${w}w`;
+  return `${phone}, ${base}-1200.avif ${SMALL_WIDTH}w, ${base}.avif ${w}w`;
+}
+
 /**
  * A phone capture, shown at phone width (`max-w-sm`, 384px) rather than
  * stretched across the column, where a 1:4 frame would run ~4,000px tall.

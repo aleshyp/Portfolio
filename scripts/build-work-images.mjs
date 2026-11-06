@@ -93,10 +93,55 @@ const MASTERS = {
     "signup.jpg": { name: "signup", trim: true },
     "website-login.jpg": { name: "website-login", trim: true },
   },
+  // Captures of the live piece (1440x900 at 2x, and a 390px phone at 2x),
+  // taken 2026-11-05 from Emberwake's production build with Playwright. Not
+  // Figma exports: the WebGL output IS the deliverable. `reinked` is a
+  // composite: the raw Doré scan on the left, the same frame as the shader
+  // draws it on the right.
+  emberwake: {
+    "burning.jpg": "burning",
+    "reinked.jpg": "reinked",
+    "gate.jpg": "gate",
+    "woke.jpg": "woke",
+    "melt.jpg": "melt",
+    "panels.jpg": "panels",
+    "iris.jpg": "iris",
+    "static.jpg": "static",
+    "phone-burning.jpg": "phone-burning",
+    "contents.jpg": "contents",
+  },
 };
 
 const LARGE = { width: 2400, quality: 88 };
 const SMALL = { width: 1200, quality: 85 };
+
+/**
+ * Projects encoded as AVIF instead of WebP.
+ *
+ * Emberwake's frames are engravings under a line screen: dense, high-frequency
+ * hatching that lossy WebP can barely compress (1.6MB per 2400px frame at q88,
+ * ~15x a Lumin screen). AVIF at q50 is a third of that size, with no visible
+ * difference in a side-by-side of the hatching. Emberwake itself serves its
+ * plates as AVIF for the same reason.
+ *
+ * These write `<name>.avif` (2400px), `<name>-1200.avif`, `<name>-720.avif`,
+ * and one fallback, `<name>-1200.webp`, for the few browsers without AVIF.
+ * Their asset component renders a <picture> from them; see workAvifSrcSet in
+ * src/lib/workImages.ts.
+ *
+ * The 720px candidate is for phones. Even as AVIF, a 1200px frame of hatching
+ * is ~165KB, and a phone (412px at 1.75x, ~640 device px in the column) has no
+ * use for 1200px. Without it, Lighthouse's emulated phone took the 1200 and
+ * scored the study's performance 86, under the 90 budget; with it, 91. The
+ * other sets don't need this: flat UI screens are a fifth of the bytes at the
+ * same width. (The remaining LCP overshoot was decode, not bytes: lowering
+ * this to q45 moved it by 3ms. See the note in EmberwakeAsset.)
+ */
+const AVIF_PROJECTS = new Set(["emberwake"]);
+const AVIF_LARGE = { width: 2400, quality: 50 };
+const AVIF_SMALL = { width: 1200, quality: 50 };
+const AVIF_PHONE = { width: 720, quality: 50 };
+const AVIF_FALLBACK = { width: 1200, quality: 75 };
 
 const manifestUrl = new URL("src/data/work-image-sizes.json", root);
 let manifest = {};
@@ -135,23 +180,39 @@ for (const [project, files] of Object.entries(MASTERS)) {
           .resize({ width, withoutEnlargement: true })
           .webp({ quality, effort: 6, smartSubsample: true })
           .toBuffer({ resolveWithObject: true });
+      const encodeAvif = ({ width, quality }) =>
+        sharp(input)
+          .resize({ width, withoutEnlargement: true })
+          .avif({ quality, effort: 5 })
+          .toBuffer({ resolveWithObject: true });
 
-      const large = await encode(LARGE);
-      const small = await encode(SMALL);
-      await writeFile(new URL(`${name}.webp`, outDir), large.data);
-      await writeFile(new URL(`${name}-1200.webp`, outDir), small.data);
+      const avif = AVIF_PROJECTS.has(project);
+      const ext = avif ? "avif" : "webp";
+      const large = await (avif ? encodeAvif(AVIF_LARGE) : encode(LARGE));
+      const small = await (avif ? encodeAvif(AVIF_SMALL) : encode(SMALL));
+      await writeFile(new URL(`${name}.${ext}`, outDir), large.data);
+      await writeFile(new URL(`${name}-1200.${ext}`, outDir), small.data);
+      let fallbackKb = 0;
+      if (avif) {
+        const phone = await encodeAvif(AVIF_PHONE);
+        await writeFile(new URL(`${name}-720.avif`, outDir), phone.data);
+        const fallback = await encode(AVIF_FALLBACK);
+        await writeFile(new URL(`${name}-1200.webp`, outDir), fallback.data);
+        fallbackKb = (phone.data.length + fallback.data.length) / 1024;
+      }
 
       manifest[project][name] = { w: large.info.width, h: large.info.height };
-      const kb = (large.data.length + small.data.length) / 1024;
+      const kb = (large.data.length + small.data.length) / 1024 + fallbackKb;
       totalKb += kb;
       console.log(
         `${project}/${name}`.padEnd(28),
         `${large.info.width}x${large.info.height}`.padEnd(10),
-        `${Math.round(large.data.length / 1024)}KB + ${Math.round(small.data.length / 1024)}KB`,
+        `${Math.round(large.data.length / 1024)}KB + ${Math.round(small.data.length / 1024)}KB ${ext}` +
+          (avif ? ` + ${Math.round(fallbackKb)}KB (720 avif, webp fallback)` : ""),
       );
     }
   }
 }
 
 await writeFile(manifestUrl, JSON.stringify(manifest, null, 2) + "\n");
-console.log(`✔ Wrote ${Math.round(totalKb)}KB of WebP and src/data/work-image-sizes.json`);
+console.log(`✔ Wrote ${Math.round(totalKb)}KB of images and src/data/work-image-sizes.json`);

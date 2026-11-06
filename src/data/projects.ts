@@ -61,6 +61,9 @@ export type ContentBlock = {
    * the same code (Ledger's engine), or the same designed route built for real
    * (Lumin's prototype). Its whole value is that a reader can check. A canned
    * walkthrough or a video belongs in `gallery`, not here.
+   *
+   * An absolute URL (Emberwake, hosted on GitHub Pages) renders as an external
+   * link that opens in a new tab; a path stays an in-site link.
    */
   demoHref?: string;
   /** Label for the `demoHref` button. Defaults to "Try the live demo". */
@@ -78,12 +81,22 @@ export type ContentBlock = {
 }; /**
  * Case studies — the single source of truth for the Work grid and detail pages.
  * Array order is the Work grid order, sequenced for product-design roles: the
- * design system first, product UI next, brand work last.
+ * design system first, product UI next, then Emberwake (real and shipped, so
+ * above the remaining concepts), brand work last.
  *
  * "This Site" is REAL: it documents this codebase, and every figure in it is
  * verifiable from the repo (token count in globals.css, budgets in
  * scripts/lh-gate.mjs, scans in e2e/a11y.spec.ts). It carries no `concept`
  * flag. If you change the system, update the study — it makes falsifiable claims.
+ *
+ * Emberwake is REAL too: live at aleshyp.github.io/emberwake, source at
+ * github.com/aleshyp/emberwake. Its figures come from that repo (plate count in
+ * src/chapters/one.ts, plate sizes in public/scenes, the smoke tests the deploy
+ * workflow runs). It's also the study where AI use matters most to get right:
+ * Claude wrote its code and its story text, and the study says so in the
+ * contributions and in its last block (checklist T4). Keep it that way. Only
+ * Chapter One is covered; the study claims nothing about Chapter Two beyond
+ * its existence, and shouldn't until its story is settled.
  *
  * Every OTHER study has an invented client and carries `concept: true`, which
  * renders a visible badge. Invented clients are fine; invented OUTCOMES are not.
@@ -123,7 +136,7 @@ export const projects: Project[] = [
     results: [
       { label: "Accessibility budget", value: "100" },
       { label: "Design tokens", value: "35" },
-      { label: "WCAG 2.2 AA scans", value: "6" },
+      { label: "WCAG 2.2 AA scans", value: "7" },
     ],
     overview:
       "A portfolio usually shows you the output of the work. This one is the work. Every screen is built from a documented token system, themed light and dark from one source of truth, and checked against WCAG 2.2 AA by tests that run before anything ships. It's the clearest evidence I can give you of how I actually work, mostly because you can go read the code and check.",
@@ -240,6 +253,79 @@ export const projects: Project[] = [
     demoLabel: "Try the coded prototype",
     resultsNote:
       "Concept project: Lumin isn't a real client and hasn't been tested with users, so there are no outcome figures here. These numbers describe the design itself, and each one is visible in the screens on this page.",
+  },
+  {
+    slug: "emberwake",
+    title: "Emberwake: Old Engravings, Re-Inked Into a Story You Scroll",
+    summary:
+      "Gustave Doré's engravings, re-inked live in WebGL into a story you scroll through, one that only goes on when the reader acts. My concept, art direction and interaction design; Claude, an AI model, wrote the code and the text.",
+    blurb: "Doré's engravings re-inked live in WebGL, in a story that waits for the reader's hands.",
+    tags: ["Interactive Storytelling", "Art Direction", "Motion"],
+    role: "Creative Director & Interaction Designer",
+    contributions: [
+      "Concept and art direction: re-inked public-domain engravings, three inks, scroll-driven scenes",
+      "Chose every Doré plate, and reviewed how each scene reads once inked",
+      "Interaction design: the hold-to-wake gate, contents and resume, reduced-motion and static editions",
+      "Directed Claude, an AI model, which wrote the code and the story text",
+    ],
+    year: "2026",
+    client: "Personal project, live",
+    duration: "Ongoing",
+    results: [
+      { label: "Scenes in Chapter One, each a Doré plate re-inked live", value: "7" },
+      { label: "Chapter One's plates on desktop, down from 7.4 MB as JPEG", value: "4.0 MB" },
+      { label: "Viewports the chapter is read end to end on before every deploy", value: "2" },
+    ],
+    overview:
+      "Emberwake is a short illustrated story you read by scrolling: a girl who swept the stairs, the last ember of a murdered god, and the Order that wants it back. Every scene is a wood engraving by Gustave Doré, re-inked as it draws in black, red and paper. The camera drifts, close-ups slide over the plate, and each scene hands over to the next its own way. It's live, and you can read it from the button above. I didn't write its code or its words. Claude, an AI model, wrote both from my concept and direction. What's mine is the idea, the look, the plates, and how a reader moves through it, and that's what this page is about.",
+    decisions: [
+      {
+        chose: "Re-ink the plates live in the browser, in three inks.",
+        over: "showing the scans as they are, which reads as a slideshow of different books.",
+      },
+      {
+        chose: "The ember wakes only when the reader presses and holds.",
+        over: "waking it at a scroll position, which a reader can pass without noticing.",
+      },
+      {
+        chose: "Each scene leaves by its own transition: melt, panels or iris.",
+        over: "one crossfade between every plate.",
+      },
+      {
+        chose: "Without WebGL, the whole story as still plates in the same three inks.",
+        over: "an error message where the story should be.",
+      },
+    ],
+    blocks: [
+      {
+        heading: "Three inks make plates from different books one book",
+        body: "Chapter One's plates come from three books, Paradise Lost, Dante's Paradiso and Tennyson, from different scans. Shown as scanned, they'd read as a slideshow. So every plate is re-inked as it's drawn: each pixel's darkness lands in black, red or paper, at thresholds set per plate so a dark battle and a pale sky come out with the same balance, and a vertical line screen redraws the red as printed lines. Doing it live rather than baking toned images is what makes the rest possible. The line screen is drawn in screen pixels, so it stays crisp while the camera pushes in. The ember's cyan glow can grow into a plate's brightest areas once it wakes. And two plates can be mixed mid-transition. I chose each plate for what it had to carry in the story, then reviewed how it reads once inked.",
+      },
+      {
+        heading: "The story waits for the reader's hands",
+        body: "In the third scene, the ember is cold and quiet, and the scroll stops. The caption says it was waiting for someone to hold on, and that's the instruction: press and hold anywhere, or hold Space, and a ring around the cursor fills over 1.8 seconds. Let go early and it drains back. When it fills, the ember wakes, the plate floods with its light, and everything after is lit by it. A scroll position could have woken it, but a reader can scroll past anything without noticing. Holding makes the reader the one who wakes it, which is the turn the whole chapter is about. On a phone it's a long press, with the ring low on the screen, and the hint spells it out in words.",
+        scenes: 2,
+      },
+      {
+        heading: "Every plate leaves its own way",
+        body: "Each scene gets 2.6 screen-heights of scroll, and the last 38% of that hands over to the next plate. One crossfade between every plate would have made the chapter read as a single long dissolve, so the transition is chosen per scene. Melt is a jagged front that drips down the screen column by column. Panels slam in as four comic bands from alternating sides, used once, leaving The Burning. Iris opens the next plate inside a paper-ringed window, centered where the eye should land. Because transitions are tied to scroll position rather than time, the reader sets the speed and can stop halfway through one to look.",
+        scenes: 3,
+      },
+      {
+        heading: "Nobody gets a blank canvas",
+        body: "A WebGL story can fail in ways a page of text can't, so the fallbacks are part of the design. Without WebGL, or if the engine fails to start, the reader gets a static edition: every plate and caption in order, toned with SVG filters into the same three inks, and a browser without WebGL never downloads the engine at all. With reduced motion on, transitions become a plain crossfade, parallax and drifting embers are off, and scrolling past the gate opens it, so it never becomes a wall. On a phone the close-ups widen for a portrait screen and plates come from a lighter 1280px set. And because a story you can only read from the top is hard to come back to, the plate counter opens a contents list of every scene, and the reader's place is saved for their next visit.",
+        scenes: 3,
+      },
+      {
+        heading: "Who made what, and what I'd change",
+        body: "Claude wrote the code and the captions. I set the concept and the look, chose the plates, made the interaction calls above, and judged the results scene by scene in a browser. Chapter Two, The Ashen Choir, is live as a work in progress and isn't covered here. Two things I'd change. The contents list hides behind the plate counter: a number that's secretly a menu is a weak affordance, and it should say what it does. And the hold gate hasn't been tested with readers. It's the one moment the story can stall, so it's the first thing I'd watch five people meet with no instructions.",
+        scenes: 0,
+      },
+    ],
+    gallery: 4,
+    accent: 3,
+    demoHref: "https://aleshyp.github.io/emberwake/",
+    demoLabel: "Read it live",
   },
   {
     slug: "marketing-landing-page",
