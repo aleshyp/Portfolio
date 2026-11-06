@@ -65,17 +65,24 @@ async function waitForDocumentReady(page: import("@playwright/test").Page) {
 }
 
 // One representative case study per asset family — the studies share a layout,
-// so scanning every slug would mostly re-test the same markup. The three here
+// so scanning every slug would mostly re-test the same markup. The four here
 // differ in what they render: learning-platform-ui mixes exported screens with
 // a DOM user-flow diagram (role="img" over aria-hidden step cards),
 // portfolio-design-system carries the hand-built SVG scenes with long alt text,
 // and marketing-landing-page is the widest set (16 scenes) and the only one that
 // exercises the "More screens" gallery for scenes past the content blocks.
+// emberwake is the only <picture>/AVIF set and the only study whose header
+// button leaves the site (an external link with an sr-only new-tab note).
+//
+// The "This Site" study quotes the number of scans in this file ("WCAG 2.2 AA
+// scans" in src/data/projects.ts: these routes, plus the 404 and the contact
+// form). Adding or removing a route here changes that figure; update it too.
 const routes = [
   "/",
   "/work/learning-platform-ui",
   "/work/portfolio-design-system",
   "/work/marketing-landing-page",
+  "/work/emberwake",
 ];
 
 // The interactive sections ("use client") only respond once React has hydrated.

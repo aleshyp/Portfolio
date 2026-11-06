@@ -154,6 +154,46 @@ test.describe("case study routing", () => {
     expect((await phone.boundingBox())?.width).toBeLessThanOrEqual(384);
   });
 
+  // Emberwake's "Read it live" leaves the site, so it must open in a new tab
+  // without handing the new page a window.opener (security rule: every
+  // target="_blank" carries rel="noopener noreferrer").
+  test("Emberwake links out to the live piece safely", async ({ page }) => {
+    await page.goto("/work/emberwake");
+    const live = page.getByRole("link", { name: /read it live/i });
+    await expect(live).toHaveAttribute(
+      "href",
+      "https://aleshyp.github.io/emberwake/",
+    );
+    await expect(live).toHaveAttribute("target", "_blank");
+    await expect(live).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(live).toHaveAccessibleName(/opens in a new tab/i);
+  });
+
+  // The AVIF set is the one asset family served through <picture>: every frame
+  // must actually decode (a wrong srcset path fails silently to a broken box),
+  // and the phone capture must stay phone-width.
+  test("Emberwake frames all load, and the phone frame stays narrow", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/work/emberwake");
+    const frames = page.locator('img[src^="/work/emberwake/"]');
+    await expect(frames).toHaveCount(10);
+    for (const img of await frames.all()) {
+      await img.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth),
+        )
+        .toBeGreaterThan(0);
+      expect(
+        await img.evaluate((el: HTMLImageElement) => el.currentSrc),
+      ).toMatch(/\.avif$/);
+    }
+    const phone = page.getByRole("img", { name: /plate iv on a phone/i });
+    expect((await phone.boundingBox())?.width).toBeLessThanOrEqual(384);
+  });
+
   test("unknown slug renders the custom 404", async ({ page }) => {
     const res = await page.goto("/work/does-not-exist");
     expect(res?.status()).toBe(404);

@@ -6,6 +6,7 @@ import { NorthwindAsset, northwindScenes } from "@/components/NorthwindAsset";
 import { LedgerAsset, ledgerScenes } from "@/components/LedgerAsset";
 import { LuminAsset, luminScenes } from "@/components/LuminAsset";
 import { NorthwindHero } from "@/components/NorthwindHero";
+import { EmberwakeAsset, emberwakeScenes } from "@/components/EmberwakeAsset";
 import {
   PortfolioSystemAsset,
   portfolioSystemScenes,
@@ -133,6 +134,7 @@ const cardScene: Record<
 };
 
 type AssetKind =
+  | "emberwake"
   | "aperture"
   | "ledger"
   | "marketing"
@@ -167,6 +169,13 @@ const assetSets: Record<string, AssetSet> = {
     // These scenes are responsive DOM, not fixed artboards: each one is as tall
     // as its own content at the current width (taller on a phone, where rows
     // stack). Pinning 16:9 would clip the stacked layout.
+    intrinsicRatio: true,
+  },
+  // Captures of the live piece. The 16:10 frames and the 390px phone capture
+  // each carry their own ratio, so the gallery mustn't pin 16:9.
+  emberwake: {
+    scenes: emberwakeScenes,
+    kind: "emberwake",
     intrinsicRatio: true,
   },
   "brand-identity-system": { scenes: apertureScenes, kind: "aperture" },
@@ -368,6 +377,19 @@ export function renderProjectScene(
         // ratio and shows each screen whole.
         ratio={allowVideoHero ? undefined : 16 / 9}
         cover={cover}
+      />
+    );
+  }
+  if (assetSet.kind === "emberwake") {
+    // No video and no separate card still: the cover frame is the thumbnail,
+    // cropped to 16:9 from the center in card-sized contexts. The cover is
+    // lazy like every other frame; EmberwakeAsset says why.
+    return (
+      <EmberwakeAsset
+        scene={item.scene as Parameters<typeof EmberwakeAsset>[0]["scene"]}
+        alt={alt}
+        className={className}
+        ratio={allowVideoHero ? undefined : 16 / 9}
       />
     );
   }

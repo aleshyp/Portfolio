@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { projects, getProject, getNextProject } from "@/data/projects";
 import { Container } from "@/components/Container";
 import { AnimatedReveal } from "@/components/AnimatedReveal";
@@ -150,11 +150,22 @@ export default async function CaseStudy({
           {project.demoHref && (
             <div className="mt-7">
               {/* No prefetch: this sits in the first screen, and fetching the
-                  demo's bundle there cost the Lumin study ~150ms of LCP. */}
-              <Button href={project.demoHref} size="md" prefetch={false}>
-                {project.demoLabel ?? "Try the live demo"}
-                <ArrowRight size={16} aria-hidden="true" />
-              </Button>
+                  demo's bundle there cost the Lumin study ~150ms of LCP.
+                  An absolute URL (a piece hosted elsewhere, like Emberwake)
+                  opens in a new tab with rel="noopener noreferrer"; the icon
+                  says so, and so does the accessible name. */}
+              {/^https?:\/\//.test(project.demoHref) ? (
+                <Button href={project.demoHref} size="md" external>
+                  {project.demoLabel ?? "Try the live demo"}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </Button>
+              ) : (
+                <Button href={project.demoHref} size="md" prefetch={false}>
+                  {project.demoLabel ?? "Try the live demo"}
+                  <ArrowRight size={16} aria-hidden="true" />
+                </Button>
+              )}
             </div>
           )}
         </AnimatedReveal>
