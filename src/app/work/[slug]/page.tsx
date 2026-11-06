@@ -124,7 +124,7 @@ export default async function CaseStudy({
         <AnimatedReveal>
           <Link
             href="/#work"
-            className="inline-flex items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+            className="inline-flex min-h-6 items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
           >
             <ArrowLeft size={16} />
             Back to work
@@ -277,7 +277,10 @@ export default async function CaseStudy({
           <AnimatedReveal delay={0.1}>
             <Card variant="soft" className="p-6">
               <p className="text-sm font-medium uppercase tracking-wider text-fg-faint">
-                Results
+                {/* Not "Results": on the concept studies these figures are
+                    scope (screens, colors, deliverables), not outcomes, and
+                    a "Results" label argued with the note beneath it. */}
+                At a glance
               </p>
               <dl className="mt-4 space-y-5">
                 {project.results.map((r) => (

@@ -237,7 +237,7 @@ function LuminHeader() {
           to={{ screen: "catalog" }}
           aria-current={onCatalog ? "page" : undefined}
           className={cn(
-            "rounded",
+            "inline-flex min-h-6 items-center rounded",
             onCatalog
               ? "font-semibold text-(--l-ink)"
               : "text-(--l-slate) hover:text-(--l-ink)",

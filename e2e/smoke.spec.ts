@@ -121,9 +121,9 @@ test.describe("case study routing", () => {
   });
 
   // A block can claim several scenes (`scenes` in projects.ts). The fixes are
-  // the evidence for "What I'd change", so they must render under it, not
+  // the evidence for "What review caught", so they must render under it, not
   // drift into "More screens" if a scene is added or the count is miscounted.
-  test("What I'd change shows its fix frames under the block", async ({
+  test("What review caught shows its fix frames under the block", async ({
     page,
   }) => {
     for (const [slug, fixes] of [
@@ -133,7 +133,7 @@ test.describe("case study routing", () => {
       await page.goto(`/work/${slug}`);
       const heading = page.getByRole("heading", {
         level: 2,
-        name: "What I'd change",
+        name: "What review caught",
       });
       // Innermost div holding both the heading and figures: the block itself.
       const block = page

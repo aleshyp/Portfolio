@@ -97,7 +97,7 @@ export const experience: ExperienceItem[] = [
   // entry is also `worksFor` in the JSON-LD (lib/seo.ts), so keep it current.
   {
     role: "UX/UI Designer & Front-End Developer",
-    company: "International Academy of Science",
+    company: "International Academy of Science (Acellus)",
     period: "2024 – Present",
     location: "United States",
     summary:
@@ -112,7 +112,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "Graphic & Motion Designer",
-    company: "International Academy of Science",
+    company: "International Academy of Science (Acellus)",
     period: "2022 – 2024",
     location: "United States",
     summary:
@@ -155,7 +155,7 @@ export type LeadershipItem = {
 
 export const leadership: LeadershipItem[] = [
   {
-    org: "International Academy of Science",
+    org: "International Academy of Science (Acellus)",
     context: "Alongside the UX/UI role",
     period: "2024 – Present",
     highlights: [

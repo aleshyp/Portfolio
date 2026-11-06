@@ -75,7 +75,9 @@ const workHtml = projects
   .map((p) => {
     const name = resumeNames[p.slug] ?? p.title.split(":")[0];
     // Role is on the case study; the résumé keeps each entry to two lines.
-    const meta = [p.year, p.concept ? "concept" : null, p.demoHref ? "coded prototype" : null]
+    // An absolute demoHref is a live, hosted piece (Emberwake), not a prototype.
+    const demo = p.demoHref && (/^https?:\/\//.test(p.demoHref) ? "live" : "coded prototype");
+    const meta = [p.year, p.concept ? "concept" : null, demo || null]
       .filter(Boolean)
       .join(" · ");
     return `<div class="item">

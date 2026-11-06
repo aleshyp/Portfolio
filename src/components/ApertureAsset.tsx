@@ -39,7 +39,7 @@ type Scene =
   | "usage";
 
 /**
- * The fixes from the study's "What I'd change". These exist only as Figma PNG
+ * The fixes from the study's "What review caught". These exist only as Figma PNG
  * exports, with no SVG stand-in, so ApertureAsset never renders them:
  * projectAssets serves their PNGs.
  */
@@ -348,7 +348,7 @@ export function ApertureAsset({ scene, className, alt }: ApertureAssetProps) {
 
 /**
  * Ordered scenes for the case-study gallery (hero first, then blocks). The last
- * three are the fixes, all shown under "What I'd change" (`scenes: 3` in
+ * three are the fixes, all shown under "What review caught" (`scenes: 3` in
  * projects.ts). They're revised COPIES; frames 02–05 above them are unchanged.
  */
 export const apertureScenes: {

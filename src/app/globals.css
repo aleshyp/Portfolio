@@ -234,7 +234,9 @@
   }
 
   .glass {
-    @apply bg-white/70 backdrop-blur-xl backdrop-saturate-150 dark:bg-ink/70;
+    /* 90%, not 70%: at 70 bold headings scrolling underneath still read as
+       shapes through the nav, which a reviewer saw as text bleeding through. */
+    @apply bg-white/90 backdrop-blur-xl backdrop-saturate-150 dark:bg-ink/90;
   }
 }
 

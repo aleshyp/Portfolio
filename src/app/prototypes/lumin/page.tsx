@@ -58,7 +58,7 @@ export default function LuminPrototypePage() {
         <div>
           <Link
             href={`/work/${study.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+            className="inline-flex min-h-6 items-center gap-2 text-sm font-medium text-fg-muted transition-colors hover:text-brand-700 dark:hover:text-brand-300"
           >
             <ArrowLeft size={16} aria-hidden="true" />
             Back to the case study
