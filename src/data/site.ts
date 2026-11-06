@@ -197,41 +197,13 @@ export const education: EducationItem[] = [
     institution: "Graphic & UX/UI design",
     period: "Since 2014",
   },
-  {
-    credential: "Foundations of Cybersecurity",
-    institution: "Coursera",
-    track: "Cybersecurity",
-    period: "September 2025",
-  },
-  {
-    credential: "Play It Safe: Manage Security Risks",
-    institution: "Coursera",
-    track: "Cybersecurity",
-    period: "September 2025",
-  },
-  {
-    credential: "Connect and Protect: Networks and Network Security",
-    institution: "Coursera",
-    track: "Cybersecurity",
-    period: "September 2025",
-  },
-  {
-    credential: "Tools of the Trade: Linux and SQL",
-    institution: "Coursera",
-    track: "Cybersecurity",
-    period: "September 2025",
-  },
-  {
-    credential: "Assets, Threats, and Vulnerabilities",
-    institution: "Coursera",
-    track: "Cybersecurity",
-    period: "October 2025",
-  },
 ];
 
 /**
- * Education collapsed by institution, so five Coursera courses read as one
- * line of coursework instead of five entries outweighing the work history.
+ * Education collapsed by institution, so a run of courses from one provider
+ * reads as one line of coursework instead of outweighing the work history.
+ * (Five Coursera cybersecurity courses were dropped on 2026-11-06 as
+ * off-target for UX roles; the grouping stays for any future run.)
  * Shared by the Experience section and the résumé so they can't disagree.
  */
 export type EducationGroup = {
